@@ -16,28 +16,28 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 	/**
 	 * Begin
 	 */
-	protected void beginTransaction() {
+	public void beginTransaction() {
 		HibernateSessionFactory.beginTransaction();
 	}
 
 	/**
 	 * Commit
 	 */
-	protected void commitTransaction() {
+	public void commitTransaction() {
 		HibernateSessionFactory.commitTransaction();
 	}
 	
 	/**
 	 * Close current session
 	 */
-	protected void closeSession() {
+	public void closeSession() {
 		HibernateSessionFactory.closeSession();		
 	}
 
 	/**
 	 * Rollback
 	 */
-	protected void rollbackTransaction() {
+	public void rollbackTransaction() {
 		HibernateSessionFactory.rollbackTransaction();
 	}
 	

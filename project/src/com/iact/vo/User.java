@@ -3,10 +3,13 @@ package com.iact.vo;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import com.iact.util.json.JSONException;
+import com.iact.util.json.JSONObject;
+
 /**
  * User entity. @author MyEclipse Persistence Tools
  */
-public class User extends AbstractUser implements java.io.Serializable {
+public class User extends AbstractUser implements java.io.Serializable, JSONObjectAble {
 
 	// Constructors
 
@@ -36,4 +39,27 @@ public class User extends AbstractUser implements java.io.Serializable {
 				loginTime, loginIp, status, payonlinelogs);
 	}
 
+	public Object toJSONObject() throws JSONException {
+		JSONObject o = new JSONObject();
+		
+		/**
+		 * 
+		 * Put properties
+		 */
+		return o;
+	}
+	
+	
+	public static User parse(JSONObject o) {
+		
+		User user = new User();
+		
+		/**
+		 * set properties 
+		 */
+		return user;
+		
+	}
+
+	
 }

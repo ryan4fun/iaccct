@@ -5,7 +5,7 @@
  */
 package com.iact.vo;
 
-import com.iact.util.json.JSONString;
+import com.iact.util.json.JSONObject.JSONObjectable;
 
 /**
  * When one VO object need to be transfered to JS, the bean must implement
@@ -14,6 +14,6 @@ import com.iact.util.json.JSONString;
  * @author Andy
  * 
  */
-public interface JSONObjectAble extends JSONString{
+public interface JSONObjectAble extends JSONObjectable{
 
 }

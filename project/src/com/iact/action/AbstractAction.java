@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -210,4 +211,54 @@ public abstract class AbstractAction implements Action {
 		}
 	}
 
+	/**
+	 * Write result to response.
+	 * 
+	 * @param result
+	 * @param resp
+	 */
+	protected void writeResponse(String result,
+			HttpServletResponse resp) throws IActException {
+		try {
+			resp.setContentType("text/html;charset=gb2312");
+			PrintWriter pw = resp.getWriter();
+
+			pw.write(result);
+			pw.flush();
+			pw.close();
+		} catch (IOException e) {
+			throw new IActException(e);
+		} 
+	}
+	
+	/**
+	 * Retrieve the SessionContainer for the user tier to the request.
+	 */
+	protected SessionContainer getSessionContainer(HttpServletRequest request) {
+
+		SessionContainer sessionContainer = (SessionContainer) getSessionObject(
+				request, "sessionContainer");
+
+		// Create a SessionContainer for the user if it doesn't exist already
+		if (sessionContainer == null) {
+			sessionContainer = new SessionContainer();
+			sessionContainer.setLocale(request.getLocale());
+			HttpSession session = request.getSession(true);
+			session.setAttribute("sessionContainer",
+					sessionContainer);
+		}
+		return sessionContainer;
+	}
+	
+	/**
+	 * Retrieve a session object based on the request and the attribute name.
+	 */
+	protected Object getSessionObject(HttpServletRequest req, String attrName) {
+		Object sessionObj = null;
+		HttpSession session = req.getSession(false);
+		if (session != null) {
+			sessionObj = session.getAttribute(attrName);
+		}
+		return sessionObj;
+	}
 }
