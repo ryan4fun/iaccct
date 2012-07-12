@@ -131,6 +131,10 @@ public class AuthCodeServlet extends HttpServlet {
 			g.drawString(strRand, (i + 1) * x, codeY);
 			randomCode.append(strRand);
 		}
+		
+		/**
+		 * Session bind current authentication code.
+		 */
 		request.getSession().setAttribute("authCode", randomCode.toString());
 
 		response.setHeader("Pragma", "no-cache");
