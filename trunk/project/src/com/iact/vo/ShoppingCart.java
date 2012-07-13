@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ShoppingCart {
 
-	private List<Bizpackageitem> packItems = new ArrayList<Bizpackageitem>();
+	private List<Bizpackage> packItems = new ArrayList<Bizpackage>();
 
 	/**
 	 * Current cart is empty or not.
@@ -37,7 +37,7 @@ public class ShoppingCart {
 	 * Add one package item to cart.
 	 * 
 	 */
-	public void addPackageItem(Bizpackageitem item) {
+	public void addPackage(Bizpackage item) {
 		packItems.add(item);
 	}
 
@@ -46,8 +46,8 @@ public class ShoppingCart {
 	 * 
 	 * @param itemId
 	 */
-	public void removePackageItem(long itemId) {
-		for (Bizpackageitem item : packItems) {
+	public void removePackage(long itemId) {
+		for (Bizpackage item : packItems) {
 			if (item.getId() == itemId) {
 				packItems.remove(item);
 			}
