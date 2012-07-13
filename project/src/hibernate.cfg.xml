@@ -8,7 +8,7 @@
 
 	<session-factory>
 		<property name="dialect">
-			org.hibernate.dialect.MySQL5Dialect
+			org.hibernate.dialect.MySQLDialect
 		</property>
 		<property name="connection.url">
 			jdbc:mysql://localhost:3306/iact
