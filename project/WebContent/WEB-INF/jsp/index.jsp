@@ -1,7 +1,12 @@
-<%@ page language="java" import="com.iact.action.SessionContainer" pageEncoding="UTF-8"%>
+<%@ page language="java" import="com.iact.action.SessionContainer,
+								 com.iact.vo.Platforminformation,
+								 com.iact.vo.Area,
+								 java.text.SimpleDateFormat,
+								 java.util.List" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -128,7 +133,122 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    </div>
 	  	</div>
 	  	<jsp:include page="menu.jsp" flush="true"/>
-	</div>	
+	  	<div class="leftinfo">
+        <div id="wbg">
+        <ul>
+       	 <li><img src="images/qa.png" width="102" height="24" /></li>
+		  	<% 
+		  		List<Platforminformation> qs 
+		  			= (List<Platforminformation>)request.getAttribute("qs");
+		  		int size = 0;
+		  		if (qs != null){
+		  			size = qs.size();
+		  			int showSize = size > 5 ? 5: size;
+		  			for (int i = 0; i < showSize; i++) {
+		  				Platforminformation q = qs.get(i);
+		  	%>
+		  				<li><a href="q.do?id=<%=q.getId()%>" > <%=q.getTitle()%></a></li>
+		  	<% 
+		  			}
+		  		}
+		  	    if (size > 5) {
+		  	%>
+	   			 <li class="more">更多...</li>
+		  	<% 
+		  	    }
+		  	%>
+		</ul>
+        </div>
+        <div id="wbg">
+        <ul>
+        <li><img src="images/online.png" width="102" height="24" /></li>
+        <li class="qq"></li>
+        <li class="qqbutton"><img src="images/QQ.png" width="191" height="60" /></li>
+        </ul>
+        </div>
+  	</div>	
+  	
+  	<div class="rightinfo">
+  		<div id="wbg">
+		<div class="rightinfodiv">
+        <ul>
+        <% 
+        	List<Area> areas = (List<Area>)request.getAttribute("areas");
+        	int aSize = 0;
+        	if (areas != null) {
+        		aSize = areas.size();
+        		for (int i = 0; i < aSize; i++) {
+        			Area a = areas.get(i);
+        %>
+       			 <li><a href="a.do?id=<%= a.getId()%>"> <%= a.getName()%></a></li>
+        <% 
+        		}
+        	}
+        %>
+        </ul>
+        </div>
+        <div class="more"><a href="tvlist.html">更多...</a></div>
+        </div>
+        <div id="wbg">
+        <div>
+        <ul>
+        <li><img src="images/gonggao.png" width="148" height="35" /></li>
+        <li></li>
+        <% 
+        	List<Platforminformation> ads = (List<Platforminformation>)request.getAttribute("ads");
+        	int adsSize = 0;
+        	if (ads != null) {
+        		adsSize = ads.size();
+        		int showSize = adsSize > 5 ? 5: adsSize;
+        		for (int i = 0; i < showSize; i++) {
+        			Platforminformation ad = ads.get(i);
+        %>
+       			 <li id="newstitle">.<a href="ad.do?id=<%= ad.getId()%>"> <%= ad.getTitle()%></a></li><li id="newsdata"><%=sf.format(ad.getAddTime())%></li>
+        <% 
+        		}
+        	}
+        %>
+        </ul>
+        </div>
+        <% 
+        	if (adsSize > 5) {
+        %>
+         <div class="more"><a href="gonggao.html">更多...</a></div>
+        <% 
+        	}
+        %>
+        </div>
+        <div id="wbg">
+        <div>
+        <ul>
+        <li><img src="images/Rss.png" width="145" height="32" /></li>
+        <li></li>
+       <% 
+        	List<Platforminformation> news = (List<Platforminformation>)request.getAttribute("news");
+        	int newsSize = 0;
+        	if (news != null) {
+        		newsSize = news.size();
+        		int showSize = newsSize > 5 ? 5: newsSize;
+        		for (int i = 0; i < showSize; i++) {
+        			Platforminformation n = news.get(i);
+        %>
+       			 <li id="newstitle">.<a href="news.do?id=<%= n.getId()%>"> <%= n.getTitle()%></a></li><li id="newsdata"><%=sf.format(n.getAddTime())%></li>
+        <% 
+        		}
+        	}
+        %>
+        </ul>
+        </div>
+        <% 
+        	if (newsSize > 5) {
+        %>
+         <div class="more"><a href="gonggao.html">更多...</a></div>
+        <% 
+        	}
+        %>
+    </div>
+  </div>  
+</div>	
 	<jsp:include page="footer.jsp" flush="true"/>
   </body>
 </html>
