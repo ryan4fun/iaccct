@@ -20,7 +20,7 @@
 	margin:0 auto;
 }
 .container .menu li{
-	background:url(images/header_tabs.png) repeat-x;
+	background:url(../images/header_tabs.png) repeat-x;
 	background-position:194px 0;
 	display:block;
 	float:left;
@@ -54,7 +54,7 @@
 .content{
 	background:#F9F9F9;
 	width:900px;
-	height:560px;
+	height:550px;
 	box-shadow:2px 2px 2px rgba(0,0,0,0.1);
 	border: 1px solid #ddd;
 }
@@ -79,7 +79,7 @@
 	clear:both;
 }
 div .step {
-	background-image: url(images/reg_step.png);
+	background-image: url(../images/reg_step.png);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 48px;
