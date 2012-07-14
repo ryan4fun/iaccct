@@ -5,8 +5,10 @@
  */
 package com.iact.action;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -60,7 +62,13 @@ public class IndexAction extends AbstractAction {
 		List<Platforminformation> questions = infoDAO.findByBizType(3);
 		req.setAttribute("qs", questions);
 		
-		_forward(req, res);
+		try {
+			req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, res);
+		} catch (ServletException e) {
+			throw new IActException(e);
+		} catch (IOException e) {
+			throw new IActException(e);
+		}
 		
 		return 0;
 	}
