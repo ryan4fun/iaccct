@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : mysqlconn
-Source Server Version : 50525
+Source Server         : iact
+Source Server Version : 50087
 Source Host           : localhost:3306
 Source Database       : iact
 
 Target Server Type    : MYSQL
-Target Server Version : 50525
+Target Server Version : 50087
 File Encoding         : 65001
 
-Date: 2012-07-12 14:03:25
+Date: 2012-07-14 18:46:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,17 +20,17 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `accountlog`;
 CREATE TABLE `accountlog` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `User` bigint(11) NOT NULL,
-  `OrderID` varchar(32) DEFAULT NULL,
-  `TransactionID` bigint(11) DEFAULT NULL,
-  `AddTime` datetime DEFAULT NULL,
-  `AlterMode` varchar(16) DEFAULT NULL,
-  `AlterContext` varchar(64) DEFAULT NULL,
-  `ExpendAmount` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `IncomeAmount` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `Balance` decimal(10,2) NOT NULL DEFAULT '0.00',
-  PRIMARY KEY (`ID`)
+  `OrderID` varchar(32) default NULL,
+  `TransactionID` bigint(11) default NULL,
+  `AddTime` datetime default NULL,
+  `AlterMode` varchar(16) default NULL,
+  `AlterContext` varchar(64) default NULL,
+  `ExpendAmount` decimal(10,2) NOT NULL default '0.00',
+  `IncomeAmount` decimal(10,2) NOT NULL default '0.00',
+  `Balance` decimal(10,2) NOT NULL default '0.00',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -42,13 +42,13 @@ CREATE TABLE `accountlog` (
 -- ----------------------------
 DROP TABLE IF EXISTS `area`;
 CREATE TABLE `area` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
-  `Parent` bigint(11) DEFAULT NULL,
+  `ID` bigint(11) NOT NULL auto_increment,
+  `Parent` bigint(11) default NULL,
   `Level` int(4) NOT NULL,
   `SequenceID` varchar(32) NOT NULL,
   `Name` varchar(32) NOT NULL,
-  `Description` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `Description` varchar(32) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3928 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -3987,16 +3987,16 @@ INSERT INTO `area` VALUES ('3927', '404', '3', '303523', '七美鄉', '');
 -- ----------------------------
 DROP TABLE IF EXISTS `bizarea`;
 CREATE TABLE `bizarea` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `Area` bigint(11) NOT NULL,
-  `Parent` bigint(20) DEFAULT NULL,
-  `Level` int(4) DEFAULT NULL,
+  `Parent` bigint(20) default NULL,
+  `Level` int(4) default NULL,
   `SequenceID` varchar(32) NOT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
+  `BizCode` varchar(32) default NULL,
   `Name` varchar(32) NOT NULL,
-  `Description` varchar(32) DEFAULT NULL,
-  `BizStatus` int(2) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`ID`)
+  `Description` varchar(32) default NULL,
+  `BizStatus` int(2) NOT NULL default '1',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4008,13 +4008,13 @@ CREATE TABLE `bizarea` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bizdevice`;
 CREATE TABLE `bizdevice` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `BizSystem` bigint(11) NOT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
-  `BizMode` int(4) NOT NULL DEFAULT '0',
+  `BizCode` varchar(32) default NULL,
+  `BizMode` int(4) NOT NULL default '0',
   `Name` varchar(32) NOT NULL,
-  `Description` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `Description` varchar(64) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4026,23 +4026,23 @@ CREATE TABLE `bizdevice` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bizpackage`;
 CREATE TABLE `bizpackage` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `BizArea` bigint(11) NOT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
+  `BizCode` varchar(32) default NULL,
   `SequenceID` varchar(32) NOT NULL,
   `Name` varchar(32) NOT NULL,
-  `Description` varchar(64) DEFAULT NULL,
-  `BeginTime` varchar(16) DEFAULT NULL,
-  `EndTime` varchar(16) DEFAULT NULL,
+  `Description` varchar(64) default NULL,
+  `BeginTime` varchar(16) default NULL,
+  `EndTime` varchar(16) default NULL,
   `SpotType` varchar(16) NOT NULL,
-  `SubtitleSpec` int(4) NOT NULL DEFAULT '1',
-  `SubtitleInfo` varchar(32) DEFAULT NULL,
-  `LogoSpec` int(4) NOT NULL DEFAULT '1',
-  `LogoInfo` varchar(32) DEFAULT NULL,
+  `SubtitleSpec` int(4) NOT NULL default '1',
+  `SubtitleInfo` varchar(32) default NULL,
+  `LogoSpec` int(4) NOT NULL default '1',
+  `LogoInfo` varchar(32) default NULL,
   `PlayNumber` int(4) NOT NULL,
   `Price` decimal(10,2) NOT NULL,
-  `Status` int(4) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`ID`)
+  `Status` int(4) NOT NULL default '1',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4054,13 +4054,13 @@ CREATE TABLE `bizpackage` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bizpackageitem`;
 CREATE TABLE `bizpackageitem` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `BizPackage` bigint(11) NOT NULL,
   `BizProgram` bigint(11) NOT NULL,
-  `SequenceID` varchar(32) DEFAULT NULL,
-  `Name` varchar(32) DEFAULT NULL,
-  `Description` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `SequenceID` varchar(32) default NULL,
+  `Name` varchar(32) default NULL,
+  `Description` varchar(32) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4072,16 +4072,16 @@ CREATE TABLE `bizpackageitem` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bizprogram`;
 CREATE TABLE `bizprogram` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `BizArea` bigint(11) NOT NULL,
-  `BizSystem` bigint(11) DEFAULT NULL,
-  `BizDevice` bigint(11) DEFAULT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
+  `BizSystem` bigint(11) default NULL,
+  `BizDevice` bigint(11) default NULL,
+  `BizCode` varchar(32) default NULL,
   `SequenceID` varchar(32) NOT NULL,
   `Name` varchar(32) NOT NULL,
-  `Description` varchar(32) DEFAULT NULL,
-  `BizStatus` varchar(16) NOT NULL DEFAULT '已开通',
-  PRIMARY KEY (`ID`)
+  `Description` varchar(32) default NULL,
+  `BizStatus` varchar(16) NOT NULL default '已开通',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4093,13 +4093,13 @@ CREATE TABLE `bizprogram` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bizsystem`;
 CREATE TABLE `bizsystem` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `BizArea` bigint(11) NOT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
-  `BizMode` int(4) NOT NULL DEFAULT '0',
+  `BizCode` varchar(32) default NULL,
+  `BizMode` int(4) NOT NULL default '0',
   `Name` varchar(32) NOT NULL,
-  `Description` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `Description` varchar(64) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4111,15 +4111,15 @@ CREATE TABLE `bizsystem` (
 -- ----------------------------
 DROP TABLE IF EXISTS `expendrecord`;
 CREATE TABLE `expendrecord` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `User` bigint(11) NOT NULL,
-  `OrderID` varchar(32) DEFAULT NULL,
-  `PrepaidTime` datetime DEFAULT NULL,
-  `PrepaidAmount` decimal(10,2) DEFAULT NULL,
-  `FinalpaidTime` datetime DEFAULT NULL,
-  `FinalpaidAmount` decimal(10,2) DEFAULT NULL,
-  `PaidStatus` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `OrderID` varchar(32) default NULL,
+  `PrepaidTime` datetime default NULL,
+  `PrepaidAmount` decimal(10,2) default NULL,
+  `FinalpaidTime` datetime default NULL,
+  `FinalpaidAmount` decimal(10,2) default NULL,
+  `PaidStatus` varchar(32) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4131,17 +4131,17 @@ CREATE TABLE `expendrecord` (
 -- ----------------------------
 DROP TABLE IF EXISTS `payonlinelog`;
 CREATE TABLE `payonlinelog` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `User` bigint(11) NOT NULL,
-  `OrderID` varchar(32) DEFAULT NULL,
-  `ProductID` varchar(32) DEFAULT NULL,
-  `SerialNumber` varchar(32) DEFAULT NULL,
-  `PayMode` varchar(32) DEFAULT NULL,
-  `PayAmount` int(8) DEFAULT NULL,
-  `PayContext` varchar(64) DEFAULT NULL,
-  `AddTime` datetime DEFAULT NULL,
-  `IPAdress` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
+  `OrderID` varchar(32) default NULL,
+  `ProductID` varchar(32) default NULL,
+  `SerialNumber` varchar(32) default NULL,
+  `PayMode` varchar(32) default NULL,
+  `PayAmount` int(8) default NULL,
+  `PayContext` varchar(64) default NULL,
+  `AddTime` datetime default NULL,
+  `IPAdress` varchar(32) default NULL,
+  PRIMARY KEY  (`ID`),
   KEY `user` (`User`),
   CONSTRAINT `user` FOREIGN KEY (`User`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -4155,17 +4155,17 @@ CREATE TABLE `payonlinelog` (
 -- ----------------------------
 DROP TABLE IF EXISTS `payrecord`;
 CREATE TABLE `payrecord` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `User` bigint(11) NOT NULL,
   `AddTime` datetime NOT NULL,
-  `OrderID` varchar(32) DEFAULT NULL,
-  `ProductID` varchar(32) DEFAULT NULL,
-  `SerialNumber` varchar(32) DEFAULT NULL,
-  `PayMode` varchar(32) DEFAULT NULL,
-  `PayAmount` int(8) DEFAULT NULL,
-  `AddFee` int(8) DEFAULT NULL,
-  `IPAdress` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `OrderID` varchar(32) default NULL,
+  `ProductID` varchar(32) default NULL,
+  `SerialNumber` varchar(32) default NULL,
+  `PayMode` varchar(32) default NULL,
+  `PayAmount` int(8) default NULL,
+  `AddFee` int(8) default NULL,
+  `IPAdress` varchar(32) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4177,28 +4177,42 @@ CREATE TABLE `payrecord` (
 -- ----------------------------
 DROP TABLE IF EXISTS `platforminformation`;
 CREATE TABLE `platforminformation` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `AddTime` datetime NOT NULL,
   `BizType` int(4) NOT NULL,
   `Title` varchar(64) NOT NULL,
   `Information` blob,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of platforminformation
 -- ----------------------------
+INSERT INTO `platforminformation` VALUES ('1', '2012-07-14 18:22:18', '1', '实拍黄河再现罕见\"流鱼\"奇观 上千市民捞鱼', null);
+INSERT INTO `platforminformation` VALUES ('2', '2012-07-13 18:23:05', '1', '实拍黄河再现罕见\"流鱼\"奇观 上千市民捞鱼', null);
+INSERT INTO `platforminformation` VALUES ('3', '2012-07-04 18:23:19', '1', '实拍黄河再现罕见\"流鱼\"奇观 上千市民捞鱼', null);
+INSERT INTO `platforminformation` VALUES ('4', '2012-07-12 18:23:35', '1', '我国禁止男同性恋献血', null);
+INSERT INTO `platforminformation` VALUES ('5', '2012-07-05 18:25:29', '1', '实拍黄河再现罕见\"流鱼\"奇观 上千市民捞鱼', null);
+INSERT INTO `platforminformation` VALUES ('6', '2012-07-03 18:25:48', '2', '爱插播门户网正式上线', null);
+INSERT INTO `platforminformation` VALUES ('7', '2012-07-04 18:26:35', '2', '爱插播门户网正式上线', null);
+INSERT INTO `platforminformation` VALUES ('8', '2012-07-03 18:26:54', '2', '爱插播门户网正式上线', null);
+INSERT INTO `platforminformation` VALUES ('9', '2012-07-03 18:27:10', '2', '爱插播门户网正式上线', null);
+INSERT INTO `platforminformation` VALUES ('10', '2012-07-03 18:27:21', '2', '爱插播门户网正式上线', null);
+INSERT INTO `platforminformation` VALUES ('11', '2012-07-04 18:27:34', '3', '怎么使用爱插播', null);
+INSERT INTO `platforminformation` VALUES ('12', '2012-07-03 18:27:55', '3', '怎么成为爱插播会员', null);
+INSERT INTO `platforminformation` VALUES ('13', '2012-07-01 18:28:18', '3', '怎么使用爱插播', null);
+INSERT INTO `platforminformation` VALUES ('14', '2012-07-01 18:28:33', '3', '怎么使用爱插播', null);
 
 -- ----------------------------
 -- Table structure for `smsreceive`
 -- ----------------------------
 DROP TABLE IF EXISTS `smsreceive`;
 CREATE TABLE `smsreceive` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `PhoneNumber` varchar(16) NOT NULL,
   `ReceiveTime` datetime NOT NULL,
-  `Message` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `Message` varchar(128) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4210,16 +4224,16 @@ CREATE TABLE `smsreceive` (
 -- ----------------------------
 DROP TABLE IF EXISTS `smsreceivelog`;
 CREATE TABLE `smsreceivelog` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(20) NOT NULL auto_increment,
   `PhoneNumber` varchar(10) NOT NULL,
   `ReceiveTime` datetime NOT NULL,
-  `Message` varchar(128) DEFAULT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
-  `BizContext` varchar(32) DEFAULT NULL,
-  `HandleTime` datetime DEFAULT NULL,
-  `HandleStatus` varchar(16) DEFAULT NULL,
-  `HandleInfo` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `Message` varchar(128) default NULL,
+  `BizCode` varchar(32) default NULL,
+  `BizContext` varchar(32) default NULL,
+  `HandleTime` datetime default NULL,
+  `HandleStatus` varchar(16) default NULL,
+  `HandleInfo` varchar(64) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4231,13 +4245,13 @@ CREATE TABLE `smsreceivelog` (
 -- ----------------------------
 DROP TABLE IF EXISTS `smssend`;
 CREATE TABLE `smssend` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
-  `PhoneNumber` varchar(32) DEFAULT NULL,
-  `AddTime` datetime DEFAULT NULL,
-  `BizCode` varchar(255) DEFAULT NULL,
-  `BizContext` varchar(255) DEFAULT NULL,
-  `Message` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `ID` bigint(11) NOT NULL auto_increment,
+  `PhoneNumber` varchar(32) default NULL,
+  `AddTime` datetime default NULL,
+  `BizCode` varchar(255) default NULL,
+  `BizContext` varchar(255) default NULL,
+  `Message` varchar(128) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4249,16 +4263,16 @@ CREATE TABLE `smssend` (
 -- ----------------------------
 DROP TABLE IF EXISTS `smssendlog`;
 CREATE TABLE `smssendlog` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `PhoneNumber` varchar(16) NOT NULL,
   `AddTime` varchar(32) NOT NULL,
-  `BizCode` varchar(32) DEFAULT NULL,
-  `BizContext` varchar(32) DEFAULT NULL,
-  `Message` varchar(128) DEFAULT NULL,
-  `SendTime` datetime DEFAULT NULL,
-  `SendStatus` varchar(16) DEFAULT NULL,
-  `SendInfo` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `BizCode` varchar(32) default NULL,
+  `BizContext` varchar(32) default NULL,
+  `Message` varchar(128) default NULL,
+  `SendTime` datetime default NULL,
+  `SendStatus` varchar(16) default NULL,
+  `SendInfo` varchar(64) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4270,15 +4284,15 @@ CREATE TABLE `smssendlog` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sysmanager`;
 CREATE TABLE `sysmanager` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `Login` varchar(16) NOT NULL,
   `PWD` varchar(64) NOT NULL,
-  `Name` varchar(32) DEFAULT NULL,
-  `Description` varchar(64) DEFAULT NULL,
-  `RoleType` int(4) NOT NULL DEFAULT '10',
-  `BizCode` varchar(32) DEFAULT NULL,
-  `Status` int(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`)
+  `Name` varchar(32) default NULL,
+  `Description` varchar(64) default NULL,
+  `RoleType` int(4) NOT NULL default '10',
+  `BizCode` varchar(32) default NULL,
+  `Status` int(4) NOT NULL default '0',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4290,14 +4304,14 @@ CREATE TABLE `sysmanager` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sysmanageroplog`;
 CREATE TABLE `sysmanageroplog` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `SysManager` bigint(11) NOT NULL,
   `OPTime` datetime NOT NULL,
-  `OPAdress` varchar(32) DEFAULT NULL,
+  `OPAdress` varchar(32) default NULL,
   `OPType` int(4) NOT NULL,
-  `OPContext` varchar(64) DEFAULT NULL,
-  `OPData` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `OPContext` varchar(64) default NULL,
+  `OPData` varchar(128) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4309,11 +4323,11 @@ CREATE TABLE `sysmanageroplog` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sysroledefine`;
 CREATE TABLE `sysroledefine` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `SysManager` bigint(11) NOT NULL,
   `BizSystem` bigint(11) NOT NULL,
-  `RoleType` int(4) NOT NULL DEFAULT '10',
-  PRIMARY KEY (`ID`)
+  `RoleType` int(4) NOT NULL default '10',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4325,34 +4339,35 @@ CREATE TABLE `sysroledefine` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
-  `Area` bigint(11) DEFAULT NULL,
+  `ID` bigint(11) NOT NULL auto_increment,
+  `Area` bigint(11) default NULL,
   `Login` varchar(32) NOT NULL,
   `PWD` varchar(64) NOT NULL,
-  `PWDQuestion` varchar(32) DEFAULT NULL,
-  `PWDAnswer` varchar(64) DEFAULT NULL,
-  `PhoneNumber` varchar(16) DEFAULT NULL,
-  `PhoneVerify` int(4) NOT NULL DEFAULT '0',
-  `VerifyCode` varchar(6) DEFAULT NULL,
-  `Email` varchar(32) DEFAULT NULL,
-  `RealName` varchar(16) DEFAULT NULL,
-  `Sex` varchar(4) DEFAULT NULL,
-  `Description` varchar(64) DEFAULT NULL,
+  `PWDQuestion` varchar(32) default NULL,
+  `PWDAnswer` varchar(64) default NULL,
+  `PhoneNumber` varchar(16) default NULL,
+  `PhoneVerify` int(4) NOT NULL default '0',
+  `VerifyCode` varchar(6) default NULL,
+  `Email` varchar(32) default NULL,
+  `RealName` varchar(16) default NULL,
+  `Sex` varchar(4) default NULL,
+  `Description` varchar(64) default NULL,
   `UserType` int(4) NOT NULL,
-  `Balance` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `Level` int(4) NOT NULL DEFAULT '0',
-  `Credit` int(8) NOT NULL DEFAULT '0',
-  `CreateDate` datetime DEFAULT NULL,
-  `CreateMode` int(4) NOT NULL DEFAULT '0',
-  `LoginTime` datetime DEFAULT NULL,
-  `LoginIP` varchar(32) DEFAULT NULL,
-  `Status` int(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`)
+  `Balance` decimal(10,2) NOT NULL default '0.00',
+  `Level` int(4) NOT NULL default '0',
+  `Credit` int(8) NOT NULL default '0',
+  `CreateDate` datetime default NULL,
+  `CreateMode` int(4) NOT NULL default '0',
+  `LoginTime` datetime default NULL,
+  `LoginIP` varchar(32) default NULL,
+  `Status` int(4) NOT NULL default '0',
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1111112 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('2222', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', '1', '11', '1', '1', 'abc@1.com', '张三丰', '1', '顶顶顶', '1', '0.00', '0', '0', '2012-07-13 14:01:32', '0', null, null, '0');
 INSERT INTO `user` VALUES ('1111111', '1', 'sa', '1234', '1', '1', '11', '1', '1', 'lu5@163.com', 'daf', '1', 'dfa', '1', '0.00', '0', '0', '2012-07-05 13:33:25', '0', '2012-07-05 13:33:36', '192.0.0.1', '0');
 
 -- ----------------------------
@@ -4360,7 +4375,7 @@ INSERT INTO `user` VALUES ('1111111', '1', 'sa', '1234', '1', '1', '11', '1', '1
 -- ----------------------------
 DROP TABLE IF EXISTS `userorder`;
 CREATE TABLE `userorder` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `User` bigint(11) NOT NULL,
   `BizPackage` bigint(11) NOT NULL,
   `TransactionID` varchar(32) NOT NULL,
@@ -4368,27 +4383,27 @@ CREATE TABLE `userorder` (
   `OrderType` varchar(16) NOT NULL,
   `SpotType` varchar(16) NOT NULL,
   `Subtitle` tinytext NOT NULL,
-  `LogoType` varchar(16) DEFAULT NULL,
+  `LogoType` varchar(16) default NULL,
   `LogoData` blob,
-  `PackageInfo` varchar(128) DEFAULT NULL,
+  `PackageInfo` varchar(128) default NULL,
   `PackageNumber` int(4) NOT NULL,
   `PlanDate` date NOT NULL,
-  `PlanBegin` datetime DEFAULT NULL,
-  `PlanEnd` datetime DEFAULT NULL,
-  `ActBegin` datetime DEFAULT NULL,
-  `ActEnd` datetime DEFAULT NULL,
+  `PlanBegin` datetime default NULL,
+  `PlanEnd` datetime default NULL,
+  `ActBegin` datetime default NULL,
+  `ActEnd` datetime default NULL,
   `PlanFee` decimal(10,2) NOT NULL,
-  `ActFee` decimal(10,2) DEFAULT NULL,
-  `CreateTime` datetime DEFAULT NULL,
-  `VerifyTime` datetime DEFAULT NULL,
-  `VerifyMode` varchar(16) DEFAULT NULL,
-  `VerifyManager` bigint(11) DEFAULT NULL,
-  `VerifyStatus` varchar(16) NOT NULL DEFAULT '等待审核',
-  `VerifyInfo` varchar(64) DEFAULT NULL,
-  `HandleTime` datetime DEFAULT NULL,
-  `HandleStatus` varchar(32) NOT NULL DEFAULT '新增',
-  `HandleInfo` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `ActFee` decimal(10,2) default NULL,
+  `CreateTime` datetime default NULL,
+  `VerifyTime` datetime default NULL,
+  `VerifyMode` varchar(16) default NULL,
+  `VerifyManager` bigint(11) default NULL,
+  `VerifyStatus` varchar(16) NOT NULL default '等待审核',
+  `VerifyInfo` varchar(64) default NULL,
+  `HandleTime` datetime default NULL,
+  `HandleStatus` varchar(32) NOT NULL default '新增',
+  `HandleInfo` varchar(64) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -4400,21 +4415,21 @@ CREATE TABLE `userorder` (
 -- ----------------------------
 DROP TABLE IF EXISTS `userresource`;
 CREATE TABLE `userresource` (
-  `ID` bigint(11) NOT NULL AUTO_INCREMENT,
+  `ID` bigint(11) NOT NULL auto_increment,
   `User` bigint(11) NOT NULL,
   `SpotType` varchar(16) NOT NULL,
   `Subtitle` tinytext NOT NULL,
-  `LogoType` varchar(16) DEFAULT NULL,
-  `LogoX` int(8) DEFAULT NULL,
-  `LogoY` int(8) DEFAULT NULL,
+  `LogoType` varchar(16) default NULL,
+  `LogoX` int(8) default NULL,
+  `LogoY` int(8) default NULL,
   `LogoData` blob,
-  `Description` varchar(64) DEFAULT NULL,
+  `Description` varchar(64) default NULL,
   `AddTime` datetime NOT NULL,
-  `VerifyTime` datetime DEFAULT NULL,
-  `VerifyManager` bigint(11) DEFAULT NULL,
-  `VerifyStatus` varchar(16) NOT NULL DEFAULT '等待审核',
-  `VerifyInfo` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `VerifyTime` datetime default NULL,
+  `VerifyManager` bigint(11) default NULL,
+  `VerifyStatus` varchar(16) NOT NULL default '等待审核',
+  `VerifyInfo` varchar(64) default NULL,
+  PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
