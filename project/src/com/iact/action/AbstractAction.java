@@ -100,7 +100,9 @@ public abstract class AbstractAction implements Action {
 			throws IActException {
 		String forward = (String) reqParams.get("page");
 		if (forward == null) {
-			forward = "index.jsp";
+			if (forward == null) {
+				throw new IActException("Not specified web page");
+			}
 		}
 		try {
 			req.getRequestDispatcher("WEB-INF/jsp/" + forward).forward(req, res);
