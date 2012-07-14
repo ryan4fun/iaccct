@@ -23,8 +23,9 @@ public class ForwardAction extends AbstractAction {
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
 		String page = (String)reqParams.get("page");
+		
 		if (page == null) {
-			throw new IActException("Not specified web page.");
+			page = "index.jsp";
 		}
 		
 		try {
