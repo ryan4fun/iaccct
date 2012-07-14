@@ -295,6 +295,10 @@ p{
 	width: 210px;
 	height: 30px;
 }
+
+.err {
+	color:#F60;
+}
 .logopan .logopansub .login div ul .spaecst {
 	width: 42px;
 	height: 30px;
