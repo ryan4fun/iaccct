@@ -1,4 +1,4 @@
-<%@ page language="java" import="com.iact.action.SessionContainer" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" import="com.iact.action.SessionContainer" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 		data:params,
 		 		success:function(data) {
 		 			if (data.errorCode == 0) {
-		 				window.location.href = basePath +"index.do?page=index.jsp";		
+		 				window.location.href = basePath +"index.do?action=IndexAction";		
 		 			} else {
 		 				$("#errpanel")[0].innerHTML = data.errorMsg;
 		 			}
