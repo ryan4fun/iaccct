@@ -10,7 +10,7 @@
         	SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
         	if (sc == null || sc.getUser() == null) {	
         %>
-        	<li class="toplilogin">您还未登录，请<a href="login.html">登录</a></li>   
+        	<li class="toplilogin">您还未登录，请<a href="f.do?page=login.jsp">登录</a></li>   
         <%
         	} else {
         		String realName = sc.getUser().getRealName();
