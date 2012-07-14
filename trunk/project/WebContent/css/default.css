@@ -11,6 +11,9 @@ body{
 	font-size:13px;
 	background: #f2f2f2;
 	font-family:Arial, Helvetica, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	font-smoothing: antialiased;
 }
 li{
 	list-style:none;
@@ -295,10 +298,6 @@ p{
 	width: 210px;
 	height: 30px;
 }
-
-.err {
-	color:#F60;
-}
 .logopan .logopansub .login div ul .spaecst {
 	width: 42px;
 	height: 30px;
@@ -436,4 +435,9 @@ p{
 	margin-bottom: 10px;
 	margin-left: 10px;
 	line-height: 24px;
+}
+.err {
+	color:#F60;
+	margin:5px;
+	font-size:16px;
 }
