@@ -57,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 	});
 		 }
 		function refreshAuth(basePath) {
-			$('#authImg')[0].src=basePath+"/auth";
+			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
 		}
 	</script>
 	</head>
