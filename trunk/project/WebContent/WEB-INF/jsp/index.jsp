@@ -1,4 +1,4 @@
-<%@ page language="java" import="com.iact.action.SessionContainer,
+﻿<%@ page language="java" import="com.iact.action.SessionContainer,
 								 com.iact.vo.Platforminformation,
 								 com.iact.vo.Area,
 								 java.text.SimpleDateFormat,
@@ -47,10 +47,10 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		 		type:"post",
 		 		url:"login.do",
 		 		beforeSend:function(){
-		 			$("#errpanel")[0].innerHTML = "正在登录， 请稍后。"
+		 			$("#errpanel")[0].innerText = "ddddd";
 		 		},
 		 		dataType:"json",
-		 		async:false,
+		 		async:true,
 		 		data:params,
 		 		success:function(data) {
 		 			if (data.errorCode == 0) {
@@ -90,10 +90,10 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			        </div>
 		        <div>
 		        <ul>
-		        <li class="spaecst"></span></li>
+		        <li class="spaecst"></li>
 		       	  <li><a href="f.do?page=user/register.jsp">免费注册</a> | <a href="f.do?page=user/forgetp.jsp">忘记密码</a></li>
 		        	<li class="spaecs">
-		        	<span class="err" id="errpanel">
+		        	<span class="err" id="errpanel"></span>
 		        	</li>
 		            <li><img src="<%=basePath%>/auth" width="61" height="21" id="authImg"/></li>
 		        	<li><a href="javascript:void(0);" onclick="refreshAuth('<%=basePath%>');">看不清？换一张</a></li>
