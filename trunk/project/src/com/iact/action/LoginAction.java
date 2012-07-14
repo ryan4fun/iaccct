@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.iact.ErrorCode;
 import com.iact.IActException;
 import com.iact.dao.DAOFactory;
 import com.iact.dao.UserDAO;
+import com.iact.util.json.JSONException;
+import com.iact.util.json.JSONObject;
 import com.iact.vo.User;
 
 /**
@@ -30,16 +33,18 @@ public class LoginAction extends AbstractAction {
 
 		String authCode = (String) req.getSession().getAttribute("authCode");
 		String pAuthCode = (String) reqParams.get("authCode");
+		String loginName = (String) reqParams.get("loginName");
+		String password = (String) reqParams.get("password");
 
 		if (!authCode.equalsIgnoreCase(pAuthCode)) {
-			String errMsg = "ÑéÖ¤ÂëÊäÈë´íÎó£¡";
+
+			String errMsg = "éªŒè¯ç é”™è¯¯ï¼";
 			getSessionContainer(req).setUser(null);
-			req.getSession().setAttribute("errMsg", errMsg);
-			_forward(req, res);
+			writeErrorMessage(ErrorCode.AUTH_FAILURE, errMsg, res);
+
 			return 0;
 		} else {
-			String loginName = (String) reqParams.get("loginName");
-			String password = (String) reqParams.get("password");
+
 			String pMD5 = DigestUtils.md5Hex(password);
 
 			UserDAO userDAO = (UserDAO) DAOFactory.getDAO(DAO);
@@ -49,20 +54,30 @@ public class LoginAction extends AbstractAction {
 					boolean matched = user.getPwd().equals(pMD5);
 					if (matched) {
 						getSessionContainer(req).setUser(user);
-						_forward(req, res);
-
+						JSONObject jo = new JSONObject();
+						try {
+							jo.put("errorCode", ErrorCode.OK);
+						} catch (JSONException e) {
+							throw new IActException(e);
+						}
+						writeResponse(jo.toString(), res);
 						return 0;
 					}
 				}
 			}
 		}
 
-		String errMsg = "ÓÃ»§Ãû»òÕßÃÜÂëÊäÈë´íÎó£¡";
+		String errMsg = "ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯ï¼";
 		getSessionContainer(req).setUser(null);
-		req.getSession().setAttribute("errMsg", errMsg);
-		_forward(req, res);
-
+		writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
 		return 0;
 	}
-
+	
+	public static void main(String[] args) {
+		String un = "admin";
+		String pwd = "admin";
+		
+		System.out.println(DigestUtils.md5Hex(pwd));
+		
+	}
 }

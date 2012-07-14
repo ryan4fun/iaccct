@@ -99,9 +99,11 @@ public abstract class AbstractAction implements Action {
 	protected void _forward(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
 		String forward = (String) reqParams.get("page");
-
+		if (forward == null) {
+			forward = "index.jsp";
+		}
 		try {
-			req.getRequestDispatcher("WEB-INF/" + forward).forward(req, res);
+			req.getRequestDispatcher("WEB-INF/jsp/" + forward).forward(req, res);
 		} catch (ServletException e) {
 			throw new IActException(e);
 		} catch (IOException e) {

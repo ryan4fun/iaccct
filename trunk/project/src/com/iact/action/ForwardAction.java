@@ -28,7 +28,7 @@ public class ForwardAction extends AbstractAction {
 		}
 		
 		try {
-			req.getRequestDispatcher("WEB-INF/"+page).forward(req, res);
+			req.getRequestDispatcher("WEB-INF/jsp/"+page).forward(req, res);
 		} catch (ServletException e) {
 			throw new IActException(e);
 		} catch (IOException e) {
