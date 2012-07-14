@@ -54,7 +54,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		 		data:params,
 		 		success:function(data) {
 		 			if (data.errorCode == 0) {
-		 				window.location.href = basePath +"index.do?page=index.jsp";		
+		 				window.location.href = basePath +"index.do?action=IndexAction";		
 		 			} else {
 		 				$("#errpanel")[0].innerHTML = data.errorMsg;
 		 			}
