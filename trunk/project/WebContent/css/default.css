@@ -436,3 +436,148 @@ p{
 	margin-left: 10px;
 	line-height: 24px;
 }
+
+#userpage{
+	width:1000px;
+	overflow:hidden;
+	clip: rect(0px,auto,0px,auto);
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+#my1{
+	background-image:url(../images/my1_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my2{
+	background-image:url(../images/my2_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my3{
+	background-image:url(../images/my3_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my4{
+	background-image:url(../images/my4_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my5{
+	background-image:url(../images/my5_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my6{
+	background-image:url(../images/my6_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my7{
+	background-image:url(../images/my7_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CAE4FF;
+}
+#my8{
+	background-image:url(../images/my8_icon.png);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	line-height: 24px;
+	text-indent: 36px;
+	height: 24px;
+}
+#myinfo_title{
+	display: inline-block;
+	float: left;
+	width: 120px;
+	text-align: right;
+}
+
+.myinfo_info {
+	display: inline-block;
+	width: 560px;
+}
+.myinfo_info_type {
+	background-color: #DEF;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.myinfo_info_dt {
+	padding-right: 10px;
+	padding-left: 10px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #def;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-right-color: #def;
+	border-left-color: #def;
+}
+#main #userpage .rightinfo #wbg div ul .search {
+	line-height: 37px;
+	background-color: #DFEFFF;
+	height: 37px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-top: 2px;
+	padding-bottom: 8px;
+}
+#main #userpage .rightinfo #wbg div ul .search ul li {
+	line-height: 37px;
+	display: inline-block;
+	float: left;
+	height: 37px;
+	margin: 5px;
+}
+
+#wbg {
+	height:460px;
+}
+
