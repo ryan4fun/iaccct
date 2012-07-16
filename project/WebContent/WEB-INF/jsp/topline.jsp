@@ -1,4 +1,4 @@
-<%@ page language="java" import="com.iact.vo.User,
+﻿<%@ page language="java" import="com.iact.vo.User,
 								 com.iact.action.SessionContainer" pageEncoding="UTF-8"%>
 <div class="topline">
 	<div id="top">
@@ -15,7 +15,7 @@
         	} else {
         		String realName = sc.getUser().getRealName();
         %>
-        <li class="toplilogin">欢迎您，<a href="user.do"><%=realName%></a></li> 
+        <li class="toplilogin">欢迎您，<%=realName%>！&nbsp;&nbsp;<a href="f.do?page=user.jsp">我的应用</a></li> 
         <% 		
         	}
         %>

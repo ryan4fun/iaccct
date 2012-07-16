@@ -1,4 +1,4 @@
-﻿<%@ page language="java" import="com.iact.action.SessionContainer,
+<%@ page language="java" import="com.iact.action.SessionContainer,
 								 com.iact.vo.Platforminformation,
 								 com.iact.vo.Area,
 								 java.text.SimpleDateFormat,
@@ -91,7 +91,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		        <div>
 		        <ul>
 		        <li class="spaecst"></li>
-		       	  <li><a href="f.do?page=user/register.jsp">免费注册</a> | <a href="f.do?page=user/forgetp.jsp">忘记密码</a></li>
+		       	  <li><a href="f.do?page=register.jsp">免费注册</a> | <a href="f.do?page=user/forgetp.jsp">忘记密码</a></li>
 		        	<li class="spaecs">
 		        	<span class="err" id="errpanel"></span>
 		        	</li>
