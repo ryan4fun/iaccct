@@ -47,7 +47,6 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		 		type:"post",
 		 		url:"login.do",
 		 		beforeSend:function(){
-		 			$("#errpanel")[0].innerText = "ddddd";
 		 		},
 		 		dataType:"json",
 		 		async:true,
