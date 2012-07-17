@@ -65,53 +65,12 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
 		}
 	</script>
-	
 	</head>
   <body>
   	 <!--  topline area -->
    	 <jsp:include page="topline.jsp" flush="true"/>
-   	 <!--  login area -->
-   	  	<%
-        	SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
-        	if (sc == null || sc.getUser() == null) {	
-        %>
-        	<div class="logopan">
-			<div class="logopansub">
-			<div class="logo"></div>
-		    <div class="login">
-		    		<div><ul>
-			        	<li class="user"></li>
-			            <li><input name="loginName" type="text" id="loginName"/></li>
-			            <li class="pass"></li>
-			            <li><input type="password" name="password" id="password"/></li>
-			            <li><input type="text" name="authCode" id="authCode"/></li>
-			            <li><img src="<%=basePath%>/images/login_button.png" width="107" height="40" onclick="login();" /></li>
-			        </ul>
-			        </div>
-		        <div>
-		        <ul>
-		        <li class="spaecst"></li>
-		       	  <li><a href="f.do?page=register.jsp">免费注册</a> | <a href="f.do?page=user/forgetp.jsp">忘记密码</a></li>
-		        	<li class="spaecs">
-		        	<span class="err" id="errpanel"></span>
-		        	</li>
-		            <li><img src="<%=basePath%>/auth" width="61" height="21" id="authImg"/></li>
-		        	<li><a href="javascript:void(0);" onclick="refreshAuth('<%=basePath%>');">看不清？换一张</a></li>
-		      	</ul>
-		     	</div>
-		    </div>
-		    </div>
-	     </div>  
-        <%
-        	} else {
-        %>
-        	<div class="logopan">
-        	<div class="logopansub">
-			<div class="logo"></div>
-				显示用户登录成功区域，等lvjian GUI
-			</div>
-	    	</div>
-        <%  }%>
+   	 <!--   login panel area -->
+   	 <jsp:include page="loginpanel.jsp" flush="true" />
    	 
      <!--   main area -->
      <div id="main">   
@@ -159,16 +118,8 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		  	%>
 		</ul>
         </div>
-        <div id="wbg">
-        <ul>
-        <li><img src="images/online.png" width="102" height="24" /></li>
-        <li class="qq"></li>        
-        <li class="qqbutton">
-        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=43145491&site=qq&menu=yes">
-        	<img border="0" src="http://wpa.qq.com/pa?p=2:43145491:49" alt="点击这里给我发消息" title="I-ACT爱插播"></a>
-        </li>
-        </ul>
-        </div>
+        <!--  online area -->
+       	<jsp:include page="online.jsp" flush="true" />
   	</div>	
   	
   	<div class="rightinfo">
@@ -252,6 +203,6 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
     </div>
   </div>  
 </div>	
-	<jsp:include page="footer.jsp" flush="true"/>
-  </body>
+<jsp:include page="footer.jsp" flush="true"/>
+</body>
 </html>

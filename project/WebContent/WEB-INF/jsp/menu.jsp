@@ -6,18 +6,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div id="menupan">
    <ul>
    <li><a href="index.html"><img src="<%=basePath %>/images/menu_home.png" width="48" height="48" /></a><br />
-     <a href="index.html">首 页</a></li>
+     <a href="index.do?action=IndexAction">首 页</a></li>
    <li><a href="list.html"><img src="<%=basePath %>/images/menu_list.png" width="48" height="48" /></a><br />
      <a href="list.html">节目套餐</a></li>
-   <li><a href="help.html"><img src="<%=basePath %>/images/menu_help.png" width="48" height="48" /></a><br />
-     <a href="help.html">使用方式</a></li>
-   <li><a href="message.html"><img src="<%=basePath %>/images/menu_mesage.png" width="48" height="48" /></a><br />
-     <a href="message.html">短信平台</a></li>
-   <li><a href="news.html"><img src="<%=basePath %>/images/menu_news.png" width="48" height="48" /></a><br />
-     <a href="news.html">最新资讯</a></li>
-   <li><a href="qa.html"><img src="<%=basePath %>/images/menu_QA.png" width="48" height="48" /></a><br />
-     <a href="qa.html">常见问题</a></li>
-   <li><a href="cantcat.html"><img src="<%=basePath %>/images/menu_cancat.png" width="48" height="48" /></a><br />
-     <a href="cantcat.html">联系我们</a></li>
+   <li><a href="f.do?page=help.jsp"><img src="<%=basePath %>/images/menu_help.png" width="48" height="48" /></a><br />
+     <a href="f.do?page=help.jsp">使用方式</a></li>
+   <li><a href="f.do?page=sms.jsp"><img src="<%=basePath %>/images/menu_mesage.png" width="48" height="48" /></a><br />
+     <a href="f.do?page=sms.jsp">短信平台</a></li>
+   <li><a href="f.do?page=news.jsp"><img src="<%=basePath %>/images/menu_news.png" width="48" height="48" /></a><br />
+     <a href="f.do?page=news.jsp">最新资讯</a></li>
+   <li><a href="f.do?page=qa.jsp"><img src="<%=basePath %>/images/menu_QA.png" width="48" height="48" /></a><br />
+     <a href="f.do?page=qa.jsp">常见问题</a></li>
+   <li><a href="f.do?page=contact.jsp"><img src="<%=basePath %>/images/menu_cancat.png" width="48" height="48" /></a><br />
+     <a href="f.do?page=contact.jsp">联系我们</a></li>
    </ul>
 </div>
