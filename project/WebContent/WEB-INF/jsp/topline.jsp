@@ -20,11 +20,11 @@
         	}
         %>
    			<li class="topliimg"><img src="images/top_help.png" width="14" height="16" /></li>
-	        <li class="toplitext"><a href="help.html">使用方式</a></li>
+	        <li class="toplitext"><a href="f.do?page=help.jsp">使用方式</a></li>
 			<li class="topliimg"><img src="images/top_QA.png" width="12" height="18" /></li>
-			<li class="toplitext"><a href="qa.html">常见问题</a></li>
+			<li class="toplitext"><a href="f.do?page=qa.jsp">常见问题</a></li>
 			<li class="topliimg"><img src="images/top_cancat.png" width="17" height="18" /></li>
-			<li class="toplitext"><a href="cantcat.html">联系我们</a></li>
+			<li class="toplitext"><a href="f.do?page=contact.jsp">联系我们</a></li>
     </ul>
 	</div>
 </div>
