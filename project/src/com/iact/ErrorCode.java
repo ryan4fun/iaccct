@@ -26,5 +26,10 @@ public class ErrorCode {
 	 */
 	public static final int UN_UP = 2;
 	
+	/**
+	 * User name is existed 
+	 */
+	public static final int EXISTED_USER = 3;
+	
 	
 }
