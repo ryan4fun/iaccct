@@ -73,11 +73,4 @@ public class LoginAction extends AbstractAction {
 		return 0;
 	}
 	
-	public static void main(String[] args) {
-		String un = "admin";
-		String pwd = "admin";
-		
-		System.out.println(DigestUtils.md5Hex(pwd));
-		
-	}
 }
