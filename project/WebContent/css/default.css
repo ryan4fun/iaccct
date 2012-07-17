@@ -332,7 +332,6 @@ p{
 .leftinfo {
 	display: inline-block;
 	float: left;
-	height: 670px;
 	width: 253px;
 	line-height: 24px;
 	text-align: left;
@@ -340,7 +339,6 @@ p{
 .rightinfo {
 	display: inline-block;
 	float: left;
-	height: 670px;
 	width: 744px;
 }
 .rightinfodiv{
@@ -577,7 +575,13 @@ p{
 	margin: 5px;
 }
 
-#wbg {
-	height:460px;
-}
 
+.aboutproduct {
+	text-indent: 30px;
+	margin: 10px;
+}
+.aboutpt {
+	font-weight: bold;
+	color: #002E73;
+	margin: 10px;
+}
