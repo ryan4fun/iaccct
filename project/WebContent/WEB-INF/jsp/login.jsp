@@ -64,12 +64,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
     <!--  topline area -->
    	 <jsp:include page="topline.jsp" flush="true"/>
-   	 <div class="logopan">
-		<div class="logopansub">
-			<div class="logo"></div>
-		    <div class="login"></div>
-    	 </div>
-	</div>
 	<div id="main">   
 	 <jsp:include page="menu.jsp" flush="true"/>
 	 <div class="rege">
