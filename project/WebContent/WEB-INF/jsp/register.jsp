@@ -1,4 +1,4 @@
-﻿<%@ page language="java" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -79,6 +79,15 @@ input.failformcss,select.failformcss,textarea.failformcss{
 	display: inline-block;
 	line-height: 36px;
 	margin: 5px;
+}
+
+.sb {
+	width:100px;
+	background-color:#ff0ff;
+	text-align:center;
+	line-height: 28px;
+	height:34px;
+	padding-top:5px;
 }
 
 </style>
@@ -394,12 +403,16 @@ function checkUserExisted() {
             </div>
             
             <div class="content">
-            	<form>
+            	<form method="post" action="r.do" id="theForm">
             	 <table border="0">
               			<tr>
               			<td class="reglabel" align="right"> 用户名：
                     </td>
                     <td align="left">
+                    <input type="hidden" value="RegisterAction" name="action" />
+                    <input type="hidden" value="2" name="type" />
+                    <input type="hidden" value="0" name="createMode" />
+                    <input type="hidden" value="register2.jsp" name="page" />
                     <input name="login" type="text" id="login" class=":required" onblur="checkUserExisted();"/><span id="errTip"></span>
                   	</td>
                     </tr>
@@ -434,7 +447,7 @@ function checkUserExisted() {
                     电子邮件：
                     </td>
                     <td align="left">
-                   <input name="" type="text" class=":email :required"  />
+                   <input name="email" type="text" class=":email :required"  />
                     </td>
                     </tr>
                     <tr>
@@ -442,7 +455,7 @@ function checkUserExisted() {
                     真实姓名：
 	                  </td>
 									  <td align="left">
-                    <input name="" type="text"  class="reginput" />
+                    <input name="realName" type="text"  class="reginput" />
                     </td>
                     </tr>
                     <tr>
@@ -451,7 +464,7 @@ function checkUserExisted() {
                     </td>
 										<td align="left">
                     
-                      <select name="">
+                      <select name="sex">
                         <option value="男">男</option>
                         <option value="女">女</option>
                       </select>
@@ -463,8 +476,8 @@ function checkUserExisted() {
                     省：
                   </td>
                   <td align="left">
-                      <select name="">
-                        <option value="云南">云南</option>
+                      <select name="province">
+                        <option value="0">云南</option>
                       </select>
                   </td>
                   </tr>
@@ -473,26 +486,28 @@ function checkUserExisted() {
                  地区：
                   </td>
                   <td align="left">
-                      <select name="">
-                        <option value="昆明">昆明</option>
+                      <select name="area">
+                        <option value="123">昆明</option>
                       </select>
                    </td>
-								</tr>
+					</tr>
                   	<tr>
                   		<td class="reglabel" align="right">
                     许可协议确认：
                   </td>
                   <td align="left">
-                      <input type="checkbox" name="checkbox" id="checkbox" class=":accept" />
+                      <input type="checkbox" name="accept" class=":accept" />
                   </td>
                 </tr>
                   <tr>
-                  	<td colspan="2">	
-                    <a href="reg2.html"><img src="images/reg_button.png" width="86" height="33" /></a>
+                  	<td>
+                  	</td>
+                  	<td align="left">	
+                  	<input type="submit" class="sb" value="下一步" />
                		</td>
                	</tr>
-							</table>	
-						</form>
+				</table>	
+			</form>
             </div>
      </div>
     </div>  
