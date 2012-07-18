@@ -8,7 +8,7 @@
     <class name="com.iact.vo.User" table="user" catalog="iact">
         <id name="id" type="java.lang.Long">
             <column name="ID" />
-            <generator class="assigned"></generator>
+            <generator class="native"></generator>
         </id>
         <property name="area" type="java.lang.Long">
             <column name="Area" />
@@ -73,11 +73,5 @@
         <property name="status" type="java.lang.Integer">
             <column name="Status" not-null="true" />
         </property>
-        <set name="payonlinelogs" inverse="true">
-            <key>
-                <column name="User" not-null="true" />
-            </key>
-            <one-to-many class="com.iact.vo.Payonlinelog" />
-        </set>
     </class>
 </hibernate-mapping>
