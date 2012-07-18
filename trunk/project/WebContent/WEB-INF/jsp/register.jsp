@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <title>I-ACT爱插播</title>
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/style.css" />
-<script src="js/jquery-1.7.min.js"></script>
+<script src="jquery/jquery-1.7.2.min.js"></script>
 <script src="js/vanadium.js"></script>
 <style>
 form *{
@@ -43,7 +43,7 @@ checkbox {
 select {
 	line-height: 36px;
 	height: 36px;
-	width: 100px;
+	width: 203px;
 	border: 1px solid #83a4c5;
 	border-radius:5px;
 	padding: 5px;
@@ -53,7 +53,7 @@ input.rightformcss,select.rightformcss,textarea.rightformcss {
 		border:1px solid green;
 		line-height: 32px;
 		height: 32px;
-		width: 100px;
+		width: 203px;
 		padding:2px;
 		border-radius:5px;
 }
@@ -68,7 +68,7 @@ input.failformcss,select.failformcss,textarea.failformcss{
 	border:1px solid #a40000;
 	line-height: 32px;
 	height: 32px;
-	width: 100px;
+	width: 203px;
 	border-radius:5px;
 	padding: 2px;
 }
@@ -277,7 +277,7 @@ Vanadium.addValidatorTypes([
       function (v, p, validation_instance, decoration_context, decoration_callback) {
         if (Vanadium.validators_types['empty'].test(v)) return true;
         if (decoration_context && decoration_callback) {
-          jQuery.getJSON(p, {value: v, id: validation_instance.element.id}, function(data) {
+          jQuery.getJSON(p, {value: v, id: validation_instance.element.id, action:"RegisterAction", type:0}, function(data) {
             decoration_callback.apply(decoration_context, [[data], true]);
           });
         }
@@ -316,6 +316,62 @@ Vanadium.addValidatorTypes([
   ])
   if (typeof(VanadiumCustomValidationTypes) !== "undefined" && VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
 };
+
+function checkUserExisted() {
+	var lv = $("#login").get(0).value;
+	$("#errTip")[0].innerHTML ="";
+	var params = "action=RegisterAction&ajax=true"
+		 			+"&login="+lv
+		 			+"&type=0"
+		 			+"&ts="+ new Date();
+		 	$.ajax({
+		 		type:"post",
+		 		url:"r.do",
+		 		beforeSend:function(){
+		 		},
+		 		dataType:"json",
+		 		async:true,
+		 		data:params,
+		 		success:function(data) {
+		 			if (data.errorCode == 0) {
+		 				$("#login")[0].className = "irightformcss";	
+		 			} else {
+		 				$("#login")[0].className = "failformcss";	
+						$("#errTip")[0].innerHTML ='<span class="failmsg failformcss">' + data.errorMsg + '</span>';		
+		 			}
+		 		}
+		 	});
+	}
+	
+	function refreshAuth(basePath) {
+			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
+	}
+	
+	function checkAuth() {
+		var v = $("#authCode").get(0).value;
+		$("#authETip")[0].innerHTML ="";
+		var params = "action=RegisterAction&ajax=true"
+		 			+"&authCode="+v
+		 			+"&type=1"
+		 			+"&ts="+ new Date();
+	 	$.ajax({
+	 		type:"post",
+	 		url:"r.do",
+	 		beforeSend:function(){
+	 		},
+	 		dataType:"json",
+	 		async:true,
+	 		data:params,
+	 		success:function(data) {
+	 			if (data.errorCode == 0) {
+	 				$("#authCode")[0].className = "irightformcss";	
+	 			} else {
+	 				$("#authCode")[0].className = "failformcss";	
+					$("#authETip")[0].innerHTML ='<span class="failmsg failformcss">' + data.errorMsg + '</span>';		
+	 			}
+	 		}
+	 	});
+	}
 </script>
 </head>
 
@@ -338,12 +394,13 @@ Vanadium.addValidatorTypes([
             </div>
             
             <div class="content">
+            	<form>
             	 <table border="0">
               			<tr>
               			<td class="reglabel" align="right"> 用户名：
                     </td>
                     <td align="left">
-                    <input name="" type="text" class=":ajax;/r.do?" />
+                    <input name="login" type="text" id="login" class=":required" onblur="checkUserExisted();"/><span id="errTip"></span>
                   	</td>
                     </tr>
                     <tr>
@@ -362,12 +419,15 @@ Vanadium.addValidatorTypes([
                     </td>
                     </tr>
                     <tr>
-              			<td lass="reglabel" align="right">
+              			<td class="reglabel" align="right">
                     验证码：
 									  </td>
                     <td align="left">
-                    <input name="" type="text" class="reginput"  /><img src="images/9527.png" width="61" height="21" />看不清换一个 
-                    <td>
+                    <input name="" type="text" class="reginput"  id="authCode"  onblur="checkAuth();"/>
+                    	<img src="<%=basePath%>/auth" width="61" height="21" id="authImg"/>
+                    	<a href="javascript:void(0);" onclick="refreshAuth('<%=basePath%>');">看不清？换一张</a>
+                    	<span id="authETip"></span>
+                    </td>
                     </tr>
                     <tr>
                     <td class="reglabel" align="right">
@@ -386,7 +446,7 @@ Vanadium.addValidatorTypes([
                     </td>
                     </tr>
                     <tr>
-                    <td lass="reglabel" align="right">
+                    <td class="reglabel" align="right">
                     性别：
                     </td>
 										<td align="left">
@@ -423,7 +483,7 @@ Vanadium.addValidatorTypes([
                     许可协议确认：
                   </td>
                   <td align="left">
-                      <input type="checkbox" name="checkbox" id="checkbox" class="regcheckbox" />
+                      <input type="checkbox" name="checkbox" id="checkbox" class=":accept" />
                   </td>
                 </tr>
                   <tr>
@@ -432,6 +492,7 @@ Vanadium.addValidatorTypes([
                		</td>
                	</tr>
 							</table>	
+						</form>
             </div>
      </div>
     </div>  
