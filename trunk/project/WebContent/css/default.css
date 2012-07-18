@@ -245,6 +245,9 @@ p{
 	float: left;
 	width: 300px;
 	height: 97px;
+	background-image: url(../images/logo-d.png);
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 .logopansub {
 	width: 1000px;
@@ -415,6 +418,9 @@ p{
 	float: left;
 	width: 250px;
 	height: 81px;
+	background-image: url(../images/logo-s.png);
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 .footpansub {
 	width: 1000px;
@@ -434,7 +440,6 @@ p{
 	margin-left: 10px;
 	line-height: 24px;
 }
-
 #userpage{
 	width:1000px;
 	overflow:hidden;
@@ -574,8 +579,6 @@ p{
 	height: 37px;
 	margin: 5px;
 }
-
-
 .aboutproduct {
 	text-indent: 30px;
 	margin: 10px;
@@ -584,4 +587,184 @@ p{
 	font-weight: bold;
 	color: #002E73;
 	margin: 10px;
+}
+#main .hotcity ul li {
+	line-height: 32px;
+	display: inline-block;
+	float: left;
+	height: 32px;
+	width: 75px;
+	font-weight: bold;
+	margin-top: 5px;
+	margin-right: 0px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+.hotcity{
+	background-color: #ddd;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #ccc;
+	height: 42px;
+}
+.citylist {
+	cursor: pointer;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #fff;
+	border-bottom-color: #fff;
+	margin-top: 4px;
+	margin-right: 5px;
+	margin-bottom: 4px;
+	margin-left: 5px;
+	height: 52px;
+	background-color: #FFF;
+	font-weight: bold;
+}
+.citylist ul li {
+	display: inline-block;
+	margin: 5px;
+	float: left;
+}
+.citylist ul li a {
+	color: #002E73;
+}
+.citylist ul li a:hover {
+	color: #FF6600;
+}
+.abcz {
+	font-weight: bold;
+	color: #F8FCFD;
+	background-color: #002E73;
+	display: inline-block;
+	margin: 5px;
+	float: left;
+	height: 42px;
+	width: 42px;
+	line-height: 42px;
+}
+.citylist:hover{
+	background-color: #ddd;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #CCC;
+	border-bottom-color: #CCC;
+	margin-top: 4px;
+	margin-right: 5px;
+	margin-bottom: 4px;
+	margin-left: 5px;
+}
+
+.product_title {
+	color: #002E73;
+	font-weight: bold;
+	text-align: left;
+	line-height: 30px;
+	height: 30px;
+}
+#main .rightinfo #wbg .product_type {
+	font-weight: bold;
+	color: #000;
+	background-color: #ddd;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 16px;
+}
+#main .rightinfo #wbg .product_info {
+	height: 80px;
+	padding-top: 16px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 16px;
+}
+#main .rightinfo #wbg .product_info li {
+	display: inline-block;
+	float: left;
+	width: 90px;
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-left-style: solid;
+	border-top-color: #CCC;
+	border-left-color: #CCC;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 10px;
+	background-color: #FFf;
+}
+#main .rightinfo #wbg .product_info .product_info_title {
+	background-color: #FFEFDF;
+}
+.cb {
+	margin-top: 0px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	text-align: right;
+}
+.logopan .logopansub .login #topinfos {
+	display: inline-block;
+	float: right;
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-top: 40px;
+}
+
+
+
+#main .rightinfo #wbg .product_info li.b {
+	display: inline-block;
+	float: left;
+	width: 90px;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 10px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCC;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CCC;
+}
+#main .rightinfo #wbg .product_info li.r {
+	display: inline-block;
+	float: left;
+	width: 90px;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 10px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #CCC;
+}
+
+#main .rightinfo #wbg .product_info:hover {
+	background-color: #FFC;
+	cursor: pointer;
+}
+.product_titlebg {
+	background-color: #D7E7FF;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 16px;
+	margin-bottom: 20px;
+}
+#main .rightinfo #wbg div ul .product_info_titles {
+	font-weight: bold;
+	color: #006;
+	background-color: #D7E7FF;
+	padding-top: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	padding-left: 16px;
+	margin-bottom: 20px;
 }
