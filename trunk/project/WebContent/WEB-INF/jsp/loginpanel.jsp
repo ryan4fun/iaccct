@@ -1,4 +1,5 @@
-<%@ page language="java" import="com.iact.action.SessionContainer" pageEncoding="UTF-8"%>
+<%@ page language="java" import="com.iact.action.SessionContainer,
+								 com.iact.vo.User" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -6,6 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <!--  login area -->
    	  	<%
         	SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
+        	User user = sc.getUser();
         	if (sc == null || sc.getUser() == null) {	
         %>
         	<div class="logopan">
@@ -41,6 +43,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<div class="logopan">
         	<div class="logopansub">
 			<div class="logo"></div>
+			   <div class="login">
+		       <div id="topinfos">我的资源：（6/10）</div>
+		       <div id="topinfos"><%= user.getBalance()%>￥</div>
+		   	   <div id="topinfos">我的余额：</div>
+		       <div id="topinfos">我的订单：（10）</div>
+		       <div id="topinfos"><img src="images/star.png" width="16" height="15" /></div>
+		       <div id="topinfos">我的等级：</div>
+		   	   </div>
 			</div>
 	    	</div>
         <%  }%>
