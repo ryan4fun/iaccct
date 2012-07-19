@@ -412,14 +412,6 @@ Vanadium.addValidatorTypes([
                       </select>
                    </td>
 								</tr>
-                  	<tr>
-                  		<td class="reglabel" align="right">
-                    许可协议确认：
-                  </td>
-                  <td align="left">
-                      <input type="checkbox" name="checkbox" id="checkbox" class=":accept" />
-                  </td>
-                </tr>
                   <tr>
                   	<td>
                   	</td>
