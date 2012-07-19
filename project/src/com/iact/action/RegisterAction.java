@@ -5,11 +5,9 @@
  */
 package com.iact.action;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +19,6 @@ import com.iact.dao.DAOFactory;
 import com.iact.dao.UserDAO;
 import com.iact.util.json.JSONException;
 import com.iact.util.json.JSONObject;
-import com.iact.vo.AbstractUser;
 import com.iact.vo.User;
 
 /**

@@ -41,7 +41,6 @@ public class LoginAction extends AbstractAction {
 			String errMsg = "验证码错误！";
 			getSessionContainer(req).setUser(null);
 			writeErrorMessage(ErrorCode.AUTH_FAILURE, errMsg, res);
-
 			return 0;
 		} else {
 
@@ -66,7 +65,7 @@ public class LoginAction extends AbstractAction {
 				}
 			}
 		}
-
+		
 		String errMsg = "用户名或密码错误！";
 		getSessionContainer(req).setUser(null);
 		writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
