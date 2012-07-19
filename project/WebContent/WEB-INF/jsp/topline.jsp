@@ -1,5 +1,5 @@
 ﻿<%@ page language="java" import="com.iact.vo.User,
-								 com.iact.action.SessionContainer" pageEncoding="UTF-8"%>
+								 com.iact.action.SessionContainer" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <div class="topline">
 	<div id="top">
 	<ul>
