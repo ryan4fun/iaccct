@@ -7,7 +7,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <!--  login area -->
    	  	<%
         	SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
-        	User user = sc.getUser();
         	if (sc == null || sc.getUser() == null) {	
         %>
         	<div class="logopan">
@@ -39,6 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     </div>  
         <%
         	} else {
+        	 	User user = sc.getUser();
         %>
         	<div class="logopan">
         	<div class="logopansub">
