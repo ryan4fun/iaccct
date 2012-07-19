@@ -82,11 +82,11 @@ input.failformcss,select.failformcss,textarea.failformcss{
 }
 
 .sb {
-	width:100px;
+	width:86px;
 	text-align:center;
-	line-height: 28px;
-	height:34px;
-	padding-top:5px;
+	line-height: 33px;
+	height:33px;
+	border:none;
 	background-image:url(images/reg_button.png);
 }
 

@@ -15,7 +15,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		window.location.href="f.do?page=login.jsp";
 	}
 	document.onreadystatechange = function(){
-        setTimeout(redirect2Login, 5000);
+        setTimeout(redirect2Login, 3000);
 	};
 </script>
 </head>
