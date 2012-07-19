@@ -224,7 +224,7 @@ public abstract class AbstractAction implements Action {
 	protected void writeResponse(String result,
 			HttpServletResponse resp) throws IActException {
 		try {
-			resp.setContentType("text/html;charset=gb2312");
+			resp.setContentType("text/html;charset=UTF-8");
 			PrintWriter pw = resp.getWriter();
 
 			pw.write(result);
