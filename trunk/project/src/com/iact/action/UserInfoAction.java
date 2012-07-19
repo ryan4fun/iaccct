@@ -10,13 +10,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.iact.ErrorCode;
 import com.iact.IActException;
 import com.iact.dao.DAOFactory;
 import com.iact.dao.UserorderDAO;
-import com.iact.util.json.JSONArray;
-import com.iact.util.json.JSONException;
+import com.iact.dao.UserresourceDAO;
+import com.iact.util.PageResultSet;
 import com.iact.vo.User;
 import com.iact.vo.Userorder;
+import com.iact.vo.Userresource;
 
 /**
  * The action handle all request from user application such as
@@ -30,6 +32,8 @@ public class UserInfoAction extends AbstractAction {
 
 	private static final String USER_ORDER_DAO = "UserorderDAO";
 
+	private static final String USER_RESOURCE_DAO = "UserresourceDAO";
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -39,41 +43,68 @@ public class UserInfoAction extends AbstractAction {
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
 
-		User user = super.getSessionContainer(req).getUser();
-
 		String type = (String) reqParams.get("type");
-		if (type == null || type.equalsIgnoreCase("basic")) {
-			
-			try {
-				super.writeResponse(user.toJSONObject().toString(), res);
-			} catch (JSONException e) {
-				throw new IActException(e);
-			}
-		} else if (type.equalsIgnoreCase("order")) {
-			
-			String pStr = (String)reqParams.get("pn");
-			int pageNum = pStr == null ? 0 : Integer.parseInt(pStr);
-			List<Userorder> orders = getUserOrders(pageNum, user);
-			
-			try {
-				super.writeResponse(JSONArray.listToJSONArray(orders).toString(), res);
-			} catch (JSONException e) {
-				throw new IActException(e);
-			}
+		if (type == null || type.equalsIgnoreCase("0")) {
+			return getUserBasicInfo(req, res);
+		} else if (type.equalsIgnoreCase("1")) {
+			return getUserOrders(req, res);
+		} else if (type.equalsIgnoreCase("2")) {
+			return getUserResouces(req, res);
 		}
-		return 0;
+		return ErrorCode.OK;
 	}
 
-	private List<Userorder> getUserOrders(int pageNum, User user)
+	private int getUserOrders(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
+
 		UserorderDAO dao = (UserorderDAO) DAOFactory.getDAO(USER_ORDER_DAO);
+		User user = super.getSessionContainer(req).getUser();
+
 		long userid = user.getId();
-		String hsql = "from Userorder o where o.user=" + userid +" order by o.id desc";
-		int start = (pageNum - 1) * PAGE_SIZE;
+		String hsql = "from Userorder o where o.user=" + userid
+				+ " order by o.id desc";
+		String pStr = (String) reqParams.get("pn");
+		int curPage = pStr == null ? 1 : Integer.parseInt(pStr);
+
+		int start = (curPage - 1) * PAGE_SIZE;
 		int limit = PAGE_SIZE;
+
 		List<Userorder> orders = dao.findByHSQL(hsql, start, limit);
 
-		return orders;
+		PageResultSet result = new PageResultSet(orders, curPage, PAGE_SIZE);
+		req.setAttribute("result", result);
+		reqParams.put("page", "userorders.jsp");
+		_forward(req, res);
+
+		return ErrorCode.OK;
+
+	}
+
+	private int getUserBasicInfo(HttpServletRequest req, HttpServletResponse res)
+			throws IActException {
+		reqParams.put("page", "userbasic.jsp");
+		_forward(req, res);
+		return ErrorCode.OK;
+	}
+
+	private int getUserResouces(HttpServletRequest req, HttpServletResponse res)
+			throws IActException {
+		
+		UserresourceDAO dao = (UserresourceDAO) DAOFactory.getDAO(USER_RESOURCE_DAO);
+		User user = super.getSessionContainer(req).getUser();
+
+		long userid = user.getId();
+		String hsql = "from Userresource o where o.user=" + userid
+				+ " order by o.id desc";
+
+		int start = 0;
+		List<Userresource> resources = dao.findByHSQL(hsql, start, PAGE_SIZE);
+
+		req.setAttribute("resources", resources);
+		reqParams.put("page", "userresource.jsp");
+		_forward(req, res);
+
+		return ErrorCode.OK;
 
 	}
 
