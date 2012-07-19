@@ -2,7 +2,7 @@
 								 com.iact.vo.Platforminformation,
 								 com.iact.vo.Area,
 								 java.text.SimpleDateFormat,
-								 java.util.List" pageEncoding="UTF-8"%>
+								 java.util.List" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -175,7 +175,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         <div>
         <ul>
         <li><img src="images/Rss.png" width="145" height="32" /></li>
-        <li></li>
+        
        <% 
         	List<Platforminformation> news = (List<Platforminformation>)request.getAttribute("news");
         	int newsSize = 0;
