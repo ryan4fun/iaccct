@@ -83,14 +83,13 @@ input.failformcss,select.failformcss,textarea.failformcss{
 }
 
 .sb {
-	width:100px;
-	background-color:#ff0ff;
+	width:86px;
 	text-align:center;
 	line-height: 28px;
-	height:34px;
-	padding-top:5px;
+	height:33px;
+	border:none;
+	background-image:url(images/reg_button-2.png);
 }
-
 </style>
 <script>
 /*
@@ -416,7 +415,7 @@ Vanadium.addValidatorTypes([
                   	<td>
                   	</td>
                   	<td align="left">	
-                  	<input type="submit" class="sb" value="下一步" />
+                  	<input type="submit" class="sb" value="" />
                		</td>
                		</tr>
 							</table>	
