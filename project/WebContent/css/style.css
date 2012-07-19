@@ -205,6 +205,7 @@ div .step li {
 }
 .byinfolist {
 	width: 700px;
+	height:75px;
 }
 .byinfolist li {
 	display: inline-block;
@@ -220,10 +221,11 @@ div .step li {
 	border-bottom-color: #7F9DB9;
 }
 .byinfolistt {
-	width: 200px;
+	width: 80px;
 }
 .byinfolists {
-	width: 700px;
+	width: 712px;
+	height:30px;
 }
 .byinfolists li {
 	display: inline-block;
