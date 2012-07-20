@@ -1,8 +1,20 @@
 <%@ page language="java" import="com.iact.vo.Platforminformation" pageEncoding="UTF-8"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 Platforminformation p = (Platforminformation)request.getAttribute("info");
+java.sql.Blob bs = p.getInformation();
+String info = "";
+if (bs != null) {
+	info = new String(bs.getBytes(1, (int)bs.length()), "GBK");
+}
+SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+String createTime = "";
+if (p.getAddTime() != null) {
+	createTime = sf.format(p.getAddTime());
+}
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -73,11 +85,12 @@ Platforminformation p = (Platforminformation)request.getAttribute("info");
  <div class="rightinfo">
     <div id="wbg">
         <ul>
-        <li><%=p.getTitle()%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= p.getAddTime()%> </li>
+        <li style="text-align:center"><%=p.getTitle()%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=createTime%> </li>
+        <li>&nbsp;</li>
         </ul>
         <ul>
         <li class="aboutproduct">
-        	<%=p.getInformation()%>
+        	<%=info%>
         </li>
         </ul>
         </div>
