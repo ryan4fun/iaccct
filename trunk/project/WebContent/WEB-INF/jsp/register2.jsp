@@ -9,6 +9,8 @@ User user = (User)session.getAttribute("tempUser");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>I-ACT爱插播</title>
+<link rel="icon" href="<%=basePath %>/images/ico.ico" type="image/x-icon"/> 
+<link rel="shortcut icon" href="<%=basePath %>/images/icon.ico" type="image/x-icon"/> 
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <script src="jquery/jquery-1.7.2.min.js"></script>
