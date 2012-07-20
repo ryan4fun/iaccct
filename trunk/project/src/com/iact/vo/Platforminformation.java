@@ -22,7 +22,7 @@ public class Platforminformation extends AbstractPlatforminformation implements
 
 	/** full constructor */
 	public Platforminformation(Long id, Timestamp addTime, Integer bizType,
-			String title, String information) {
+			String title, java.sql.Blob information) {
 		super(id, addTime, bizType, title, information);
 	}
 

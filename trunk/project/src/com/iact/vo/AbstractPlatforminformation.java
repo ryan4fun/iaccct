@@ -16,7 +16,7 @@ public abstract class AbstractPlatforminformation implements
 	private Timestamp addTime;
 	private Integer bizType;
 	private String title;
-	private String information;
+	private java.sql.Blob information;
 
 	// Constructors
 
@@ -35,7 +35,7 @@ public abstract class AbstractPlatforminformation implements
 
 	/** full constructor */
 	public AbstractPlatforminformation(Long id, Timestamp addTime,
-			Integer bizType, String title, String information) {
+			Integer bizType, String title, java.sql.Blob information) {
 		this.id = id;
 		this.addTime = addTime;
 		this.bizType = bizType;
@@ -77,11 +77,11 @@ public abstract class AbstractPlatforminformation implements
 		this.title = title;
 	}
 
-	public String getInformation() {
+	public java.sql.Blob getInformation() {
 		return this.information;
 	}
 
-	public void setInformation(String information) {
+	public void setInformation(java.sql.Blob  information) {
 		this.information = information;
 	}
 
