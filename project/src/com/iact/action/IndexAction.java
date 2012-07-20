@@ -58,9 +58,6 @@ public class IndexAction extends AbstractAction {
 		List<Platforminformation> ads = infoDAO.findByBizType(2);
 		req.setAttribute("ads", ads);
 		
-		// 4. Fetch common questions
-		List<Platforminformation> questions = infoDAO.findByBizType(3);
-		req.setAttribute("qs", questions);
 		
 		try {
 			req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, res);
