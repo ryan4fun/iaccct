@@ -95,26 +95,12 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         <div id="wbg">
         <ul>
        	 <li><img src="images/qa.png" width="102" height="24" /></li>
-		  	<% 
-		  		List<Platforminformation> qs 
-		  			= (List<Platforminformation>)request.getAttribute("qs");
-		  		int size = 0;
-		  		if (qs != null){
-		  			size = qs.size();
-		  			int showSize = size > 5 ? 5: size;
-		  			for (int i = 0; i < showSize; i++) {
-		  				Platforminformation q = qs.get(i);
-		  	%>
-		  				<li><a href="q.do?id=<%=q.getId()%>" > <%=q.getTitle()%></a></li>
-		  	<% 
-		  			}
-		  		}
-		  	    if (size > 5) {
-		  	%>
-	   			 <li class="more">更多...</li>
-		  	<% 
-		  	    }
-		  	%>
+	  	 <li><a href="f.do?page=qa.jsp#q1">领先的广告信息发布方式</a></li>
+       	 <li><a href="f.do?page=qa.jsp#q2">灵活的信息定制方式</a></li>
+         <li><a href="f.do?page=qa.jsp#q3">基于Cloud控制和管理</a></li>
+         <li><a href="f.do?page=qa.jsp#q4">安全的信息过滤技术</a></li>
+         <li><a href="f.do?page=qa.jsp#q5">灵活的盈利方案</a></li>
+         <li class="more"><a href="f.do?page=qa.jsp">更多...</a></li>
 		</ul>
         </div>
         <!--  online area -->
@@ -146,7 +132,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         <div>
         <ul>
         <li><img src="images/gonggao.png" width="148" height="35" /></li>
-        <li></li>
+        
         <% 
         	List<Platforminformation> ads = (List<Platforminformation>)request.getAttribute("ads");
         	int adsSize = 0;
