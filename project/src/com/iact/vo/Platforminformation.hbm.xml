@@ -19,7 +19,7 @@
         <property name="title" type="java.lang.String">
             <column name="Title" length="64" not-null="true" />
         </property>
-        <property name="information" type="java.lang.String">
+        <property name="information" type="java.sql.Blob">
             <column name="Information" />
         </property>
     </class>
