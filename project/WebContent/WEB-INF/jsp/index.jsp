@@ -142,7 +142,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         		for (int i = 0; i < showSize; i++) {
         			Platforminformation ad = ads.get(i);
         %>
-       			 <li id="newstitle">.<a href="ad.do?id=<%= ad.getId()%>"> <%= ad.getTitle()%></a></li><li id="newsdata"><%=sf.format(ad.getAddTime())%></li>
+       			 <li id="newstitle">.<a href="ad.do?action=OpenNewsAction&id=<%= ad.getId()%>"> <%= ad.getTitle()%></a></li><li id="newsdata"><%=sf.format(ad.getAddTime())%></li>
         <% 
         		}
         	}
@@ -152,7 +152,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         <% 
         	if (adsSize > 5) {
         %>
-         <div class="more"><a href="gonggao.html">更多...</a></div>
+         <div class="more"><a href="more.do?action=MoreNewsAction">更多...</a></div>
         <% 
         	}
         %>
@@ -171,7 +171,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         		for (int i = 0; i < showSize; i++) {
         			Platforminformation n = news.get(i);
         %>
-       			 <li id="newstitle">.<a href="news.do?id=<%= n.getId()%>"> <%= n.getTitle()%></a></li><li id="newsdata"><%=sf.format(n.getAddTime())%></li>
+       			 <li id="newstitle">.<a href="ad.do?action=OpenNewsAction&id=<%=n.getId()%>"> <%= n.getTitle()%></a></li><li id="newsdata"><%=sf.format(n.getAddTime())%></li>
         <% 
         		}
         	}
@@ -181,7 +181,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         <% 
         	if (newsSize > 5) {
         %>
-         <div class="more"><a href="gonggao.html">更多...</a></div>
+         <div class="more"><a href="more.do?action=MoreNewsAction" >更多...</a></div>
         <% 
         	}
         %>
