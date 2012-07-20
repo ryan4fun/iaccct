@@ -5,6 +5,7 @@
  */
 package com.iact.action;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,10 @@ public class LoginAction extends AbstractAction {
 					boolean matched = user.getPwd().equals(pMD5);
 					if (matched) {
 						getSessionContainer(req).setUser(user);
+						user.setLoginIp(req.getRemoteAddr());
+						user.setLoginTime(new Timestamp(System.currentTimeMillis()));
+						
+						userDAO.merge(user);
 						JSONObject jo = new JSONObject();
 						try {
 							jo.put("errorCode", ErrorCode.OK);
