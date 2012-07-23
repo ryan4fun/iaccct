@@ -86,6 +86,7 @@ String pageNav = result.getToolBar(url);
     <div id="wbg">
        <ul>
         <li><img src="images/Rss.png" width="145" height="32" /></li>
+        <li>&nbsp;</li>
         <% 
         	int newsSize = 0;
         	if (news != null) {
