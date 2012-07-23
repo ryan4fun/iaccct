@@ -58,7 +58,7 @@ public class UserInfoAction extends AbstractAction {
 			return getUserOrders(req, res);
 		} else if (type.equalsIgnoreCase("2")) {
 			return getUserResouces(req, res);
-		}else if (type.equalsIgnoreCase("3")) {
+		} else if (type.equalsIgnoreCase("3")) {
 			return getUserPayRecords(req, res);
 		} else if (type.equalsIgnoreCase("4")) {
 			return getUserExpendRecords(req, res);
@@ -73,8 +73,23 @@ public class UserInfoAction extends AbstractAction {
 		User user = super.getSessionContainer(req).getUser();
 
 		long userid = user.getId();
-		String hsql = "from Userorder o where o.user=" + userid
-				+ " order by o.id desc";
+		StringBuilder wherePortion = new StringBuilder();
+		String sdate = (String) reqParams.get("sdate");
+		wherePortion.append(" where o.user=" + userid);
+		if (sdate != null) {
+			sdate = sdate + " 00:00:00";
+			wherePortion.append(" and o.createTime >= '" + sdate + "'");
+		}
+
+		String edate = (String) reqParams.get("edate");
+		if (edate != null) {
+			edate = edate + " 23:59:59";
+			wherePortion.append(" and o.createTime <= '" + edate + "'");
+		}
+
+		String hsql = "from Userorder o" + wherePortion.toString()
+				+ " order by o.createTime desc";
+
 		String pStr = (String) reqParams.get("pn");
 		int curPage = pStr == null ? 1 : Integer.parseInt(pStr);
 
@@ -99,8 +114,23 @@ public class UserInfoAction extends AbstractAction {
 		User user = super.getSessionContainer(req).getUser();
 
 		long userid = user.getId();
-		String hsql = "from Payrecord o where o.user=" + userid
-				+ " order by o.id desc";
+		StringBuilder wherePortion = new StringBuilder();
+		String sdate = (String) reqParams.get("sdate");
+		wherePortion.append(" where o.user=" + userid);
+		if (sdate != null) {
+			sdate = sdate + " 00:00:00";
+			wherePortion.append(" and o.addTime >= '" + sdate + "'");
+		}
+
+		String edate = (String) reqParams.get("edate");
+		if (edate != null) {
+			edate = edate + " 23:59:59";
+			wherePortion.append(" and o.addTime <= '" + edate + "'");
+		}
+
+		String hsql = "from Payrecord o" + wherePortion.toString()
+				+ " order by o.addTime desc";
+
 		String pStr = (String) reqParams.get("pn");
 		int curPage = pStr == null ? 1 : Integer.parseInt(pStr);
 
@@ -126,8 +156,23 @@ public class UserInfoAction extends AbstractAction {
 		User user = super.getSessionContainer(req).getUser();
 
 		long userid = user.getId();
-		String hsql = "from Expendrecord o where o.user=" + userid
-				+ " order by o.id desc";
+		StringBuilder wherePortion = new StringBuilder();
+		String sdate = (String) reqParams.get("sdate");
+		wherePortion.append(" where o.user=" + userid);
+		if (sdate != null) {
+			sdate = sdate + " 00:00:00";
+			wherePortion.append(" and o.finalpaidTime >= '" + sdate + "'");
+		}
+
+		String edate = (String) reqParams.get("edate");
+		if (edate != null) {
+			edate = edate + " 23:59:59";
+			wherePortion.append(" and o.finalpaidTime <= '" + edate + "'");
+		}
+
+		String hsql = "from Expendrecord o" + wherePortion.toString()
+				+ " order by o.finalpaidTime desc";
+
 		String pStr = (String) reqParams.get("pn");
 		int curPage = pStr == null ? 1 : Integer.parseInt(pStr);
 
