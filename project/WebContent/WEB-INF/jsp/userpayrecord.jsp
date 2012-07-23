@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.List,
 								 java.text.SimpleDateFormat,
-								 com.iact.vo.Userorder,
+								 com.iact.vo.Payrecord,
 								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 PageResultSet result = (PageResultSet)request.getAttribute("result");
 String url = "user.do?action=UserInfoAction&type=1";
 String pageNav = result.getToolBar(url);
-List<Userorder> userOrders = (List<Userorder>)result.getData();
+List<Payrecord> payrecords = (List<Payrecord>)result.getData();
 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -43,7 +43,7 @@ ul li{
         <div id="wbg">
         <div>
         <ul>
-        <li><img src="images/my_title2.png" width="160" height="30" /></li>
+       <li><img src="images/my_title6.png" width="160" height="30" /></li>
         <li>&nbsp;</li>
         <li class="search">
         <ul>
@@ -55,32 +55,26 @@ ul li{
         <li><img src="images/search_button.png" width="120" height="33" /></li>
         </ul>
         </li>
-        <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户订单</li>
+        <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户成功充值记录</li>
         <li>
         <ul class="byinfolist">
         <li><input name="" type="checkbox" value="" /></li>
         <li class="byinfolistt">订单号</li>
-        <li class="byinfolistt">套餐名称</li>
-        <li class="byinfolistt" style="width:50px;">单价</li> 
-        <li class="byinfolistt" style="width:50px;">套数</li>
-        <li class="byinfolistt" style="width:60px;">处理状态</li>
-        <li class="byinfolistt">日期</li>
-        <li class="byinfolistt" style="width:50px;">删除</li>
+        <li class="byinfolistt">充值模式</li>
+         <li class="byinfolistt">充值金额</li>
+        <li class="byinfolistt">充值时间</li> 
         </ul>
         <% 
-        	for (int i = 0, size = (userOrders 
-        						== null ? 0 :userOrders.size()); i < size; i++ ) {
-        		Userorder u = userOrders.get(i);
+        	for (int i = 0, size = (payrecords 
+        						== null ? 0 :payrecords.size()); i < size; i++ ) {
+        		Payrecord u = payrecords.get(i);
         %>
 	        <ul class="byinfolists">
 	        <li><input name="" type="checkbox" value="" /></li>
 	        <li class="byinfolistt"><%=u.getOrderId() %></li>
-	        <li class="byinfolistt"><%=u.getBizPackage() %></li>
-	        <li class="byinfolistt" style="width:50px;"><%=u.getPlanFee()%></li>
-	        <li class="byinfolistt" style="width:50px;"><%=u.getPackageNumber() %></li>
-	        <li class="byinfolistt" style="width:60px;"><%=u.getHandleStatus()%></li>
-	        <li class="byinfolistt"><%=sf.format(u.getCreateTime())%></li>
-	        <li class="byinfolistt" style="width:50px;">删除</li>
+	        <li class="byinfolistt" style="width:60px;"><%=u.getPayMode()%></li>
+	        <li class="byinfolistt"><%=u.getPayAmount() %></li>
+	        <li class="byinfolistt"><%=sf.format(u.getAddTime())%></li>
 	        </ul> 
         <%	
         	}
