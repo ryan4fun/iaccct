@@ -32,4 +32,9 @@ public class ErrorCode {
 	public static final int EXISTED_USER = 3;
 	
 	
+	public static final int LARGER_THAN_MAX_UPSIZE = 4;
+
+	public static final int ILLEGAL_FILE_TYPE = 5;
+	
+	
 }
