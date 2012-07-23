@@ -20,7 +20,32 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 <link rel="shortcut icon" href="<%=basePath %>/images/icon.ico" type="image/x-icon"/> 
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <link rel="stylesheet" type="text/css" href="css/style.css" />
-<script type="text/javascript" src="<%=basePath %>/jquery/jquery-1.7.2.min.js"></script>
+<link rel="stylesheet" href="jquery/jquery.ui.datepicker.css"/>
+<link rel="stylesheet" href="jquery/jquery.ui.theme.css"/>
+<script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
+<script src="jquery/jquery.ui.core.js"></script>
+<script src="jquery/jquery.ui.widget.js"></script>
+<script src="jquery/jquery.ui.datepicker.js"></script>
+<script src="jquery/jquery.ui.datepicker-zh-CN.js"></script>
+
+<script>
+	$(function() {
+		$( "#sdate" ).datepicker({
+			showOn: "button",
+			buttonImage: "images/calendar.png",
+			buttonImageOnly: true,
+			prevText:'',
+			nextText:''
+		});
+		$( "#edate" ).datepicker({
+			showOn: "button",
+			buttonImage: "images/calendar.png",
+			buttonImageOnly: true,
+			prevText:'',
+			nextText:''
+		});
+	});
+</script>
 <!--[if lte IE 7]>
 <style type="text/css">
 ul li{
@@ -48,10 +73,9 @@ ul li{
         <li class="search">
         <ul>
         <li>起始时间:</li>
-        <li><input name="" type="text" class="searchinput" /></li>
-        <li><img src="images/calendar.png" width="16" height="16" /></li>
-        <li><input name="" type="text" class="searchinput" /></li>
-        <li><img src="images/calendar.png" width="16" height="16" /></li>
+        <li><input name="" type="text" class="searchinput" id="sdate" readonly="readonly"/></li>
+        <li>&nbsp;</li>
+        <li><input name="" type="text" class="searchinput" id="edate" readonly="readonly"/></li>
         <li><img src="images/search_button.png" width="120" height="33" /></li>
         </ul>
         </li>
