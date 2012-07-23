@@ -100,7 +100,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         <% 
         	if (adsSize > 5) {
         %>
-         <div class="more"><a href="more.do?action=MoreNewsAction">更多...</a></div>
+         <div class="more"><a href="more.do?action=ListNewsAction">更多...</a></div>
         <% 
         	}
         %>
