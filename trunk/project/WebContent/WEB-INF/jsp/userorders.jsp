@@ -71,13 +71,17 @@ ul li{
         <li><img src="images/my_title2.png" width="160" height="30" /></li>
         <li>&nbsp;</li>
         <li class="search">
+        <form action="user.do" id="searchForm">
+        <input type="hidden" value="UserInfoAction" name="action" />
+         <input type="hidden" value="1" name="type" />
         <ul>
         <li>起始时间:</li>
-        <li><input name="" type="text" class="searchinput" id="sdate" readonly="readonly"/></li>
+        <li><input type="text" class="searchinput" id="sdate" name="sdate" readonly="readonly"/></li>
         <li>&nbsp;</li>
-        <li><input name="" type="text" class="searchinput" id="edate" readonly="readonly"/></li>
-        <li><img src="images/search_button.png" width="120" height="33" /></li>
+        <li><input type="text" class="searchinput" id="edate" name="edate" readonly="readonly"/></li>
+        <li><a href="javascript:void(0);" onclick="searchForm.submit();"><img src="images/search_button.png" width="120" height="33"/></a></li>
         </ul>
+        </form>
         </li>
         <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户订单</li>
         <li>
