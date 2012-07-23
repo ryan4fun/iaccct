@@ -1,5 +1,6 @@
 package com.iact.vo;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -22,7 +23,7 @@ public class Userresource extends AbstractUserresource implements
 
 	/** full constructor */
 	public Userresource(Long id, Long user, String spotType, String subtitle,
-			String logoType, Integer logoX, Integer logoY, String logoData,
+			String logoType, Integer logoX, Integer logoY, Blob logoData,
 			String description, Timestamp addTime, Timestamp verifyTime,
 			Long verifyManager, String verifyStatus, String verifyInfo) {
 		super(id, user, spotType, subtitle, logoType, logoX, logoY, logoData,
