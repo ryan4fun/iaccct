@@ -1,5 +1,6 @@
 package com.iact.vo;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -18,7 +19,7 @@ public abstract class AbstractUserresource implements java.io.Serializable {
 	private String logoType;
 	private Integer logoX;
 	private Integer logoY;
-	private String logoData;
+	private Blob logoData;
 	private String description;
 	private Timestamp addTime;
 	private Timestamp verifyTime;
@@ -46,7 +47,7 @@ public abstract class AbstractUserresource implements java.io.Serializable {
 	/** full constructor */
 	public AbstractUserresource(Long id, Long user, String spotType,
 			String subtitle, String logoType, Integer logoX, Integer logoY,
-			String logoData, String description, Timestamp addTime,
+			Blob logoData, String description, Timestamp addTime,
 			Timestamp verifyTime, Long verifyManager, String verifyStatus,
 			String verifyInfo) {
 		this.id = id;
@@ -123,11 +124,11 @@ public abstract class AbstractUserresource implements java.io.Serializable {
 		this.logoY = logoY;
 	}
 
-	public String getLogoData() {
+	public Blob getLogoData() {
 		return this.logoData;
 	}
 
-	public void setLogoData(String logoData) {
+	public void setLogoData(Blob logoData) {
 		this.logoData = logoData;
 	}
 
