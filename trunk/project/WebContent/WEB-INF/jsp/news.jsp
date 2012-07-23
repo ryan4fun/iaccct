@@ -1,7 +1,11 @@
-<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page language="java" import="com.iact.action.SessionContainer,
+								 com.iact.vo.Platforminformation,
+								 java.text.SimpleDateFormat,
+								 java.util.List" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -72,33 +76,63 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	<jsp:include page="online.jsp" flush="true" />
 </div>
  <div class="rightinfo">
-   <div id="wbg">
+    <div id="wbg">
         <div>
         <ul>
         <li><img src="images/gonggao.png" width="148" height="35" /></li>
-        <li></li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
+        
+        <% 
+        	List<Platforminformation> ads = (List<Platforminformation>)request.getAttribute("ads");
+        	int adsSize = 0;
+        	if (ads != null) {
+        		adsSize = ads.size();
+        		int showSize = adsSize > 5 ? 5: adsSize;
+        		for (int i = 0; i < showSize; i++) {
+        			Platforminformation ad = ads.get(i);
+        %>
+       			 <li id="newstitle">.<a href="ad.do?action=OpenNewsAction&id=<%= ad.getId()%>"> <%= ad.getTitle()%></a></li><li id="newsdata"><%=sf.format(ad.getAddTime())%></li>
+        <% 
+        		}
+        	}
+        %>
         </ul>
         </div>
-        <div class="more"><a href="gonggao.html">更多...</a></div>
-    	</div>
+        <% 
+        	if (adsSize > 5) {
+        %>
+         <div class="more"><a href="more.do?action=MoreNewsAction">更多...</a></div>
+        <% 
+        	}
+        %>
+        </div>
         <div id="wbg">
         <div>
         <ul>
         <li><img src="images/Rss.png" width="145" height="32" /></li>
-        <li></li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>      
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        <li id="newstitle">.实拍黄河再现罕见"流鱼"奇观 上千市民捞鱼</li><li id="newsdata">2012-07-07</li>
-        </ul>        
+        
+       <% 
+        	List<Platforminformation> news = (List<Platforminformation>)request.getAttribute("news");
+        	int newsSize = 0;
+        	if (news != null) {
+        		newsSize = news.size();
+        		int showSize = newsSize > 5 ? 5: newsSize;
+        		for (int i = 0; i < showSize; i++) {
+        			Platforminformation n = news.get(i);
+        %>
+       			 <li id="newstitle">.<a href="ad.do?action=OpenNewsAction&id=<%=n.getId()%>"> <%= n.getTitle()%></a></li><li id="newsdata"><%=sf.format(n.getAddTime())%></li>
+        <% 
+        		}
+        	}
+        %>
+        </ul>
         </div>
-     <div class="more"><a href="news.html">更多...</a></div>
+        <% 
+        	if (newsSize > 5) {
+        %>
+         <div class="more"><a href="more.do?action=ListNewsAction" >更多...</a></div>
+        <% 
+        	}
+        %>
     </div>
 </div>  
 </div>
