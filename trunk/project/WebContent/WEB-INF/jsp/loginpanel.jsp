@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			            <li class="pass"></li>
 			            <li><input type="password" name="password" id="password"/></li>
 			            <li><input type="text" name="authCode" id="authCode"/></li>
-			            <li><img src="<%=basePath%>/images/login_button.png" width="107" height="40" onclick="login();" /></li>
+			            <li><a href="javascript:void(0);" onclick="login();"><img src="<%=basePath%>/images/login_button.png" width="107" height="40"/></a></li>
 			        </ul>
 			        </div>
 		        <div>
