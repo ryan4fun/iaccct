@@ -84,29 +84,33 @@ ul li{
         </form>
         </li>
         <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户成功充值记录</li>
-        <li>
-        <ul class="byinfolist">
+        <li class="byinfolist">
+        <ul >
         <li><input name="" type="checkbox" value="" /></li>
         <li class="byinfolistt">订单号</li>
         <li class="byinfolistt">充值模式</li>
          <li class="byinfolistt">充值金额</li>
         <li class="byinfolistt">充值时间</li> 
         </ul>
+        </li>
         <% 
         	for (int i = 0, size = (payrecords 
         						== null ? 0 :payrecords.size()); i < size; i++ ) {
         		Payrecord u = payrecords.get(i);
         %>
-	        <ul class="byinfolists">
+        	<li class="byinfolists">
+	        <ul >
 	        <li><input name="" type="checkbox" value="" /></li>
 	        <li class="byinfolistt"><%=u.getOrderId() %></li>
 	        <li class="byinfolistt" style="width:60px;"><%=u.getPayMode()%></li>
 	        <li class="byinfolistt"><%=u.getPayAmount() %></li>
 	        <li class="byinfolistt"><%=sf.format(u.getAddTime())%></li>
 	        </ul> 
+	        </li>
         <%	
         	}
         %>
+        <li>
         </li>
         </ul>  
         </div>

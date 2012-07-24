@@ -84,8 +84,8 @@ ul li{
         </form>
         </li>
         <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户订单</li>
-        <li>
-        <ul class="byinfolist">
+        <li class="byinfolist">
+        <ul>
         <li><input name="" type="checkbox" value="" /></li>
         <li class="byinfolistt">订单号</li>
         <li class="byinfolistt">套餐名称</li>
@@ -95,12 +95,15 @@ ul li{
         <li class="byinfolistt">日期</li>
         <li class="byinfolistt" style="width:50px;">删除</li>
         </ul>
+        </li>
+        
         <% 
         	for (int i = 0, size = (userOrders 
         						== null ? 0 :userOrders.size()); i < size; i++ ) {
         		Userorder u = userOrders.get(i);
         %>
-	        <ul class="byinfolists">
+	    	<li class="byinfolists">
+	        <ul >
 	        <li><input name="" type="checkbox" value="" /></li>
 	        <li class="byinfolistt"><%=u.getOrderId() %></li>
 	        <li class="byinfolistt"><%=u.getBizPackage() %></li>
@@ -110,10 +113,11 @@ ul li{
 	        <li class="byinfolistt"><%=sf.format(u.getCreateTime())%></li>
 	        <li class="byinfolistt" style="width:50px;">删除</li>
 	        </ul> 
+	        </li>
         <%	
         	}
         %>
-        </li>
+        <li></li>
         </ul>  
         </div>
         <div>
