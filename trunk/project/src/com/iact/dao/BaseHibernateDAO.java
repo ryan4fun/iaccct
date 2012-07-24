@@ -85,4 +85,11 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 		
 		return c.list();
 	}
+	
+ 
+	public int findCount(String sql) {  
+	    Query query = this.getSession().createQuery(sql);  
+	    return ((Number)query.uniqueResult()).intValue();  
+
+	}  
 }
