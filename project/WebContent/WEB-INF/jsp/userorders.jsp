@@ -83,16 +83,16 @@ ul li{
         </ul>
         </form>
         </li>
-        <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户订单</li>
+        <li class="userbytitle">&gt;&gt;最近30天的用户订单</li>
         <li class="byinfolist">
         <ul>
-        <li><input name="" type="checkbox" value="" /></li>
         <li class="byinfolistt">订单号</li>
         <li class="byinfolistt">套餐名称</li>
         <li class="byinfolistt" style="width:50px;">单价</li> 
         <li class="byinfolistt" style="width:50px;">套数</li>
         <li class="byinfolistt" style="width:60px;">处理状态</li>
         <li class="byinfolistt">日期</li>
+        <li class="byinfolistt" style="width:50px;">明细</li>
         <li class="byinfolistt" style="width:50px;">删除</li>
         </ul>
         </li>
@@ -104,13 +104,13 @@ ul li{
         %>
 	    	<li class="byinfolists">
 	        <ul >
-	        <li><input name="" type="checkbox" value="" /></li>
 	        <li class="byinfolistt"><%=u.getOrderId() %></li>
 	        <li class="byinfolistt"><%=u.getBizPackage() %></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPlanFee()%></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPackageNumber() %></li>
 	        <li class="byinfolistt" style="width:60px;"><%=u.getHandleStatus()%></li>
 	        <li class="byinfolistt"><%=sf.format(u.getCreateTime())%></li>
+	        <li class="byinfolistt" style="width:50px;">明细</li>
 	        <li class="byinfolistt" style="width:50px;">删除</li>
 	        </ul> 
 	        </li>
