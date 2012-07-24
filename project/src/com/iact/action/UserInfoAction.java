@@ -208,8 +208,8 @@ public class UserInfoAction extends AbstractAction {
 		String hsql = "from Userresource o where o.user=" + userid
 				+ " order by o.id desc";
 
-		int start = 0;
-		List<Userresource> resources = dao.findByHSQL(hsql, start, PAGE_SIZE);
+
+		List<Userresource> resources = dao.findByHSQL(hsql, 0, 100);
 
 		req.setAttribute("resources", resources);
 		reqParams.put("page", "userresource.jsp");

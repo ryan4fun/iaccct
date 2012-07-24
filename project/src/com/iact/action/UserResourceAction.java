@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -96,6 +97,10 @@ public class UserResourceAction extends AbstractAction {
 		String resType = (String) reqParams.get("resType");
 
 		Userresource ures = new Userresource();
+		User u = getSessionContainer(req).getUser();
+		long userid = u.getId();
+		ures.setUser(userid);
+		
 		Timestamp addTime = new Timestamp(System.currentTimeMillis());
 		ures.setAddTime(addTime);
 		ures.setDescription((String) reqParams.get("desc"));
@@ -103,12 +108,13 @@ public class UserResourceAction extends AbstractAction {
 		String subTitle = (String) reqParams.get("subTitle");
 		ures.setSubtitle(subTitle);
 		ures.setVerifyStatus("等待审核");
-
-		if (resType == "1") {
+		ures.setSpotType("文字");
+		
+		if (resType.equalsIgnoreCase("1")) {
 			// image
 			String fileName = (String) reqParams.get("fileName");
 			String fileFullPath = req.getSession().getServletContext()
-					.getRealPath("/")
+					.getRealPath("/") + "images/temp/"
 					+ fileName;
 			File f = new File(fileFullPath);
 
@@ -149,6 +155,16 @@ public class UserResourceAction extends AbstractAction {
 			uresDAO.closeSession();
 		}
 
+		if (resType == "1") {
+			
+		}
+		
+		try {
+			res.sendRedirect("user.do?action=UserInfoAction&type=2");
+		} catch (IOException e) {
+			throw new IActException(e);
+		}
+		
 		return ErrorCode.OK;
 	}
 
