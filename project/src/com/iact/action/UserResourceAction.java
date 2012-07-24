@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -60,6 +59,8 @@ public class UserResourceAction extends AbstractAction {
 			return uploadLogo(req, res);
 		} else if (type.equalsIgnoreCase("save")) {
 			return submitResource(req, res);
+		} else if (type.equalsIgnoreCase("dele")) {
+			return deleUserResource(req, res);
 		}
 
 		return ErrorCode.OK;
@@ -100,7 +101,7 @@ public class UserResourceAction extends AbstractAction {
 		User u = getSessionContainer(req).getUser();
 		long userid = u.getId();
 		ures.setUser(userid);
-		
+
 		Timestamp addTime = new Timestamp(System.currentTimeMillis());
 		ures.setAddTime(addTime);
 		ures.setDescription((String) reqParams.get("desc"));
@@ -109,13 +110,13 @@ public class UserResourceAction extends AbstractAction {
 		ures.setSubtitle(subTitle);
 		ures.setVerifyStatus("等待审核");
 		ures.setSpotType("文字");
-		
+
 		if (resType.equalsIgnoreCase("1")) {
 			// image
 			String fileName = (String) reqParams.get("fileName");
 			String fileFullPath = req.getSession().getServletContext()
-					.getRealPath("/") + "images/temp/"
-					+ fileName;
+					.getRealPath("/")
+					+ "images/temp/" + fileName;
 			File f = new File(fileFullPath);
 
 			FileInputStream in;
@@ -154,16 +155,17 @@ public class UserResourceAction extends AbstractAction {
 		} finally {
 			uresDAO.closeSession();
 		}
-
-		if (resType == "1") {
-			
-		}
+		
+		User user = getSessionContainer(req).getUser();
+		int resNum = user.getResNum();
+		getSessionContainer(req).getUser().setResNum(resNum + 1);
 		
 		try {
 			res.sendRedirect("user.do?action=UserInfoAction&type=2");
 		} catch (IOException e) {
 			throw new IActException(e);
 		}
+
 		
 		return ErrorCode.OK;
 	}
@@ -247,4 +249,42 @@ public class UserResourceAction extends AbstractAction {
 		}
 		return ErrorCode.OK;
 	}
+
+	private int deleUserResource(HttpServletRequest req, HttpServletResponse res)
+			throws IActException {
+		String ids = (String) reqParams.get("ids");
+		UserresourceDAO uresDAO = (UserresourceDAO) DAOFactory
+				.getDAO(USER_RESOURCE_DAO);
+		if (ids != null) {
+			String[] ss = ids.split(",");
+			 int len = ss.length;
+			try {
+				uresDAO.beginTransaction();
+				for (int i = 0; i < len; i++) {
+					long id = Long.parseLong(ss[i]);
+					Userresource resource = uresDAO.findById(id);
+					uresDAO.delete(resource);
+				}
+				uresDAO.commitTransaction();
+			} catch (Throwable t) {
+				uresDAO.rollbackTransaction();
+			} finally {
+				uresDAO.closeSession();
+			}
+			
+			User user = getSessionContainer(req).getUser();
+			int resNum = user.getResNum();
+			getSessionContainer(req).getUser().setResNum(resNum - len);
+		}
+		
+		try {
+			res.sendRedirect("user.do?action=UserInfoAction&type=2");
+		} catch (IOException e) {
+			throw new IActException(e);
+		}
+
+		
+		return ErrorCode.OK;
+	}
+
 }
