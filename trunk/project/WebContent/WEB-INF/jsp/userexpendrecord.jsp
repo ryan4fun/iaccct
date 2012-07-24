@@ -84,10 +84,9 @@ ul li{
         </ul>
         </form>
         </li>
-        <li class="userbytitle"><img src="images/Bin.png" width="24" height="24" />&nbsp;&nbsp;&nbsp;&nbsp;最近30天的用户成功充值记录</li>
+        <li class="userbytitle">&gt;&gt;最近30天的用户消费记录</li>
         <li>
         <ul class="byinfolist">
-        <li><input name="" type="checkbox" value="" /></li>
         <li class="byinfolistt">订单号</li>
         <li class="byinfolistt">预付时间</li>
          <li class="byinfolistt">预付金额</li>
@@ -103,7 +102,6 @@ ul li{
         %>
         	<li class="byinfolists">
 	        <ul >
-	        <li><input name="" type="checkbox" value="" /></li>
 	        <li class="byinfolistt"><%=u.getOrderId() %></li>
 	        <li class="byinfolistt" style="width:60px;"><%=sf.format(u.getPrepaidTime())%></li>
 	        <li class="byinfolistt" style="width:60px;"><%=u.getPrepaidAmount()%></li>
