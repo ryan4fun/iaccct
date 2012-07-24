@@ -17,6 +17,8 @@ import com.iact.ErrorCode;
 import com.iact.IActException;
 import com.iact.dao.DAOFactory;
 import com.iact.dao.UserDAO;
+import com.iact.dao.UserorderDAO;
+import com.iact.dao.UserresourceDAO;
 import com.iact.util.json.JSONException;
 import com.iact.util.json.JSONObject;
 import com.iact.vo.User;
@@ -28,6 +30,10 @@ import com.iact.vo.User;
 public class LoginAction extends AbstractAction {
 
 	private static final String DAO = "UserDAO";
+	
+	private static final String USER_RESOURCE_DAO = "UserresourceDAO";
+	
+	private static final String USER_ORDER_DAO = "UserorderDAO";
 
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
@@ -53,6 +59,9 @@ public class LoginAction extends AbstractAction {
 				for (User user : users) {
 					boolean matched = user.getPwd().equals(pMD5);
 					if (matched) {
+						user.setResNum(getUserResourceNum(user.getId()));
+						user.setOrderNum(getUserOrderNum(user.getId()));
+						
 						getSessionContainer(req).setUser(user);
 						user.setLoginIp(req.getRemoteAddr());
 						user.setLoginTime(new Timestamp(System.currentTimeMillis()));
@@ -77,4 +86,16 @@ public class LoginAction extends AbstractAction {
 		return 0;
 	}
 	
+	private int getUserResourceNum(long userid) throws IActException {
+		UserresourceDAO resourceDAO = (UserresourceDAO)DAOFactory.getDAO(USER_RESOURCE_DAO);
+		String sql = "select count(*) from Userresource as r where r.user = " + userid;
+		return resourceDAO.findCount(sql);
+
+	}
+
+	private int getUserOrderNum(long userid) throws IActException {
+		UserorderDAO orderDAO = (UserorderDAO)DAOFactory.getDAO(USER_ORDER_DAO);
+		String sql = "select count(*) from Userorder as r where r.user = " + userid;
+		return orderDAO.findCount(sql);
+	}
 }
