@@ -768,3 +768,46 @@ p{
 	padding-left: 16px;
 	margin-bottom: 20px;
 }
+.popimg {
+	background-color: #FFF;
+	height: 380px;
+	width: 480px;
+	border: 1px solid #CCC;
+	margin: 10px;
+	padding: 5px;
+	display:none;
+	z-index:9999;
+}
+.popimg div ul li {
+	display: inline-block;
+	float: left;
+	margin: 5px;
+}
+.popimg div ul .poplefttitle {
+	text-align: right;
+	width: 100px;
+}
+.popimg div ul .popinfo {
+	width: 200px;
+}
+.popimg div {
+	clear: both;
+}
+.popimg div ul .popinfo select{
+	width: 340px;
+}
+
+.popimg div ul .popinfo input {
+	width: 340px;
+}
+
+.popimg div ul .popinfo textarea {
+	width: 340px;
+}
+.popimg .poptitle {
+	font-size: 24px;
+	text-align: center;
+	color: #FFF;
+	background-color: #3A72A5;
+	line-height: 36px;
+}
