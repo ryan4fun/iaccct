@@ -44,10 +44,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<div class="logopansub">
 			<div class="logo"></div>
 			   <div class="login">
-		       <div id="topinfos">我的资源：（6/10）</div>
+		       <div id="topinfos">我的资源：（<%=user.getResNum() %>/10）</div>
 		       <div id="topinfos"><%= user.getBalance()%>￥</div>
 		   	   <div id="topinfos">我的余额：</div>
-		       <div id="topinfos">我的订单：（10）</div>
+		       <div id="topinfos">我的订单：（<%=user.getOrderNum() %>）</div>
 		       <div id="topinfos"><img src="images/star.png" width="16" height="15" /></div>
 		       <div id="topinfos">我的等级：</div>
 		   	   </div>
