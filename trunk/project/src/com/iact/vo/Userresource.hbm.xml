@@ -28,7 +28,7 @@
         <property name="logoY" type="java.lang.Integer">
             <column name="LogoY" />
         </property>
-        <property name="logoData" type="java.lang.String">
+        <property name="logoData" type="java.sql.Blob">
             <column name="LogoData" />
         </property>
         <property name="description" type="java.lang.String">
