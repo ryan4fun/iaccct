@@ -95,12 +95,14 @@ ul li{
          <li class="byinfolistt">终付金额</li>
         <li class="byinfolistt" style="width:50px;">状态</li> 
         </ul>
+        </li>
         <% 
         	for (int i = 0, size = (payrecords 
         						== null ? 0 :payrecords.size()); i < size; i++ ) {
         		Expendrecord u = payrecords.get(i);
         %>
-	        <ul class="byinfolists">
+        	<li class="byinfolists">
+	        <ul >
 	        <li><input name="" type="checkbox" value="" /></li>
 	        <li class="byinfolistt"><%=u.getOrderId() %></li>
 	        <li class="byinfolistt" style="width:60px;"><%=sf.format(u.getPrepaidTime())%></li>
@@ -109,9 +111,11 @@ ul li{
 	        <li class="byinfolistt"><%=u.getPrepaidAmount()%></li>
 	        <li class="byinfolistt"><%=u.getPaidStatus()%></li>
 	        </ul> 
+	        </li>
         <%	
         	}
         %>
+        <li>
         </li>
         </ul>  
         </div>
