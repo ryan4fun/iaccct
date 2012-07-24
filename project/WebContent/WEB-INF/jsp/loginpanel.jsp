@@ -39,6 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <%
         	} else {
         	 	User user = sc.getUser();
+        	 	int level = user.getLevel() == 0 ? 1: user.getLevel();
         %>
         	<div class="logopan">
         	<div class="logopansub">
@@ -48,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		       <div id="topinfos"><%= user.getBalance()%>￥</div>
 		   	   <div id="topinfos">我的余额：</div>
 		       <div id="topinfos">我的订单：（<%=user.getOrderNum() %>）</div>
-		       <div id="topinfos"><img src="images/star.png" width="16" height="15" /></div>
+		       <div id="topinfos"><img src="images/star<%=level%>.png" width="16" height="15" /></div>
 		       <div id="topinfos">我的等级：</div>
 		   	   </div>
 			</div>
