@@ -1,13 +1,16 @@
 <%@ page language="java" pageEncoding="UTF-8" import="java.util.List, 
 													   com.iact.vo.Userresource,
-													   java.text.SimpleDateFormat" contentType="text/html;charset=UTF-8" %>
+													   java.text.SimpleDateFormat,
+													   com.iact.vo.User,
+													   com.iact.action.SessionContainer" contentType="text/html;charset=UTF-8" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
 List<Userresource> ures  = (List<Userresource>)request.getAttribute("resources");
-
+SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
+User user = sc.getUser();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -31,7 +34,14 @@ List<Userresource> ures  = (List<Userresource>)request.getAttribute("resources")
 	}
 </style>
 <script type="text/javascript">
+
+var resNum = <%=user.getResNum()%>;
+
 function popDiv(pid) {
+	if (resNum >= 10) {
+		alert("对不起,您的资源数目已经超过最大数10");
+		return;
+	}
 	 var pobj = $("#"+pid);
 	 var w = document.body.clientWidth;
 	 var h = document.body.clientHeight ;
@@ -77,6 +87,38 @@ function uploadImage() {
 function submitUserRes(fid) {
 	$("#" + fid).get(0).submit();
 }
+
+$(document).ready(function(){
+	$("#allch").click(
+		function() {
+			$("input[name='checkbox1']").each(
+				function(){
+					var checked = $("#allch").get(0).checked;
+					$(this).attr("checked", checked);	
+				});
+		}
+	);
+});
+
+function deleRes(sid) {
+	if (sid != null) {
+		$("#ids").val(sid);
+		$("#deleForm").submit();
+	} else {
+		var checkedids = [];
+		$("input[name='checkbox1']").each(
+			function(){
+				var checked = $(this).get(0).checked;
+				if (checked) {
+					checkedids.push( $(this).get(0).value);
+				}
+		});
+		if (checkedids.length > 0) {
+			$("#ids").get(0).value = checkedids.join(",");
+			$("#deleForm").get(0).submit();
+		}
+	}
+}
 	
 </script>
 <!--[if lte IE 7]>
@@ -109,13 +151,13 @@ ul li{
 			<a href="javascript:void(0);" onclick="popDiv('poptext');" title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>
 		    &nbsp;&nbsp;&nbsp;&nbsp;
 		    <a href="javascript:void(0);"  onclick="popDiv('popimg');" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>
-    		&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="delRes();"><img src="images/Bin.png" width="24" height="24" /></a>
+    		&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="deleRes();" title="删除选中资源"><img src="images/Bin.png" width="24" height="24" /></a>
     	</li>
 		</ul>
         </li>
         <li class="byinfolist">
         <ul>
-        <li><input name="" type="checkbox" value="" /></li>
+        <li><input name="allChecked" type="checkbox" value="" id="allch"/></li>
         <li class="byinfolistt">资源名称</li>
         <li class="byinfolistt">资源类型</li>
         <li class="byinfolistt">日期</li>
@@ -130,12 +172,12 @@ ul li{
        %>
         <li class="byinfolists">
         <ul>
-        <li><input name="" type="checkbox" value="" /></li>
+        <li><input name="checkbox1" type="checkbox" value="<%=r.getId()%>" /></li>
         <li class="byinfolistt"><%=r.getSubtitle() %></li>
         <li class="byinfolistt"><%=r.getSpotType() %></li>
         <li class="byinfolistt"><%=sf.format(r.getAddTime()) %></li>
         <li class="byinfolistt"><%=r.getVerifyStatus()%></li>
-        <li class="byinfolistt">删除</li>
+        <li class="byinfolistt"><a href="javascript:void(0);" onclick="deleRes('<%=r.getId() %>');">删除</a></li>
         </ul>
         </li>
        <%
@@ -208,5 +250,12 @@ ul li{
     </ul></div>
     </form>
 </div>
+
+<form id="deleForm" action="user.do" method="post">
+	<input type="hidden" name="action" value="UserResourceAction"/>
+	<input type="hidden" name="type" value="dele"/>
+	<input type="hidden" name="ids" id="ids"/>
+</form>
+
 </body>
 </html>
