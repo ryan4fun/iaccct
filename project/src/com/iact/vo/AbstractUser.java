@@ -36,8 +36,20 @@ public abstract class AbstractUser implements java.io.Serializable {
 	private String loginIp;
 	private Integer status;
 	private Set payonlinelogs = new HashSet(0);
-
+	
+	private int resNum = 0;
+	
+	private int orderNum = 0;
+	
 	// Constructors
+
+	public int getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(int orderNum) {
+		this.orderNum = orderNum;
+	}
 
 	/** default constructor */
 	public AbstractUser() {
@@ -277,5 +289,14 @@ public abstract class AbstractUser implements java.io.Serializable {
 	public void setPayonlinelogs(Set payonlinelogs) {
 		this.payonlinelogs = payonlinelogs;
 	}
+
+	public int getResNum() {
+		return resNum;
+	}
+
+	public void setResNum(int resNum) {
+		this.resNum = resNum;
+	}
+	
 
 }
