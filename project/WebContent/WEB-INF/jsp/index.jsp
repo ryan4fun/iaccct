@@ -1,6 +1,6 @@
 <%@ page language="java" import="com.iact.action.SessionContainer,
 								 com.iact.vo.Platforminformation,
-								 com.iact.vo.Area,
+								 com.iact.vo.Bizarea,
 								 java.text.SimpleDateFormat,
 								 java.util.List" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
 <%
@@ -114,21 +114,21 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		<div class="rightinfodiv">
         <ul>
         <% 
-        	List<Area> areas = (List<Area>)request.getAttribute("areas");
+        	List<Bizarea> areas = (List<Bizarea>)request.getAttribute("areas");
         	int aSize = 0;
         	if (areas != null) {
         		aSize = areas.size();
         		for (int i = 0; i < aSize; i++) {
-        			Area a = areas.get(i);
+        			Bizarea a = areas.get(i);
         %>
-       			 <li><a href="a.do?id=<%= a.getId()%>"> <%= a.getName()%></a></li>
+       			 <li><a href="list.do?action=ListPackagesAction&bizarea=<%= a.getId()%>"> <%= a.getName()%></a></li>
         <% 
         		}
         	}
         %>
         </ul>
         </div>
-        <div class="more"><a href="tvlist.html">更多...</a></div>
+        <div class="more"><a href="more.do?page=listarea.jsp">更多...</a></div>
         </div>
         <div id="wbg">
         <div>
