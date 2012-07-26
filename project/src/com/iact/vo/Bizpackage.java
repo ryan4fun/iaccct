@@ -1,5 +1,7 @@
 package com.iact.vo;
 
+import java.util.Set;
+
 /**
  * Bizpackage entity. @author MyEclipse Persistence Tools
  */
@@ -25,10 +27,10 @@ public class Bizpackage extends AbstractBizpackage implements
 			String name, String description, String beginTime, String endTime,
 			String spotType, Integer subtitleSpec, String subtitleInfo,
 			Integer logoSpec, String logoInfo, Integer playNumber,
-			Double price, Integer status) {
+			Double price, Integer status, Set items) {
 		super(id, bizArea, bizCode, sequenceId, name, description, beginTime,
 				endTime, spotType, subtitleSpec, subtitleInfo, logoSpec,
-				logoInfo, playNumber, price, status);
+				logoInfo, playNumber, price, status, items);
 	}
 
 }

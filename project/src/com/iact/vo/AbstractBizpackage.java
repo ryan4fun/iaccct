@@ -1,5 +1,8 @@
 package com.iact.vo;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * AbstractBizpackage entity provides the base persistence definition of the
  * Bizpackage entity. @author MyEclipse Persistence Tools
@@ -25,6 +28,8 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 	private Integer playNumber;
 	private Double price;
 	private Integer status;
+	
+	private Set items = new HashSet(0);
 
 	// Constructors
 
@@ -53,7 +58,8 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 			String sequenceId, String name, String description,
 			String beginTime, String endTime, String spotType,
 			Integer subtitleSpec, String subtitleInfo, Integer logoSpec,
-			String logoInfo, Integer playNumber, Double price, Integer status) {
+			String logoInfo, Integer playNumber, Double price, Integer status,
+			Set items) {
 		this.id = id;
 		this.bizArea = bizArea;
 		this.bizCode = bizCode;
@@ -70,6 +76,7 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 		this.playNumber = playNumber;
 		this.price = price;
 		this.status = status;
+		this.items = items;
 	}
 
 	// Property accessors
@@ -200,6 +207,14 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public Set getItems() {
+		return items;
+	}
+
+	public void setItems(Set items) {
+		this.items = items;
 	}
 
 }

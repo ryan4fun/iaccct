@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ShoppingCart {
 
-	private List<Bizpackage> packItems = new ArrayList<Bizpackage>();
+	private List<Userorder> orders = new ArrayList<Userorder>();
 
 	/**
 	 * Current cart is empty or not.
@@ -22,7 +22,7 @@ public class ShoppingCart {
 	 * @return
 	 */
 	public boolean isEmptyCart() {
-		return packItems.size() == 0;
+		return orders.size() == 0;
 	}
 
 	/**
@@ -30,15 +30,15 @@ public class ShoppingCart {
 	 * 
 	 */
 	public void empty() {
-		packItems.clear();
+		orders.clear();
 	}
 
 	/**
-	 * Add one package item to cart.
+	 * Add one order item to cart.
 	 * 
 	 */
-	public void addPackage(Bizpackage item) {
-		packItems.add(item);
+	public void addOrder(Userorder item) {
+		orders.add(item);
 	}
 
 	/**
@@ -46,10 +46,10 @@ public class ShoppingCart {
 	 * 
 	 * @param itemId
 	 */
-	public void removePackage(long itemId) {
-		for (Bizpackage item : packItems) {
+	public void removeOrder(long itemId) {
+		for (Userorder item : orders) {
 			if (item.getId() == itemId) {
-				packItems.remove(item);
+				orders.remove(item);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class ShoppingCart {
 	 * @return
 	 */
 	public int size() {
-		return packItems.size();
+		return orders.size();
 	}
 
 	/**
@@ -71,5 +71,6 @@ public class ShoppingCart {
 	public float getTotalPrice() {
 		return 0;
 	}
-
+	
+	
 }

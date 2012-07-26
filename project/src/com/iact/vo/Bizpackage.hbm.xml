@@ -55,5 +55,11 @@
         <property name="status" type="java.lang.Integer">
             <column name="Status" not-null="true" />
         </property>
+        <set name="items" inverse="false" cascade="all">  
+            <key>  
+                <column name="BizPackage"/>  
+            </key>  
+            <one-to-many class="com.iact.vo.Bizpackageitem" />  
+        </set> 
     </class>
 </hibernate-mapping>
