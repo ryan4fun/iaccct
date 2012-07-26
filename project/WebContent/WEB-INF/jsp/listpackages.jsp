@@ -105,7 +105,7 @@ String pageNav = result.getToolBar(url);
         <li class="b r"><a href="product-dt.html">动物世界</a></li>
         </ul>
         <ul>
-        <li class="cb"><a href="detail.do?action=BizPackageAction&pid=1"><img src="images/by_button.png" width="86" height="33" /></a></li>
+        <li class="cb"><a href="detail.do?action=BizPackageAction&pid=1"><img src="images/bydt_button_h.png" width="120" height="33" /></a></li>
         </ul>
          <div>
      	 <%=pageNav%>      
