@@ -218,5 +218,16 @@ public class UserInfoAction extends AbstractAction {
 		return ErrorCode.OK;
 
 	}
+	
+	private int cancelUserOrder() {
+		
+		return ErrorCode.OK;
+	}
+	
+	private int viewUserOrderDetail() {
+		return ErrorCode.OK;
+		
+	}
+	
 
 }
