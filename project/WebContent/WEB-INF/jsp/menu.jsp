@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    <li><a href="index.html"><img src="<%=basePath %>/images/menu_home.png" width="48" height="48" /></a><br />
      <a href="index.do?action=IndexAction">首 页</a></li>
    <li><a href="list.html"><img src="<%=basePath %>/images/menu_list.png" width="48" height="48" /></a><br />
-     <a href="list.html">节目套餐</a></li>
+     <a href="list.do?action=ListPackagesAction">节目套餐</a></li>
    <li><a href="f.do?page=help.jsp"><img src="<%=basePath %>/images/menu_help.png" width="48" height="48" /></a><br />
      <a href="f.do?page=help.jsp">使用方式</a></li>
    <li><a href="f.do?page=sms.jsp"><img src="<%=basePath %>/images/menu_mesage.png" width="48" height="48" /></a><br />
