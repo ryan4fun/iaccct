@@ -14,7 +14,7 @@ public class Tools {
 	 * User order id
 	 * 
 	 * Lock is for controlling multi-thread synchronization, useed is base-number, we could
-	 * think it is always repeated within one day.
+	 * think it is always different within one day.
 	 * 
 	 * System.currentTimeMillis / 1000 is current second
 	 * 
