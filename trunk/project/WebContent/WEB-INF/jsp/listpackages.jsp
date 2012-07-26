@@ -77,7 +77,7 @@ String pageNav = result.getToolBar(url);
 <jsp:include page="topline.jsp" flush="true" />
 <jsp:include page="loginpanel.jsp" flush="true" />
 <div id="main"> 
-<div><img src="images/title_img-3.png" width="1000" height="120" /></div> 
+<div><img src="images/title_img-6.png" width="1000" height="120" /></div> 
 <jsp:include page="menu.jsp" flush="true" />    
 <div class="leftinfo">
  	<jsp:include page="online.jsp" flush="true" />
