@@ -5,7 +5,7 @@
   <li class="qq"></li>        
   <li class="qqbutton">
   <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=43145491&site=qq&menu=yes">
-  	<img border="0" src="http://wpa.qq.com/pa?p=2:43145491:49" alt="点击这里给我发消息" title="I-ACT爱插播"></a>
+  	<img border="0" src="images/QQ.png" alt="点击这里给我发消息" title="I-ACT爱插播"></a>
   </li>
   </ul>
 </div>
