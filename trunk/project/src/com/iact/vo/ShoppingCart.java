@@ -72,5 +72,9 @@ public class ShoppingCart {
 		return 0;
 	}
 	
+	public List<Userorder> getOrders() {
+		return orders;
+	}
+	
 	
 }
