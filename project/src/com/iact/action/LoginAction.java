@@ -21,7 +21,9 @@ import com.iact.dao.UserorderDAO;
 import com.iact.dao.UserresourceDAO;
 import com.iact.util.json.JSONException;
 import com.iact.util.json.JSONObject;
+import com.iact.vo.ShoppingCart;
 import com.iact.vo.User;
+import com.iact.vo.Userorder;
 
 /**
  * @author Andy
@@ -30,9 +32,9 @@ import com.iact.vo.User;
 public class LoginAction extends AbstractAction {
 
 	private static final String DAO = "UserDAO";
-	
+
 	private static final String USER_RESOURCE_DAO = "UserresourceDAO";
-	
+
 	private static final String USER_ORDER_DAO = "UserorderDAO";
 
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
@@ -61,11 +63,12 @@ public class LoginAction extends AbstractAction {
 					if (matched) {
 						user.setResNum(getUserResourceNum(user.getId()));
 						user.setOrderNum(getUserOrderNum(user.getId()));
-						
+
 						getSessionContainer(req).setUser(user);
 						user.setLoginIp(req.getRemoteAddr());
-						user.setLoginTime(new Timestamp(System.currentTimeMillis()));
-						
+						user.setLoginTime(new Timestamp(System
+								.currentTimeMillis()));
+
 						userDAO.merge(user);
 						JSONObject jo = new JSONObject();
 						try {
@@ -73,29 +76,61 @@ public class LoginAction extends AbstractAction {
 						} catch (JSONException e) {
 							throw new IActException(e);
 						}
+
+						SessionContainer sc = getSessionContainer(req);
+						ShoppingCart cart = sc.getCart();
+						if (!cart.isEmptyCart()) {
+							List<Userorder> orders = cart.getOrders();
+							UserorderDAO DAO = (UserorderDAO) DAOFactory
+									.getDAO(USER_ORDER_DAO);
+							try {
+								DAO.beginTransaction();
+								// 1. save order
+								for (int i = 0, size = orders.size(); i < size; i++) {
+									Userorder order = orders.get(i);
+									order.setUser(user.getId());
+									DAO.save(orders.get(i));
+								}
+								DAO.commitTransaction();
+								cart.empty();
+							} catch (Throwable t) {
+								DAO.rollbackTransaction();
+							} finally {
+								DAO.closeSession();
+							}
+							try {
+								jo.put("forder", "true");
+							} catch (JSONException e) {
+								throw new IActException(e);
+							}
+						}
 						writeResponse(jo.toString(), res);
 						return 0;
 					}
 				}
 			}
 		}
-		
+
 		String errMsg = "用户名或密码错误！";
 		getSessionContainer(req).setUser(null);
 		writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
 		return 0;
 	}
-	
+
 	private int getUserResourceNum(long userid) throws IActException {
-		UserresourceDAO resourceDAO = (UserresourceDAO)DAOFactory.getDAO(USER_RESOURCE_DAO);
-		String sql = "select count(*) from Userresource as r where r.user = " + userid;
+		UserresourceDAO resourceDAO = (UserresourceDAO) DAOFactory
+				.getDAO(USER_RESOURCE_DAO);
+		String sql = "select count(*) from Userresource as r where r.user = "
+				+ userid;
 		return resourceDAO.findCount(sql);
 
 	}
 
 	private int getUserOrderNum(long userid) throws IActException {
-		UserorderDAO orderDAO = (UserorderDAO)DAOFactory.getDAO(USER_ORDER_DAO);
-		String sql = "select count(*) from Userorder as r where r.user = " + userid;
+		UserorderDAO orderDAO = (UserorderDAO) DAOFactory
+				.getDAO(USER_ORDER_DAO);
+		String sql = "select count(*) from Userorder as r where r.user = "
+				+ userid;
 		return orderDAO.findCount(sql);
 	}
 }
