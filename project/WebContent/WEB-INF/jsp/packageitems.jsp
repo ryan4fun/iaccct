@@ -1,13 +1,12 @@
 <%@ page language="java" import="com.iact.vo.Bizpackage,
 								 java.util.List,
+								 java.util.Set,
+								 com.iact.vo.Bizpackageitem,
 								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
-<%@page import="java.text.SimpleDateFormat"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 Bizpackage p = (Bizpackage)request.getAttribute("bizpackage");
-SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -52,6 +51,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 </style>
 <script type="text/javascript">
 var basePath = "<%=basePath%>";
+var price = <%=p.getPrice() %>;
 $(function() {
 	$( "#sdate" ).datepicker({
 		showOn: "button",
@@ -61,6 +61,13 @@ $(function() {
 		nextText:''
 	});
 	$( "#edate" ).datepicker({
+		showOn: "button",
+		buttonImage: "images/calendar.png",
+		buttonImageOnly: true,
+		prevText:'',
+		nextText:''
+	});
+	$( "#plandate" ).datepicker({
 		showOn: "button",
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
@@ -143,9 +150,53 @@ function uploadImage() {
 		 }
 	});
 }
+
+function showResArea(type) {
+	if (type == 0) {
+		$("#restitle").get(0).innerHTML="创建资源：";
+		$("#resarea").get(0).innerHTML='<input type="radio" name="restype" checked="checked" onclick="popDiv(\'poptext\');"/><a href="javascript:void(0);"  title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>'
+		   +'&nbsp;&nbsp;&nbsp;&nbsp;'
+		   +'<input type="radio" name="restype" onclick="popDiv(\'popimg\')";/>' 
+		   +'<a href="javascript:void(0);" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>'
+ 			;
+	} else {
+		$("#restitle").get(0).innerHTML="选择资源：";
+		$("#resarea").get(0).innerHTML='<select name="resid" style="width:160px;">'+
+          '<option value="文字1">文字1</option>'+
+          '<option value="文字2">文字2</option>'+
+          '<option value="文字3">文字3</option>'+
+          '<option value="文字4">文字4</option>'+
+          '<option value="文字5">文字5</option>'+
+          '<option value="图片1">图片1</option>'+
+          '</select>'+
+          ' <span style="color:#F60;padding-left:10px;">(该项只对登陆用户开放)</span>';
+	}
+}
+
+function submitOrder() {
+	$("#orderform").submit();
+}
+
+function caltotalprice(obj) {
+	var num = obj.value;
+	if (num == undefined) {
+		num = 1;
+	}
+	
+	var total = num * price;
+	$("#totalprice").get(0).innerHTML  = "" + total + "￥";
+}
+
 </script>
 </head>
 <body>
+<form id="orderform" action="order.do" method="post">
+<input type="hidden" name="action" value="BizPackageAction" />
+<input type="hidden" name="pid" value="<%=p.getId()%>" />
+<input type="hidden" name="ptype" value="order" />
+<input type="hidden" name="pinfo" value="<%=p.getDescription()%>" />
+<input type="hidden" name="price" value="<%=p.getPrice()%>" />
+
 <jsp:include page="topline.jsp" flush="true" />
 <jsp:include page="loginpanel.jsp" flush="true" />
 <div id="main"> 
@@ -154,53 +205,63 @@ function uploadImage() {
 <div class="leftinfo">
  	<jsp:include page="online.jsp" flush="true" />
 </div>
+
  <div class="rightinfo">
     <div id="wbg">
         <div>
         <ul>
-        <li class="product_info_titles">节目套餐1</li>
-        <li id="myinfo_title">业务代码：</li><li>123455679</li>
-        <li id="myinfo_title">开通地区：</li><li>昆明</li>      
-        <li id="myinfo_title">套餐名称：</li><li>节目套餐1</li>
-        <li id="myinfo_title">套餐单价：</li><li>3000￥</li>
-        <li id="myinfo_title">套餐描述：</li>
+        <li class="product_info_titles"><%=p.getName() %></li>
+        <li class="myinfo_title">开通地区：</li><li><%=p.getBizArea() %></li>   
+        <li class="myinfo_title">开始时间：</li><li><%=p.getBeginTime() %></li>   
+        <li class="myinfo_title">结束时间：</li><li><%=p.getEndTime()%></li>   
+        <li class="myinfo_title">套餐单价：</li><li><%=p.getPrice() %>￥</li>
+         <li class="myinfo_title">播放次数：</li><li><%=p.getPlayNumber() %></li>
+        <li class="myinfo_title">套餐描述：</li>
+        <li><%=p.getDescription() %></li>
+        <li class="myinfo_title">节目列表：</li>
         <li>
-        <ul class="myinfo_info">
-        <li class="myinfo_info_type">昆明1台</li>
-        <li class="myinfo_info_dt">轩辕剑.天之痕</li>
-        <li class="myinfo_info_dt">法制在线</li>
-        <li class="myinfo_info_type">昆明2台</li>
-        <li class="myinfo_info_dt">天涯明月刀</li>
-        <li class="myinfo_info_dt">动物世界</li>
-        <li class="myinfo_info_type">云南卫视经济频道</li>
-        <li class="myinfo_info_dt">大口马牙</li>
-        </ul>
+         <table cellspacing="0" cellpadding="0" style="margin:5px;">
+		        	<tr class="product_info">
+		        	<% 
+		        		Set<Bizpackageitem> items = p.getItems();
+        	    		for (Bizpackageitem item: items) {
+					%>
+					<td class="product_info_title">昆明1台</td>
+        	    	<%
+        	    		}
+        	    	%>
+        	    	</tr> 
+        	    	<tr class="product_info">
+        	    	<% 
+        	    		for (Bizpackageitem item: items) {
+					%>
+					 <td class="product_info_title" style="background-color:#fff;"><%= item.getName()%></td>
+        	    	<%
+        	    		}
+        	    	%> 
+        	    	</tr>
+		        </table>
         </li>
-        <li id="myinfo_title">开始时间：</li>  
+        <li class="myinfo_title">计划日期：</li>  
+        <li><input type="text" class="searchinput" id="plandate" name="plandate" readonly="readonly"/></li>
+        <li class="myinfo_title">计划开始：</li>  
         <li><input type="text" class="searchinput" id="sdate" name="sdate" readonly="readonly"/></li>
-        <li id="myinfo_title">结束时间：</li>  
+        <li class="myinfo_title">计划结束：</li>  
         <li><input type="text" class="searchinput" id="edate" name="edate" readonly="readonly"/></li>
-        <li id="myinfo_title">已有资源：</li>
-        <li><select name="" style="width:160px;">
-          <option value="选择资源">选择资源</option>
-          <option value="文字1">文字1</option>
-          <option value="文字2">文字2</option>
-          <option value="文字3">文字3</option>
-          <option value="文字4">文字4</option>
-          <option value="文字5">文字5</option>
-          <option value="图片1">图片1</option>
-        </select>
-        <span style="color:#F60;padding-left:10px;">(该项只对登陆用户开放)</span>
-        </li>
-        <li id="myinfo_title">创建资源：</li>
+        <li class="myinfo_title">资源类型：</li>
         <li>
-			<a href="javascript:void(0);" onclick="popDiv('poptext');" title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>
+         <input type="radio" name="resfrom" onclick="showResArea(0);" checked="checked" value="0"/><label> 创建资源</label>
+         &nbsp;&nbsp;&nbsp;<input type="radio" name="resfrom" onclick="showResArea(1);"; value="1"/><label>选择资源</label>
+        </li>
+        <li class="myinfo_title" id="restitle">创建资源：</li>
+        <li id="resarea">
+			<input type="radio" name="restype" onclick="popDiv('poptext');" value="0" checked="checked" /><a href="javascript:void(0);"  title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>
 		    &nbsp;&nbsp;&nbsp;&nbsp;
-		    <a href="javascript:void(0);"  onclick="popDiv('popimg');" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>
+		    <input type="radio" name="restype" onclick="popDiv('popimg')"; value="1"/> <a href="javascript:void(0);"   title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>
        </li>
-       <li id="myinfo_title">播放次数：</li><li><input name="" type="text" value="1" class="searchinput" /></li>
-       <li id="myinfo_title">价格合计：</li><li style="color:#ff0000;">3000￥</li>
-       <li id="myinfo_title">&nbsp;</li><li><a href="user_by.html"><img src="images/by_button.png" width="86" height="33" /></a></li>
+       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" type="text" value="1" class="searchinput" onblur="caltotalprice(this);"/></li>
+       <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=p.getPrice() %>￥</li>
+       <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();"><img src="images/by_button.png" width="86" height="33" /></a></li>
        </ul>        
        </div>
     </div>
@@ -208,14 +269,10 @@ function uploadImage() {
 </div>
 <jsp:include page="footer.jsp" flush="true" />
 <div id="popimg" class="popimg">
-	<input type="hidden" value="UserResourceAction" name="action" />
-	<input type="hidden" value="1" name="resType" />
-	<input type="hidden" value="save" name="type" />
-	<input type="hidden" value="save" name="fileName" id="fileName" />
 	<div class="poptitle">发布图片
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('popimg')" /></div>
     <div><ul><li class="poplefttitle">图片规格：</li><li class="popinfo">
-      <select name="select" id="imgScale">
+      <select name="imgScale" id="imgScale">
         <option value="0">120×80(最佳)</option>
         <option value="1">160×120</option>
       </select>
@@ -228,14 +285,14 @@ function uploadImage() {
      </ul>
      </div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo"><img src="images/truck.png" width="120" height="80" id="prevImg"/></li></ul></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="subTitle" type="text" /></li></ul></div>
+    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="isubtitle" type="text" /></li></ul></div>
     <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
       <label for="textarea"></label>
-      <textarea name="desc" id="textarea" cols="45" rows="5"></textarea>
+      <textarea name="idesc" id="textarea" cols="45" rows="5"></textarea>
     </li>
     </ul></div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="">
+    <a href="javascript:void(0);" onclick="hideDiv('popimg');">
     <img src="images/img_button.png" width="86" height="33" />
     </a></li>
     </ul></div>
@@ -243,22 +300,20 @@ function uploadImage() {
 </div>
 
 <div id="poptext" class="popimg" style="height:300px;">
-	<input type="hidden" value="UserResourceAction" name="action" />
-	<input type="hidden" value="0" name="resType" />
-	<input type="hidden" value="save" name="type" />
 	<div class="poptitle">发布文字
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('poptext')" /></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="subTitle" type="text" /></li></ul></div>
+    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="tsubtitle" type="text" /></li></ul></div>
     <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
       <label for="textarea"></label>
-      <textarea name="desc" id="textarea" cols="45" rows="5"></textarea>
+      <textarea name="tdesc" id="textarea" cols="45" rows="5"></textarea>
     </li>
     </ul></div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="">
+    <a href="javascript:void(0);" onclick="hideDiv('poptext');">
     <img src="images/img_button.png" width="86" height="33" />
     </a></li>
     </ul></div>
 </div>
+</form>
 </body>
 </html>
