@@ -1,7 +1,9 @@
 <%@ page language="java" import="com.iact.vo.Bizpackage,
 								 java.util.List,
+								 java.util.Set,
 								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.iact.vo.Bizpackageitem"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -12,6 +14,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 String url = "list.do?action=ListPackagesAction";
 String pageNav = result.getToolBar(url);
 
+String packTitle = (String)request.getAttribute("packTitle");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -85,25 +88,42 @@ String pageNav = result.getToolBar(url);
   <div class="rightinfo">
     <div id="wbg">
         <ul class="product_titlebg">
-        <li class="product_title">昆明地区节目套餐</li>
+        <li class="product_title"><%=packTitle %></li>
         </ul>
-        <ul class="product_type">
-        <li>套餐1</li>
-        </ul>
-      <ul class="product_info">
-        <li class="product_info_title"><a href="product-dt.html">昆明1台</a></li>
-        <li class="product_info_title"><a href="product-dt.html">昆明1台</a></li>
-        <li class="product_info_title"><a href="product-dt.html">昆明1台</a></li>
-        <li class="product_info_title"><a href="product-dt.html">昆明1台</a></li>
-        <li class="product_info_title"><a href="product-dt.html">昆明1台</a></li>
-        <li class="product_info_title r"><a href="product-dt.html">昆明1台</a></li>
-        <li class="b"><a href="product-dt.html">动物世界</a></li>
-        <li class="b"><a href="product-dt.html">动物世界</a></li>
-        <li class="b"><a href="product-dt.html">动物世界</a></li>
-        <li class="b"><a href="product-dt.html">动物世界</a></li>
-        <li class="b"><a href="product-dt.html">动物世界</a></li>
-        <li class="b r"><a href="product-dt.html">动物世界</a></li>
-        </ul>
+       
+        <% 
+        	for (int i = 0, size = packages.size(); i < size; i++) {
+        		Bizpackage p = packages.get(i);
+        		Set<Bizpackageitem> items = p.getItems();
+        		int isize = items == null ? 0 : items.size();
+        %> 
+		         <ul class="product_type">
+		        <li><%=p.getName() %></li>
+		        </ul>
+		        <table cellspacing="0" cellpadding="0" style="margin:5px;">
+		        	<tr class="product_info">
+		        	<% 
+        	    		for (Bizpackageitem item: items) {
+					%>
+					<td class="product_info_title">昆明1台</td>
+        	    	<%
+        	    		}
+        	    	%>
+        	    	</tr> 
+        	    	<tr class="product_info">
+        	    	<% 
+        	    		for (Bizpackageitem item: items) {
+					%>
+					 <td class="product_info_title" style="background-color:#fff;"><%= item.getName()%></td>
+        	    	<%
+        	    		}
+        	    	%> 
+        	    	</tr>
+		        </table>
+        <% 
+       		 }
+        %>
+
         <ul>
         <li class="cb"><a href="detail.do?action=BizPackageAction&pid=1"><img src="images/bydt_button_h.png" width="120" height="33" /></a></li>
         </ul>
