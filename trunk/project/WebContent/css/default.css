@@ -534,7 +534,7 @@ p{
 	text-indent: 36px;
 	height: 24px;
 }
-#myinfo_title{
+.myinfo_title{
 	display: inline-block;
 	float: left;
 	width: 120px;
@@ -676,30 +676,22 @@ p{
 	padding-left: 16px;
 }
 #main .rightinfo #wbg .product_info {
-	height: 80px;
+	height: 30px;
 	padding-top: 16px;
 	padding-right: 3px;
 	padding-bottom: 3px;
 	padding-left: 16px;
 }
-#main .rightinfo #wbg .product_info li {
-	display: inline-block;
-	float: left;
-	width: 90px;
-	border-top-width: 1px;
-	border-left-width: 1px;
-	border-top-style: solid;
-	border-left-style: solid;
-	border-top-color: #CCC;
-	border-left-color: #CCC;
+
+#main .rightinfo #wbg .product_info .product_info_title {
+	background-color: #FFEFDF;
+	border: 1px solid #ccc;
 	padding-top: 3px;
 	padding-right: 3px;
 	padding-bottom: 3px;
 	padding-left: 10px;
-	background-color: #FFf;
-}
-#main .rightinfo #wbg .product_info .product_info_title {
-	background-color: #FFEFDF;
+	font-size:12pt;
+	width:80px;
 }
 .cb {
 	margin-top: 0px;
@@ -746,10 +738,7 @@ p{
 	border-right-color: #CCC;
 }
 
-#main .rightinfo #wbg .product_info:hover {
-	background-color: #FFC;
-	cursor: pointer;
-}
+
 .product_titlebg {
 	background-color: #D7E7FF;
 	padding-top: 3px;
