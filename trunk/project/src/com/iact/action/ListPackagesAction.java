@@ -13,14 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.iact.ErrorCode;
 import com.iact.IActException;
+import com.iact.dao.BizareaDAO;
 import com.iact.dao.BizpackageDAO;
 import com.iact.dao.DAOFactory;
 import com.iact.util.PageResultSet;
+import com.iact.vo.Bizarea;
 import com.iact.vo.Bizpackage;
 
 public class ListPackagesAction extends AbstractAction {
 
 	private static final String BIZ_PACKAGE_DAO = "BizpackageDAO";
+	
+	private static final String BIZ_AREA_DAO = "BizareaDAO";
+	
 	private static final int PAGE_SIZE = 10;
 
 	/*
@@ -42,24 +47,36 @@ public class ListPackagesAction extends AbstractAction {
 		String bizAreaStr = (String) reqParams.get("bizarea");
 
 		List<Bizpackage> packages = null;
+		
+		String packTitle = null;
 		if (bizAreaStr == null) {
 			/**
 			 * IP location for biz area or find all packages, if using IP
 			 * location, it will use third party web service or pure IP DB such
 			 * as QQ.
 			 */
-			packages = packageDAO.findAll();
-
+			String hsql = "from Bizpackage";
+			packages = packageDAO.findByHSQL(hsql, start, limit);
+			packTitle = "所有开通地区节目套餐";
 		} else {
 			long bizArea = Long.parseLong(bizAreaStr);
-			packages = packageDAO.findByBizArea(bizArea);
+			String hsql = "from Bizpackage o where o.bizArea = " + bizArea;
+			packages = packageDAO.findByHSQL(hsql, start, limit);
+			
+			BizareaDAO areaDAO  = (BizareaDAO)DAOFactory.getDAO(BIZ_AREA_DAO);
+			Bizarea area = areaDAO.findById(bizArea);
+			
+			packTitle = area.getName() + "节目套餐";
+		
 		}
+		
 		PageResultSet result = new PageResultSet(packages, curPage, PAGE_SIZE);
 		req.setAttribute("result", result);
+		req.setAttribute("packTitle", packTitle);
 		reqParams.put("page", "listpackages.jsp");
 
 		_forward(req, res);
-
+		
 		return ErrorCode.OK;
 	}
 
