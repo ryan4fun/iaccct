@@ -48,6 +48,9 @@ Bizpackage p = (Bizpackage)request.getAttribute("bizpackage");
         left:0px;
         opacity:0.6;
 	}
+	.failmsg{
+		color:#a40000;
+	}
 </style>
 <script type="text/javascript">
 var basePath = "<%=basePath%>";
@@ -109,6 +112,11 @@ function refreshAuth(basePath) {
 
 function popDiv(pid) {
 
+ if (pid == 'poptext') {
+ 	$("#textcheck").get(0).checked = "checked";
+ } else {
+ 	$("#imgcheck").get(0).checked = "checked";
+ }
  var pobj = $("#"+pid);
  var w = document.body.clientWidth;
  var h = document.body.clientHeight ;
@@ -174,6 +182,34 @@ function showResArea(type) {
 }
 
 function submitOrder() {
+	
+	if (!$(plandate).val()) {
+		$("#lperr").html("&nbsp;&nbsp;计划日期不能为空");
+		return;
+	} else {
+		$("#lperr").html("");
+	}
+	if (!$(sdate).val()) {
+		$("#sperr").html("&nbsp;&nbsp;计划开始时间不能为空");
+		return;
+	} else {
+		$("#sperr").html("");
+	}
+	if (!$(edate).val()) {
+		$("#eperr").html("&nbsp;&nbsp;计划结束不能为空");
+		return;
+	} else {
+		$("#eperr").html("");
+	}
+	
+	var pnum = $("#pnum").val();
+	var reg = new RegExp("^[0-9]*$");
+	if (!pnum || !reg.test(pnum)) {
+		$("#pnerr").html("请输入数字");
+		return;
+	} else {
+		$("#pnerr").html("");
+	}
 	$("#orderform").submit();
 }
 
@@ -182,7 +218,6 @@ function caltotalprice(obj) {
 	if (num == undefined) {
 		num = 1;
 	}
-	
 	var total = num * price;
 	$("#totalprice").get(0).innerHTML  = "" + total + "￥";
 }
@@ -243,11 +278,11 @@ function caltotalprice(obj) {
 		        </table>
         </li>
         <li class="myinfo_title">计划日期：</li>  
-        <li><input type="text" class="searchinput" id="plandate" name="plandate" readonly="readonly"/></li>
+        <li><input type="text" class="searchinput" id="plandate" name="plandate" readonly="readonly"/><span class='failmsg' id='lperr'></span></li>
         <li class="myinfo_title">计划开始：</li>  
-        <li><input type="text" class="searchinput" id="sdate" name="sdate" readonly="readonly"/></li>
+        <li><input type="text" class="searchinput" id="sdate" name="psdate" readonly="readonly"/><span class='failmsg' id='sperr'></span></li>
         <li class="myinfo_title">计划结束：</li>  
-        <li><input type="text" class="searchinput" id="edate" name="edate" readonly="readonly"/></li>
+        <li><input type="text" class="searchinput" id="edate" name="pedate" readonly="readonly"/><span class='failmsg' id='eperr'></span></li>
         <li class="myinfo_title">资源类型：</li>
         <li>
          <input type="radio" name="resfrom" onclick="showResArea(0);" checked="checked" value="0"/><label> 创建资源</label>
@@ -255,11 +290,18 @@ function caltotalprice(obj) {
         </li>
         <li class="myinfo_title" id="restitle">创建资源：</li>
         <li id="resarea">
-			<input type="radio" name="restype" onclick="popDiv('poptext');" value="0" checked="checked" /><a href="javascript:void(0);"  title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>
+			<input type="radio" name="restype"  onclick="popDiv('poptext');" value="0" checked="checked" id="textcheck"/>
+			<a href="javascript:void(0);" onclick="popDiv('poptext');" title="注意：最多可以输入140个文字">
+			<img src="images/131s.png" width="24" height="24" />
+			</a>
 		    &nbsp;&nbsp;&nbsp;&nbsp;
-		    <input type="radio" name="restype" onclick="popDiv('popimg')"; value="1"/> <a href="javascript:void(0);"   title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>
+		    <input type="radio" name="restype"  onclick="popDiv('popimg');"  value="1" id="imgcheck"/>
+		    <a href="javascript:void(0);" onclick="popDiv('popimg');"  title="图片格式：jpg、png；图片大小：100px x 100px">
+		    <img src="images/130s.png" width="24" height="24" />
+		    </a> 
        </li>
-       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" type="text" value="1" class="searchinput" onblur="caltotalprice(this);"/></li>
+       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" type="text" value="1" class="searchinput" onblur="caltotalprice(this);"/>
+       <span class='failmsg' id='pnerr'></span></li>
        <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=p.getPrice() %>￥</li>
        <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();"><img src="images/by_button.png" width="86" height="33" /></a></li>
        </ul>        

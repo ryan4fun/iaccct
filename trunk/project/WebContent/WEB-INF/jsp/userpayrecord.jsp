@@ -83,7 +83,7 @@ ul li{
         </ul>
         </form>
         </li>
-        <li class="userbytitle">&gt;&gt;最近30天的用户成功充值记录</li>
+        <li class="userbytitle"><img src="images/30day.png" /></li>
         <li class="byinfolist">
         <ul >
         <li class="byinfolistt">订单号</li>
