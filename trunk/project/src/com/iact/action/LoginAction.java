@@ -86,12 +86,15 @@ public class LoginAction extends AbstractAction {
 							try {
 								DAO.beginTransaction();
 								// 1. save order
-								for (int i = 0, size = orders.size(); i < size; i++) {
+								int size = orders.size();
+								for (int i = 0; i < size; i++) {
 									Userorder order = orders.get(i);
 									order.setUser(user.getId());
 									DAO.save(orders.get(i));
 								}
 								DAO.commitTransaction();
+								int orderNum = sc.getUser().getOrderNum();
+								sc.getUser().setOrderNum(orderNum + size);
 								cart.empty();
 							} catch (Throwable t) {
 								DAO.rollbackTransaction();

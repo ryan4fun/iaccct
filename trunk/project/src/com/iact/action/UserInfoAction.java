@@ -62,7 +62,7 @@ public class UserInfoAction extends AbstractAction {
 			return getUserPayRecords(req, res);
 		} else if (type.equalsIgnoreCase("4")) {
 			return getUserExpendRecords(req, res);
-		}
+		} 
 		return ErrorCode.OK;
 	}
 
@@ -76,13 +76,13 @@ public class UserInfoAction extends AbstractAction {
 		StringBuilder wherePortion = new StringBuilder();
 		String sdate = (String) reqParams.get("sdate");
 		wherePortion.append(" where o.user=" + userid);
-		if (sdate != null) {
+		if (sdate != null && sdate.trim().length() != 0) {
 			sdate = sdate + " 00:00:00";
 			wherePortion.append(" and o.createTime >= '" + sdate + "'");
 		}
 
 		String edate = (String) reqParams.get("edate");
-		if (edate != null) {
+		if (edate != null && edate.trim().length() != 0) {
 			edate = edate + " 23:59:59";
 			wherePortion.append(" and o.createTime <= '" + edate + "'");
 		}
