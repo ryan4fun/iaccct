@@ -372,6 +372,13 @@ p{
 	margin-bottom: 12px;
 	margin-left: 6px;
 }
+
+#main #userpage .rightinfo #wbg #basic {
+ background-image: url(../images/wel.png);
+ background-repeat: no-repeat;
+ background-position: 300px 40px;
+}
+
 #newstitle{
 	display: inline-block;
 	float: left;
@@ -799,4 +806,77 @@ p{
 	color: #FFF;
 	background-color: #3A72A5;
 	line-height: 36px;
+}
+.popAccept {
+	background-color:#fff;
+	width:800px;
+	height:600px;
+	display:none;
+	z-index:9999;
+	border: 1px solid #CCC;
+}
+.popAccept div {
+	clear: both;
+}
+.popAccept .popArea {
+	width:780px;
+	height:580px;
+	margin:10px;
+}
+.popAccept .poptitle {
+	font-size: 24px;
+	text-align: center;
+	color: #FFF;
+	background-color: #3A72A5;
+	line-height: 36px;
+}
+.mask {
+    background-color:#eee;
+    position:absolute;
+    top:0px;
+    left:0px;
+    opacity:0.6;
+}
+
+.forget {
+	background-color: #FFF;
+	height: 200px;
+	width: 300px;
+	border: 1px solid #CCC;
+	margin: 10px;
+	padding: 5px;
+	display:none;
+	z-index:9999;
+}
+
+.forget .fortitle {
+	font-size: 24px;
+	text-align: center;
+	color: #FFF;
+	background-color: #3A72A5;
+	line-height: 36px;
+}
+
+.forget input {
+	background-image: url(../images/input.png);
+	background-repeat: no-repeat;
+	height: 37px;
+	width: 146px;
+	margin-right: 6px;
+	margin-left: 6px;
+	margin-top:10px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	text-indent: 10px;
+	color: #b5b5b5;
+	line-height: 37px;
+}
+
+.forget .sb {
+	background-image: url(../images/img_button.png);
+	background-repeat: no-repeat;
+	width:86px;
+	height:33px;
 }
