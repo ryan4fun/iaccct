@@ -45,6 +45,17 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			nextText:''
 		});
 	});
+	
+	function deleOrder(oid, status) {
+		if (status != '新增') {
+			alert(status+"订单不能删除!");
+		} else {
+			if (oid != null) {
+				$("#sid").val(oid);
+				$("#deleForm").submit();
+			} 
+		}
+	}
 </script>
 <!--[if lte IE 7]>
 <style type="text/css">
@@ -83,7 +94,7 @@ ul li{
         </ul>
         </form>
         </li>
-        <li class="userbytitle">&gt;&gt;最近30天的用户订单</li>
+        <li class="userbytitle"><img src="images/30day.png" /></li>
         <li class="byinfolist">
         <ul>
         <li class="byinfolistt">订单号</li>
@@ -111,7 +122,7 @@ ul li{
 	        <li class="byinfolistt" style="width:60px;"><%=u.getHandleStatus()%></li>
 	        <li class="byinfolistt"><%=sf.format(u.getCreateTime())%></li>
 	        <li class="byinfolistt" style="width:50px;">明细</li>
-	        <li class="byinfolistt" style="width:50px;">删除</li>
+	        <li class="byinfolistt" style="width:50px;"><a href="javascript:void(0);" onclick="deleOrder('<%=u.getId() %>', '<%=u.getHandleStatus() %>');">删除</a></li>
 	        </ul> 
 	        </li>
         <%	
@@ -128,5 +139,12 @@ ul li{
 </div>
 <jsp:include page="footer.jsp" flush="true"/>
 </div>
+
+<form id="deleForm" action="user.do" method="post">
+	<input type="hidden" name="action" value="UserOrderAction"/>
+	<input type="hidden" name="stype" value="deleOrder"/>
+	<input type="hidden" name="sid" id="sid"/>
+</form>
+
 </body>
 </html>

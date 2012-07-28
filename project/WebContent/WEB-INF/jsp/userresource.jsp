@@ -24,46 +24,20 @@ User user = sc.getUser();
 <!-- Add jQuery library -->
 <script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="js/ajaxfileupload.js"></script>
-<style>
-	.mask {
-        background-color:#eee;
-        position:absolute;
-        top:0px;
-        left:0px;
-        opacity:0.6;
-	}
-</style>
+<script type="text/javascript" src="js/iact.js"></script>
 <script type="text/javascript">
 
 var resNum = <%=user.getResNum()%>;
 
-function popDiv(pid) {
+
+function popResDiv(pid) {
 	if (resNum >= 10) {
 		alert("对不起,您的资源数目已经超过最大数10");
 		return;
 	}
-	 var pobj = $("#"+pid);
-	 var w = document.body.clientWidth;
-	 var h = document.body.clientHeight ;
-	 
-     var ph = pobj.height();       
-     var pw = pobj.width();    
-      
-	$("<div class='mask'/>")
-		 				.width(document.body.scrollWidth)
-		 				.height(document.body.scrollHeight)
-		 				.appendTo("body");
-	 pobj.css({"position":"absolute"})
-	 				.animate({left: w/2-pw/2,    
-                      top: h/2-ph/2, opacity: "show" }, "slow");
+	popDiv(pid);
 }
 	
-function hideDiv(pid) {
-	$(".mask").remove();
-	var pobj = $("#"+pid);
-	pobj.animate({left: 0, top: 0, opacity: "hide" }, "slow");   
-}
-
 function uploadImage() {
 	$.ajaxFileUpload({
 		  url:'user.do?action=UserResourceAction&type=upload',
@@ -148,9 +122,9 @@ ul li{
         <li class="userbytitle">
         <ul id="nav">
 		<li>
-			<a href="javascript:void(0);" onclick="popDiv('poptext');" title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>
+			<a href="javascript:void(0);" onclick="popResDiv('poptext');" title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>
 		    &nbsp;&nbsp;&nbsp;&nbsp;
-		    <a href="javascript:void(0);"  onclick="popDiv('popimg');" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>
+		    <a href="javascript:void(0);"  onclick="popResDiv('popimg');" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>
     		&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="deleRes();" title="删除选中资源"><img src="images/Bin.png" width="24" height="24" /></a>
     	</li>
 		</ul>
@@ -230,7 +204,7 @@ ul li{
     </form>
 </div>
 
-<div id="poptext" class="popimg" style="height:300px;">
+<div id="poptext" class="popimg" style="height:250px;">
 	<form action="user.do" id="tForm" method="post">
 	<input type="hidden" value="UserResourceAction" name="action" />
 	<input type="hidden" value="0" name="resType" />

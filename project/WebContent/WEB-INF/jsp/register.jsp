@@ -1,7 +1,11 @@
-﻿<%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+﻿<%@ page language="java" pageEncoding="UTF-8"
+						 import="com.iact.vo.Area,
+						 		 java.util.List" contentType="text/html; charset=UTF-8" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+
+List<Area> areas = (List<Area>)request.getAttribute("areas");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <script src="jquery/jquery-1.7.2.min.js"></script>
 <script src="js/vanadium.js"></script>
+<script src="js/iact.js"></script>
 <style>
 form *{
 	padding:0; 
@@ -383,6 +388,24 @@ function checkUserExisted() {
 	 		}
 	 	});
 	}
+	
+	function getCascadingAreas(area) {
+		var v = area.value;
+		if (v) {
+			$.getJSON(
+				"reg.do?action=RegisterAction&type=5&parent=" + v,
+				function(json){
+					$("#city").html("");
+					var len = json.length;
+					for (var i = 0; i<len; i++) {
+						var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+						$("#city").append(op);
+					}
+				}
+			);
+		}	
+	}
+	
 </script>
 </head>
 
@@ -478,8 +501,18 @@ function checkUserExisted() {
                     省：
                   </td>
                   <td align="left">
-                      <select name="province">
-                        <option value="0">云南</option>
+                      <select name="province" onchange="getCascadingAreas(this);">
+                       <option value="">--请选择省份</option>
+                      	<% 
+                      		int size = areas.size();
+                      		for (int i = 0; i < size; i++) {
+                      			Area a = areas.get(i);
+                      	%>
+                      	 	<option value="<%=a.getId()%>"><%=a.getName()%></option>
+                      	<%	
+                      		}
+                      	%>
+                       
                       </select>
                   </td>
                   </tr>
@@ -488,8 +521,8 @@ function checkUserExisted() {
                  地区：
                   </td>
                   <td align="left">
-                      <select name="area">
-                        <option value="123">昆明</option>
+                      <select name="area" id="city">
+                        <option value="">--请选择地区</option>
                       </select>
                    </td>
 					</tr>
@@ -498,7 +531,8 @@ function checkUserExisted() {
                     许可协议确认：
                   </td>
                   <td align="left">
-                      <input type="checkbox" name="accept" class=":accept" />
+                      <input type="checkbox" name="accept" class=":accept" style="width:30px;"/>
+                      <a href="javascript:void(0);" onclick="popDiv('acceptDiv');"><label style="text-decoration:underline;line-height:27px;height:37px;">查看许可协议</label></a>
                   </td>
                 </tr>
                   <tr>
@@ -515,5 +549,51 @@ function checkUserExisted() {
     </div>  
 </div>
 <jsp:include page="footer.jsp" flush="true" />
+<div class="popAccept" id="acceptDiv">
+<div class="poptitle">许可协议细则
+<img src="images/close_button.png" style="float:right" onclick="hideDiv('acceptDiv');" />
+</div>
+<textarea class='popArea'>
+《国际长途网用户使用协议》
+1、重要须知
+
+国际长途网网络电话是由北京亚库通讯技术有限公司（以下简称“服务方”）推出并运营的网络语音通信服务产品。
+
+以下所述条款和条件即构成您与服务方就国际长途网网络电话软件的下载、安装、复制、注册、使用、管理国际长途网网络电话帐号所订立的协议（以下简称《协议》）。“用户”或“您”是指通过服务方提供的获取软件授权和帐号注册的途径获得软件产品及帐号授权许可的个人或单一实体。
+
+用户应认真阅读、充分理解本《协议》中各条款，包括免除或者限制服务方责任的免责条款及对用户的权利限制。请您审阅并接受或不接受本《协议》（未成年人应在法定监护人陪同下审阅）。除非您接受本《协议》条款，否则您无权下载、安装或使用本软件及其相关服务。一旦您下载安装使用了国际长途网网络电话软件，即表示您已接受了本《协议》所述的条款和条件。
+
+本《协议》可由服务方随时更新，且毋须另行通知。本《协议》条款一旦发生变更, 服务方只需在本软件或网页上公布更新内容。更新后的协议内容一旦公布即有效代替原来的协议条款。您可随时登录本软件或网站查阅最新版协议条款。在服务方修改协议条款后，您如果继续使用国际长途网则被视作您已接受了修改后的条款。
+2、定义
+
+除非本《协议》另有规定，否则下列词汇的含义为：
+
+2.1　国际长途网网络电话：是指由服务方推出并运营的互联网服务性产品。详见国际长途网网络电话网站（http://www.guojichangtu.net）上关于国际长途网的介绍及说明。服务方有权更改产品名称和功能。
+
+2.2　国际长途网网络电话帐号：包括国际长途网网络电话的帐号名以及您设置的密码。 您：指您，即国际长途网网络电话软件的最终用户，有时亦可使用“您的”。
+
+2.3　UI：指国际长途网网络电话软件的用户界面。
+
+2.4　生效日期：指达成本协议的日期，即您按上文所述单击“我已经阅读并同意”按钮的日期，或您安装或使用国际长途网网络电话软件的日期。
+
+2.5　紧急呼叫服务：指根据适用的地方或全国规定，让用户能够接通紧急救护人员或公共安全报警接收点的服务。
+
+2.6　国际长途网网络电话软件：指国际长途网发行的网络语音通信软件，包括但不局限于国际长途网 API、UI和文档，及其任何未来版本、改进、开发、程序补丁、更新和升级。
+3、用户使用须知
+
+3.1　用户应保证其注册登记时提供的资料均真实无误。
+
+3.2　国际长途网网络电话帐号
+
+    3.2.1　用户可以通过注册国际长途网网络电话帐号，使用服务方提供的服务。用户通过国际长途网网络电话帐号使用服务方提供的服务时，须同时遵守相关服务的服务条款。
+    3.2.2　国际长途网网络电话帐号的所有权归服务方，用户完成注册申请手续后，获得相应国际长途网网络电话帐号的使用权。
+    3.2.3　国际长途网网络电话帐号使用权仅属于初始申请注册人，禁止转让、继受或售卖。如果服务方发现使用者并非帐号初始注册人，服务方有权回收该帐号而无需向该帐号使用人承担法律责任。服务方禁止用户私下有偿或无偿转让帐号，以免因帐号问题产生纠纷，用户应当自行承担因违反此条款而遭致的任何损失。
+    3.2.4　用户承担国际长途网网络电话帐号与密码的保管责任，并就其帐号及密码项下之一切活动负全部责任。用户须重视国际长途网网络电话帐号及密码保护。
+    3.2.5　您需凭您的帐号、密码登录国际长途网网络电话。服务方仅根据您的帐号和密码确认使用国际长途网网络电话的用户身份。您应妥善保管您的帐号和密码，并对其使用及其遗失自行承担责任。如果您的帐号和密码遭到未获授权的使用，或者发生其他任何安全问题时，将立即通知服务方。您在此同意并确认，服务方对因上述情形产生的遗失或损害不负责任。
+    3.2.6　用户注册国际长途网网络电话帐号后如果超过90天没有使用且帐户余额为“0”或者不足以进行最后一次最低计费，服务方有权回收帐号，以免造成资源浪费。
+
+3.3　服务方保留在任何时候自行决定对国际长途网网络电话及其相关功能变更、升级、修改、转移的权利。服务方进一步保留在国际长途网网络电话中开发新功能的权利。上述所有新的功能、软件服务的提供，除非服务方另有说明，否则仍适用本《协议》。
+</textarea>
+</div>
 </body>
 </html>

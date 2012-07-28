@@ -8,6 +8,7 @@ SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer")
 User user = sc.getUser();
 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 String loginTime = user.getLoginTime() == null ? "&nbsp;&nbsp;" : sf.format(user.getLoginTime());
+int level = user.getLevel() == 0 ? 1: user.getLevel();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -42,14 +43,22 @@ ul li{
         <div id="basic">
 	        <ul>
 	        <li><img src="images/my_title1.png" width="160" height="30" /></li>
-	        <li id="myinfo_title">&nbsp;</li><li>&nbsp;</li>
-	        <li id="myinfo_title">账户名称：</li><li><%=user.getLogin() %></li>
-	        <li id="myinfo_title">用户姓名：</li><li><%=user.getRealName() %></li>      
-	        <li id="myinfo_title">帐户余额：</li><li><%=user.getBalance()%></li>
-	        <li id="myinfo_title">用户等级：</li><li><%=user.getLevel() %></li>
-	        <li id="myinfo_title">上次登录时间：</li><li><%=loginTime %></li>
-	        <li id="myinfo_title">上次登录地址：</li><li><%=user.getLoginIp() %></li>
-	        <li id="myinfo_title">&nbsp;</li><li>&nbsp;</li>
+	        <li class="myinfo_title">&nbsp;</li><li>&nbsp;</li>
+	        <li class="myinfo_title">账户名称：</li><li><%=user.getLogin() %></li>
+	        <li class="myinfo_title">用户姓名：</li><li><%=user.getRealName() %></li>      
+	        <li class="myinfo_title">帐户余额：</li><li><%=user.getBalance()%></li>
+	        <li class="myinfo_title">用户等级：</li>
+	        <li>   
+	        <% 
+		       	for (int i = 0; i < level; i++) {
+		       %>
+		      	 <img src="images/star.png" width="16" height="15" />
+		       <%
+		       	}
+		     %></li>
+	        <li class="myinfo_title">上次登录时间：</li><li><%=loginTime %></li>
+	        <li class="myinfo_title">上次登录地址：</li><li><%=user.getLoginIp() %></li>
+	        <li class="myinfo_title">&nbsp;</li><li>&nbsp;</li>
 	        </ul>        
         </div>
    		</div>

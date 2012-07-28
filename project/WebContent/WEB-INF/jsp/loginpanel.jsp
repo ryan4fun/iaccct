@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        <div>
 		        <ul>
 		        <li class="spaecst"></li>
-		       	  <li><a href="f.do?page=register.jsp">免费注册</a> | <a href="f.do?page=user/forgetp.jsp">忘记密码</a></li>
+		       	  <li><a href="reg.do?action=RegisterAction&type=4">免费注册</a> | <a href="javascript:void(0);" onclick="popForgetDiv();" >忘记密码</a></li>
 		        	<li class="spaecs">
 		        	<span class="err" id="errpanel"></span>
 		        	</li>
@@ -49,7 +49,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		       <div id="topinfos"><%= user.getBalance()%>￥</div>
 		   	   <div id="topinfos">我的余额：</div>
 		       <div id="topinfos">我的订单：（<%=user.getOrderNum() %>）</div>
-		       <div id="topinfos"><img src="images/star<%=level%>.png" width="16" height="15" /></div>
+		       <div id="topinfos">
+		       <% 
+		       	for (int i = 0; i < level; i++) {
+		       %>
+		      	 <img src="images/star.png" width="16" height="15" />
+		       <%
+		       	}
+		       %>
+		       
+		       </div>
 		       <div id="topinfos">我的等级：</div>
 		   	   </div>
 			</div>
