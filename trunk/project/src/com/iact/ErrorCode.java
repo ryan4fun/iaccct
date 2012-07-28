@@ -36,5 +36,12 @@ public class ErrorCode {
 
 	public static final int ILLEGAL_FILE_TYPE = 5;
 	
+	/**
+	 * 
+	 */
+	public static final int FAIL_DELE_ORDER = 6;
+	
+	public static final int ERROR = -1;
+	
 	
 }
