@@ -5,11 +5,13 @@
  */
 package com.iact.action;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +24,6 @@ import com.iact.dao.UserresourceDAO;
 import com.iact.util.Tools;
 import com.iact.vo.Bizpackage;
 import com.iact.vo.ShoppingCart;
-import com.iact.vo.User;
 import com.iact.vo.Userorder;
 import com.iact.vo.Userresource;
 
@@ -92,14 +93,23 @@ public class BizPackageAction extends AbstractAction {
 					DAO.beginTransaction();
 					DAO.save(order);
 					DAO.commitTransaction();
+					int orderNum = sc.getUser().getOrderNum();
+					sc.getUser().setOrderNum(orderNum + 1);
 				} catch (Throwable t) {
 					DAO.rollbackTransaction();
 				} finally {
 					DAO.closeSession();
 				}
 				// 2. forward to user order
-				req
-						.getRequestDispatcher("user.do?action=UserInfoAction&type=1");
+				try {
+					req.getRequestDispatcher(
+							"user.do?action=UserInfoAction&type=1").forward(
+							req, res);
+				} catch (ServletException e) {
+					throw new IActException(e);
+				} catch (IOException e) {
+					throw new IActException(e);
+				}
 			}
 		}
 		return ErrorCode.OK;
@@ -109,10 +119,10 @@ public class BizPackageAction extends AbstractAction {
 		Userorder order = new Userorder();
 		String orderId = Tools.getOrderID();
 		order.setOrderId(orderId);
-		
+
 		String transId = Tools.getTransID();
 		order.setTransactionId(transId);
-	
+
 		long pid = Long.parseLong((String) reqParams.get("pid"));
 		order.setBizPackage(pid);
 
@@ -125,7 +135,7 @@ public class BizPackageAction extends AbstractAction {
 		order.setPackageInfo((String) reqParams.get("pinfo"));
 
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		String sdate = (String) reqParams.get("sdate");
+		String sdate = (String) reqParams.get("psdate");
 		Timestamp planBegin = null;
 		if (sdate != null) {
 			Date start;
@@ -142,7 +152,7 @@ public class BizPackageAction extends AbstractAction {
 
 		order.setPlanBegin(planBegin);
 
-		String edate = (String) reqParams.get("edate");
+		String edate = (String) reqParams.get("pedate");
 		Timestamp planEnd = null;
 		if (edate != null) {
 			Date end;
@@ -157,7 +167,7 @@ public class BizPackageAction extends AbstractAction {
 			planEnd = new Timestamp(end.getTime());
 		}
 		order.setPlanEnd(planEnd);
-		
+
 		String pdate = (String) reqParams.get("plandate");
 		Timestamp plandate = null;
 		if (pdate != null) {
@@ -210,12 +220,13 @@ public class BizPackageAction extends AbstractAction {
 			} catch (Throwable t) {
 				num = 1;
 			}
-		} 
+		}
 		order.setPackageNumber(num);
 		String sprice = (String) reqParams.get("price");
 		double price = Double.parseDouble(sprice);
 		order.setPlanFee(price * num);
-		
+
+		order.setVerifyStatus("等待审核");
 		return order;
 	}
 
