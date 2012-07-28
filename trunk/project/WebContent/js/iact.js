@@ -72,6 +72,41 @@ $(document).ready(function(){
 	/* End of customizations */
 });
 
+function popDiv(pid) {
+	 var pobj = $("#"+pid);
+	 var w = document.body.clientWidth;
+	 var h = document.body.clientHeight ;
+	 
+     var ph = pobj.height();       
+     var pw = pobj.width();    
+      
+	$("<div class='mask'/>")
+		 				.width(document.body.scrollWidth)
+		 				.height(document.body.scrollHeight)
+		 				.appendTo("body");
+	 pobj.css({"position":"absolute"})
+	 				.animate({left: w/2-pw/2,    
+                      top: h/2-ph/2, opacity: "show" }, "slow");
+}
+function hideDiv(pid) {
+	$(".mask").remove();
+	var pobj = $("#"+pid);
+	pobj.animate({left: 0, top: 0, opacity: "hide" }, "fast");   
+}
 
+
+function popForgetDiv() {
+	var w = document.body.clientWidth;
+	var h = document.body.clientHeight ;
+	var fobj = $("#forDiv").get(0);
+	if (!fobj) {
+		fobj = $("<div class='forget' id='forDiv' />").appendTo("body");
+		fobj.append("<div class='fortitle'>忘记密码<img src='images/close_button.png' onclick='hideDiv(\"forDiv\");' style='float:right;'/></div>");
+		fobj.append("<label class='reglabel'>&nbsp;&nbsp;&nbsp;用户名：</label><input type='text' name='login' onblur='checkUser();' /><br/>");
+		fobj.append("<label class='reglabel'>注册邮箱：</label><input type='text' name='real'/>");
+		fobj.append("<input type='button' class='sb'onclick='sbForgetPwd();' />");	
+	}
+	popDiv('forDiv');
+}
 
 
