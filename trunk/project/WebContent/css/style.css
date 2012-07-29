@@ -8,18 +8,18 @@
 	margin-left: auto;
 }
 
-.container .menu{
+.container .regmenu{
 	width:900px;
 	height:34px;
 }
 
-.container .menu ul{
+.container .regmenu ul{
 	list-style:none;
 	width:820px;
 	height:34px;
 	margin:0 auto;
 }
-.container .menu li{
+.container .regmenu li{
 	background:url(../images/header_tabs.png) repeat-x;
 	background-position:194px 0;
 	display:block;
@@ -28,17 +28,17 @@
 	height:34px;
 	cursor:pointer;
 }
-.container .menu li.current{
+.container .regmenu li.current{
 	background-position:0 0;
 }
-.container .menu span{
+.container .regmenu span{
 	color:#eee;
 	display: inline-block;
 	line-height:34px;
 	text-align:center;
 	font-size: 18px;
 }
-.container .menu span:hover{
+.container .regmenu span:hover{
 	color:#FFF;
 	display: inline-block;
 	line-height:34px;
