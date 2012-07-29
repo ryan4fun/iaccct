@@ -11,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <li id="my1"><a href="user.do?action=UserInfoAction">帐户信息</a></li>
         <li id="my2"><a href="user.do?action=UserInfoAction&type=1">我的订单</a></li>
         <li id="my3"><a href="user.do?action=UserInfoAction&type=2">我的资源</a></li>
-        <li id="my5"><a href="#">在线充值</a></li>
+        <li id="my5"><a href="user.do?page=userpay.jsp">在线充值</a></li>
         <li id="my6"><a href="user.do?action=UserInfoAction&type=3">充值记录</a></li>
         <li id="my7"><a href="user.do?action=UserInfoAction&type=4">消费记录</a></li>
         <li id="my4"><a href="#">我的业务</a></li>
