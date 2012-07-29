@@ -15,6 +15,7 @@ public abstract class AbstractUser implements java.io.Serializable {
 
 	private Long id;
 	private Long area;
+	private Long province;
 	private String login;
 	private String pwd;
 	private String pwdquestion;
@@ -296,6 +297,14 @@ public abstract class AbstractUser implements java.io.Serializable {
 
 	public void setResNum(int resNum) {
 		this.resNum = resNum;
+	}
+
+	public Long getProvince() {
+		return province;
+	}
+
+	public void setProvince(Long province) {
+		this.province = province;
 	}
 	
 
