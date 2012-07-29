@@ -59,6 +59,10 @@ public class RegisterAction extends AbstractAction {
 			req.getSession().setAttribute("tempUser", user);
 			List<Area> areas = getAreas();
 			req.setAttribute("areas", areas);
+			long parent = user.getProvince();
+			
+			List<Area> subAreas = getCascadingAreas(parent);
+			req.setAttribute("subAreas",subAreas);
 			_forward(req, res);
 		} else if (intType == 3) {
 			User user = (User) req.getSession().getAttribute("tempUser");
@@ -72,7 +76,8 @@ public class RegisterAction extends AbstractAction {
 			reqParams.put("page", "register.jsp");
 			_forward(req, res);
 		} else if (intType == 5) {
-			List<Area> areas = getCascadingAreas();
+			Long parent = Long.parseLong((String) reqParams.get("parent"));
+			List<Area> areas = getCascadingAreas(parent);
 			int size = areas.size();
 
 			JSONArray arra = new JSONArray();
@@ -89,7 +94,27 @@ public class RegisterAction extends AbstractAction {
 				arra.put(o);
 			}
 			super.writeResponse(arra.toString(), res);
-		}
+		} else if (intType == 6) {
+			boolean isExisted = checkPhoneExisted();
+			if (isExisted) {
+				super
+						.writeErrorMessage(ErrorCode.EXISTED_USER, "该手机号已被注册.",
+								res);
+			} else {
+				super.writeErrorMessage(ErrorCode.OK, "ok", res);
+			}
+		} else if (intType == 8) {
+			//send auth code
+			String mAuthCode = "8888";
+			req.getSession().setAttribute("mauthCode", mAuthCode);
+		} else if (intType == 7) {
+			String mAuthCode = (String)req.getSession().getAttribute("mauthCode");
+			String fmAuthCode = (String)reqParams.get("mauthCode");
+			
+			if (!fmAuthCode.equalsIgnoreCase(mAuthCode)) {
+				super.writeErrorMessage(ErrorCode.AUTH_FAILURE, "手机验证码错误", res);
+			}
+		} 
 
 		return ErrorCode.OK;
 	}
@@ -102,6 +127,14 @@ public class RegisterAction extends AbstractAction {
 		return us != null && us.size() > 0;
 	}
 
+	private boolean checkPhoneExisted() throws IActException {
+		UserDAO userDAO = (UserDAO) DAOFactory.getDAO(USER_DAO);
+		String login = (String) reqParams.get("mlogin");
+		List<User> us = userDAO.findByLogin(login);
+		return us != null && us.size() > 0;
+	}
+
+	
 	private boolean checkAuthCode(String sAuth) throws IActException {
 		String auth = (String) reqParams.get("authCode");
 		return auth.equalsIgnoreCase(sAuth);
@@ -113,16 +146,30 @@ public class RegisterAction extends AbstractAction {
 
 		String pwd = (String) reqParams.get("pwd");
 		user.setPwd(DigestUtils.md5Hex(pwd));
-		user.setArea(Long.parseLong((String) reqParams.get("area")));
+		String area = (String) reqParams.get("area");
+		if (area != null && area.trim().length()!= 0) {
+			user.setArea(Long.parseLong(area));
+		}
 		user.setCreateDate(new Timestamp(System.currentTimeMillis()));
-		user.setCreateMode(Integer.parseInt((String) reqParams
-				.get("createMode")));
+		
+		int createMode = Integer.parseInt((String) reqParams
+				.get("createMode"));
+		user.setCreateMode(createMode);
+		
+		if (createMode == 1) {
+			user.setPhoneNumber((String) reqParams.get("login"));
+		}
+		
 		user.setEmail((String) reqParams.get("email"));
 		user.setLogin((String) reqParams.get("login"));
 		user.setRealName((String) reqParams.get("realName"));
 		user.setSex((String) reqParams.get("sex"));
 		user.setUserType(0);
-
+		String province = (String) reqParams.get("province");
+		if (province != null && province.trim().length()!= 0) {
+			user.setProvince(Long.parseLong(province));
+		}
+		
 		return user;
 	}
 
@@ -157,42 +204,6 @@ public class RegisterAction extends AbstractAction {
 		return true;
 	}
 
-	private boolean saveUser() throws IActException {
-		String userInfo = (String) reqParams.get("userInfo");
-
-		try {
-			JSONObject jo = new JSONObject(userInfo);
-
-			User user = null;// AbstractUser.parse(jo);
-
-			/**
-			 * MD5 for password
-			 */
-			String pwd = user.getPwd();
-			String pwdMd5 = DigestUtils.md5Hex(pwd);
-			user.setPwd(pwdMd5);
-
-			/**
-			 * Save user
-			 */
-			UserDAO userDAO = (UserDAO) DAOFactory.getDAO(USER_DAO);
-			try {
-				userDAO.beginTransaction();
-				userDAO.save(user);
-				userDAO.commitTransaction();
-			} catch (Throwable t) {
-				userDAO.rollbackTransaction();
-				throw new IActException(t);
-			} finally {
-				userDAO.closeSession();
-			}
-
-			return true;
-		} catch (JSONException e) {
-			throw new IActException(e);
-		}
-
-	}
 
 	private List<Area> getAreas() throws IActException {
 
@@ -203,10 +214,10 @@ public class RegisterAction extends AbstractAction {
 
 	}
 
-	private List<Area> getCascadingAreas() throws IActException {
+	private List<Area> getCascadingAreas(long parent) throws IActException {
 		AreaDAO DAO = (AreaDAO) DAOFactory.getDAO(AREA_DAO);
 
-		Long parent = Long.parseLong((String) reqParams.get("parent"));
+		
 		List<Area> areas = DAO.findByParent(parent);
 
 		return areas;
