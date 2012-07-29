@@ -99,6 +99,16 @@ input.failformcss,select.failformcss,textarea.failformcss{
 
 </style>
 <script>
+
+/** register menu **/
+$(document).ready(function() {
+	$(".regmenu li").click(function(){
+			var index = $(this).index();
+		   $(this).addClass("current").siblings().removeClass("current");
+	       $(".content li").eq(index).show().siblings().hide();
+	});
+});
+  
 /*
  *本插件原作者Vanadium,原文请移步前往http://vanadiumjs.com/查看
  *本插件由Mr.Think中文整理,Mr.Think的博客:http://MrThink.net/
@@ -363,6 +373,11 @@ function checkUserExisted() {
 			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
 	}
 	
+  function getMobileAuthCode(basePath) {
+  	 
+	}
+	
+	
 	function checkAuth() {
 		var v = $("#authCode").get(0).value;
 		$("#authETip")[0].innerHTML ="";
@@ -389,23 +404,83 @@ function checkUserExisted() {
 	 	});
 	}
 	
-	function getCascadingAreas(area) {
+	function getCascadingAreas(area, type) {
 		var v = area.value;
 		if (v) {
 			$.getJSON(
 				"reg.do?action=RegisterAction&type=5&parent=" + v,
 				function(json){
-					$("#city").html("");
-					var len = json.length;
-					for (var i = 0; i<len; i++) {
-						var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
-						$("#city").append(op);
+					if (type == 0) {
+						$("#city").html("");
+						var len = json.length;
+						for (var i = 0; i<len; i++) {
+							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+							$("#city").append(op);
+						}
+					} else {
+						$("#mcity").html("");
+						var len = json.length;
+						for (var i = 0; i<len; i++) {
+							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+							$("#mcity").append(op);
+						}
 					}
 				}
 			);
 		}	
 	}
+	function checkPAuth() {
+		var v = $("#mauthCode").val();
+		$("mauthETip").html("");
+		var params = "action=RegisterAction"
+		 			+"&mauthCode="+v
+		 			+"&type=7"
+		 			+"&ts="+ new Date();
+		var url = "reg.do?"+params;
+		$.getJSON(url, function(json){
+			if (json.errorCode != 0) {
+				$("#mauthETip").html(json.errorMsg);
+			}
+		});
+	}
 	
+	function sendMAuthCode() {
+		$("mauthETip").html("");
+		var phoneNum = $("mlogin").val();
+		var params = "action=RegisterAction"
+		 			+"&type=8"
+		 			+"&phoneNum="+phoneNum
+		 			+"&ts="+ new Date();
+		var url = "reg.do?"+params;
+		$.getJSON(url, function(json){
+			if (json.errorCode != 0) {
+				$("#mauthETip").html(json.errorMsg);
+			} 
+		});
+	}
+	
+	function checkPhoneNum() {
+		var lv = $("#mlogin").val();
+		$("#merrTip").html("");
+    	if(!(/^1[3|5|8][0-9]\d{4,8}$/.test(lv))){ 
+    	 	$("#mlogin")[0].className="failformcss";	
+	        $("#merrTip").html("不是正确的手机号"); 
+	        return; 
+   		} else {
+   			$("#mlogin")[0].className = "irightformcss";	
+   		}
+		var params = "action=RegisterAction"
+		 			+"&mlogin="+lv
+		 			+"&type=6"
+		 			+"&ts="+ new Date();
+		var url = "reg.do?" + params;
+		$.getJSON(url, function(json){
+			if (json.errorCode != 0) {
+				$("#merrTip").html(json.errorMsg);
+				$("#mlogin")[0].className="failformcss";
+			}
+		});
+	}
 </script>
 </head>
 
@@ -420,7 +495,7 @@ function checkUserExisted() {
     <li>注册成功</li>
     </ul>
 		<div class="container">
-            <div class="menu">
+            <div class="regmenu">
                   <ul>
                       <li class="current"><span>注册用户</span></li>
                       <li><span>手机注册</span></li>
@@ -428,6 +503,8 @@ function checkUserExisted() {
             </div>
             
             <div class="content">
+            <ul>
+              <li>
             	<form method="post" action="r.do" id="theForm">
             	 <table border="0">
               			<tr>
@@ -501,7 +578,7 @@ function checkUserExisted() {
                     省：
                   </td>
                   <td align="left">
-                      <select name="province" onchange="getCascadingAreas(this);">
+                      <select name="province" onchange="getCascadingAreas(this, 0);">
                        <option value="">--请选择省份</option>
                       	<% 
                       		int size = areas.size();
@@ -544,7 +621,127 @@ function checkUserExisted() {
                	</tr>
 				</table>	
 			</form>
+			</li>
+     		 <li style="display: none;">
+  					<form method="post" action="r.do" id="mobileForm">
+            	 <table border="0">
+              			<tr>
+              			<td class="reglabel" align="right"> 手机号码：
+                    </td>
+                    <td align="left">
+                    <input type="hidden" value="RegisterAction" name="action" />
+                    <input type="hidden" value="2" name="type" />
+                    <input type="hidden" value="1" name="createMode" />
+                    <input type="hidden" value="register2.jsp" name="page" />
+                    <input name="login" type="text" id="mlogin" onblur="checkPhoneNum();"/><span id="merrTip" class="failmsg"></span>
+                  	</td>
+                    </tr>
+                    <tr>
+              			<td class="reglabel" align="right"> 密 码：
+                    </td>
+                    <td align="left">
+                    <input name="pwd" id="mpwd" class=":min_length;6 :required" type="password" />
+                    </td>
+                    </tr>
+                   	<tr>
+              			<td class="reglabel" align="right">
+                    确认密码：
+										</td>
+              			<td align="left">
+                    <input name="rpwd" type="password" class=":same_as;mpwd"  />
+                    </td>
+                    </tr>
+                    <tr>
+              			<td class="reglabel" align="right">
+                    手机验证码：
+									  </td>
+                    <td align="left">
+                    <input name="" type="text" class="reginput"  id="mauthCode"  onblur="checkPAuth();"/>
+                    	<a href="javascript:void(0);" onclick="sendMAuthCode();">获取手机验证码</a>
+                    	<span id="mauthETip"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class="reglabel" align="right">
+                    电子邮件：
+                    </td>
+                    <td align="left">
+                   <input name="email" type="text" class=":email :required"  />
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class="reglabel" align="right">
+                    真实姓名：
+	                  </td>
+									  <td align="left">
+                    <input name="realName" type="text"  class="reginput" />
+                    </td>
+                    </tr>
+                    <tr>
+                    <td class="reglabel" align="right">
+                    性别：
+                    </td>
+										<td align="left">
+                    
+                      <select name="sex">
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                      </select>
+                  
+                 	</td>
+                </tr>
+                   <tr>
+                    <td class="reglabel" align="right">	
+                    省：
+                  </td>
+                  <td align="left">
+                      <select name="province" onchange="getCascadingAreas(this, 1);">
+                       <option value="">--请选择省份</option>
+                      	<% 
+                      		int isize = areas.size();
+                      		for (int i = 0; i < isize; i++) {
+                      			Area a = areas.get(i);
+                      	%>
+                      	 	<option value="<%=a.getId()%>"><%=a.getName()%></option>
+                      	<%	
+                      		}
+                      	%>
+                       
+                      </select>
+                  </td>
+                  </tr>
+									<tr>
+										<td class="reglabel" align="right">
+                 地区：
+                  </td>
+                  <td align="left">
+                      <select name="area" id="mcity">
+                        <option value="">--请选择地区</option>
+                      </select>
+                   </td>
+					</tr>
+                  	<tr>
+                  		<td class="reglabel" align="right">
+                    许可协议确认：
+                  </td>
+                  <td align="left">
+                      <input type="checkbox" name="accept" class=":accept" style="width:30px;"/>
+                      <a href="javascript:void(0);" onclick="popDiv('acceptDiv');"><label style="text-decoration:underline;line-height:27px;height:37px;">查看许可协议</label></a>
+                  </td>
+                </tr>
+                  <tr>
+                  	<td>
+                  	</td>
+                  	<td align="left">	
+                  	<input type="submit" class="sb" value="" />
+               		</td>
+               	</tr>
+				</table>	
+			</form>
+			</li>
+		 </ul>
             </div>
+            
      </div>
     </div>  
 </div>

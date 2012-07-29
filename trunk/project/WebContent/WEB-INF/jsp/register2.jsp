@@ -1,8 +1,13 @@
-<%@ page language="java" pageEncoding="UTF-8" import="com.iact.vo.User" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" pageEncoding="UTF-8" import="com.iact.vo.User,
+													  com.iact.vo.Area,
+													  java.util.List" contentType="text/html; charset=UTF-8" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 User user = (User)session.getAttribute("tempUser");
+
+List<Area> areas = (List<Area>)request.getAttribute("areas");
+List<Area> subAreas = (List<Area>)request.getAttribute("subAreas");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -327,6 +332,32 @@ Vanadium.addValidatorTypes([
   ])
   if (typeof(VanadiumCustomValidationTypes) !== "undefined" && VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
 };
+
+	function getCascadingAreas(area, type) {
+		var v = area.value;
+		if (v) {
+			$.getJSON(
+				"reg.do?action=RegisterAction&type=5&parent=" + v,
+				function(json){
+					if (type == 0) {
+						$("#city").html("");
+						var len = json.length;
+						for (var i = 0; i<len; i++) {
+							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+							$("#city").append(op);
+						}
+					} else {
+						$("#mcity").html("");
+						var len = json.length;
+						for (var i = 0; i<len; i++) {
+							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+							$("#mcity").append(op);
+						}
+					}
+				}
+			);
+		}	
+	}
 </script>
 </head>
 
@@ -398,8 +429,20 @@ Vanadium.addValidatorTypes([
                     省：
                   </td>
                   <td align="left">
-                      <select name="province">
-                        <option value="云南">云南</option>
+                     <select name="province" onchange="getCascadingAreas(this, 0);">
+                        <option value="">--请选择省份</option>
+                      	<% 
+                      		int isize = areas.size();
+                      		for (int i = 0; i < isize; i++) {
+                      			Area a = areas.get(i);
+                      			if (user.getProvince().longValue() == a.getId().longValue()) {
+                      				System.out.println(a.getName());
+                      			}
+                      	%>
+                      	 	<option value="<%=a.getId()%>" <%if(user.getProvince().longValue() == a.getId().longValue()){ %> selected <%}%> ><%=a.getName()%></option>
+                      	<%	
+                      		}
+                      	%>
                       </select>
                   </td>
                   </tr>
@@ -408,8 +451,17 @@ Vanadium.addValidatorTypes([
                  地区：
                   </td>
                   <td align="left">
-                      <select name="area">
-                        <option value="123">昆明</option>
+                      <select name="area" id="city">
+                         <option value="">--请选择地区</option>
+                         <% 
+                      		int jsize = subAreas.size();
+                      		for (int i = 0; i < jsize; i++) {
+                      			Area a = subAreas.get(i);
+                      	 %>
+                      	 	<option value="<%=a.getId()%>" <%if(user.getArea().longValue() == a.getId().longValue()){%> selected <%}%> ><%=a.getName()%></option>
+                      	 <%	
+                      		}
+                      	 %>
                       </select>
                    </td>
 								</tr>
