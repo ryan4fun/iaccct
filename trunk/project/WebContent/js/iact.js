@@ -70,6 +70,8 @@ $(document).ready(function(){
 	var itvl = setInterval(function(){autoAdvance()},changeEvery*1000);
 
 	/* End of customizations */
+	
+     
 });
 
 function popDiv(pid) {
