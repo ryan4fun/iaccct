@@ -88,14 +88,14 @@ function popDiv(pid) {
 		 				.appendTo("body");
 	 pobj.css({"position":"absolute"})
 	 				.animate({left: w/2-pw/2,    
-                      top: h/2-ph/2, opacity: "show" }, "slow");
+                      top: h/2-ph/2, opacity: "show" }, "normal");
 }
+
 function hideDiv(pid) {
 	$(".mask").remove();
 	var pobj = $("#"+pid);
-	pobj.animate({left: 0, top: 0, opacity: "hide" }, "fast");   
+	pobj.animate({left: 0, top: 0, opacity: "hide" }, "normal");   
 }
-
 
 function popForgetDiv() {
 	var w = document.body.clientWidth;
