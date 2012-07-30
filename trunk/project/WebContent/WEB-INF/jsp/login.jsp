@@ -33,6 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 var basePath = "<%=basePath%>";
 		 
 		 function login() {
+		 	$("#errpanel").html("");
 		 	var un = $("#loginName").val();
 		 	var pd = $("#password").val();
 		 	var at = $("#authCode").val();
@@ -57,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 					window.location.href = basePath +"index.do?action=IndexAction";		
 		 				}
 		 			} else {
-		 				$("#errpanel")[0].innerHTML = data.errorMsg;
+		 				$("#errpanel").html(data.errorMsg);
 		 			}
 		 		}
 		 	});
@@ -76,9 +77,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="container">
             <div class="welcome">欢迎登陆本站</div>
             <div class="content">
-              <div class="err" id="errpanel"></div>
               <ul>
               		<li>
+              		<div>&nbsp;</div>
+              		<div class="errmsg" id="errpanel"></div>
+              		<div class="reginfo">&nbsp;</div>
                     <div class="reglabel">用户名/手机号码：</div>
                     <div><input name="loginName" type="text" class="reginput" id="loginName"/></div>
                     <div class="reginfo">&nbsp;</div>
