@@ -15,6 +15,11 @@ body{
 	-moz-font-smoothing: antialiased;
 	font-smoothing: antialiased;
 }
+.errmsg {
+	color:#a40000;
+	font-size:16px;
+}
+
 li{
 	list-style:none;
 }
