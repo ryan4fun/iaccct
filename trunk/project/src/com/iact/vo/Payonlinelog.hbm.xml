@@ -10,9 +10,14 @@
             <column name="ID" />
             <generator class="assigned"></generator>
         </id>
+        <!--
         <many-to-one name="user" class="com.iact.vo.User" fetch="select">
             <column name="User" not-null="true" />
         </many-to-one>
+        -->
+        <property name="user" type="java.lang.Long">
+            <column name="User" not-null="true" />
+        </property>
         <property name="orderId" type="java.lang.String">
             <column name="OrderID" length="32" />
         </property>

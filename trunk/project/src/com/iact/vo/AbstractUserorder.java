@@ -14,14 +14,14 @@ public abstract class AbstractUserorder implements java.io.Serializable {
 
 	private Long id;
 	private Long user;
-	private Long bizPackage;
+	private Bizpackage bizPackage;
 	private String transactionId;
 	private String orderId;
 	private String orderType;
 	private String spotType;
 	private String subtitle;
 	private String logoType;
-	private String logoData;
+	private java.sql.Blob logoData;
 	private String packageInfo;
 	private Integer packageNumber;
 	private Date planDate;
@@ -48,7 +48,7 @@ public abstract class AbstractUserorder implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public AbstractUserorder(Long id, Long user, Long bizPackage,
+	public AbstractUserorder(Long id, Long user, Bizpackage bizPackage,
 			String transactionId, String orderId, String orderType,
 			String spotType, String subtitle, Integer packageNumber,
 			Date planDate, Double planFee, String verifyStatus,
@@ -69,9 +69,9 @@ public abstract class AbstractUserorder implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AbstractUserorder(Long id, Long user, Long bizPackage,
+	public AbstractUserorder(Long id, Long user, Bizpackage bizPackage,
 			String transactionId, String orderId, String orderType,
-			String spotType, String subtitle, String logoType, String logoData,
+			String spotType, String subtitle, String logoType, java.sql.Blob logoData,
 			String packageInfo, Integer packageNumber, Date planDate,
 			Timestamp planBegin, Timestamp planEnd, Timestamp actBegin,
 			Timestamp actEnd, Double planFee, Double actFee,
@@ -126,11 +126,11 @@ public abstract class AbstractUserorder implements java.io.Serializable {
 		this.user = user;
 	}
 
-	public Long getBizPackage() {
+	public Bizpackage getBizPackage() {
 		return this.bizPackage;
 	}
 
-	public void setBizPackage(Long bizPackage) {
+	public void setBizPackage(Bizpackage bizPackage) {
 		this.bizPackage = bizPackage;
 	}
 
@@ -182,11 +182,11 @@ public abstract class AbstractUserorder implements java.io.Serializable {
 		this.logoType = logoType;
 	}
 
-	public String getLogoData() {
+	public java.sql.Blob getLogoData() {
 		return this.logoData;
 	}
 
-	public void setLogoData(String logoData) {
+	public void setLogoData(java.sql.Blob logoData) {
 		this.logoData = logoData;
 	}
 

@@ -13,9 +13,15 @@
         <property name="user" type="java.lang.Long">
             <column name="User" not-null="true" />
         </property>
+        <!--
         <property name="bizPackage" type="java.lang.Long">
             <column name="BizPackage" not-null="true" />
         </property>
+        -->
+        <many-to-one name="bizPackage" class="com.iact.vo.Bizpackage" fetch="select">
+            <column name="BizPackage" not-null="true" />
+        </many-to-one>
+        
         <property name="transactionId" type="java.lang.String">
             <column name="TransactionID" length="32" not-null="true" />
         </property>
@@ -34,7 +40,7 @@
         <property name="logoType" type="java.lang.String">
             <column name="LogoType" length="16" />
         </property>
-        <property name="logoData" type="java.lang.String">
+        <property name="logoData" type="java.sql.Blob">
             <column name="LogoData" />
         </property>
         <property name="packageInfo" type="java.lang.String">

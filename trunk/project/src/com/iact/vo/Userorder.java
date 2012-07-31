@@ -16,7 +16,7 @@ public class Userorder extends AbstractUserorder implements
 	}
 
 	/** minimal constructor */
-	public Userorder(Long id, Long user, Long bizPackage, String transactionId,
+	public Userorder(Long id, Long user, Bizpackage bizPackage, String transactionId,
 			String orderId, String orderType, String spotType, String subtitle,
 			Integer packageNumber, Date planDate, Double planFee,
 			String verifyStatus, String handleStatus) {
@@ -26,9 +26,9 @@ public class Userorder extends AbstractUserorder implements
 	}
 
 	/** full constructor */
-	public Userorder(Long id, Long user, Long bizPackage, String transactionId,
+	public Userorder(Long id, Long user, Bizpackage bizPackage, String transactionId,
 			String orderId, String orderType, String spotType, String subtitle,
-			String logoType, String logoData, String packageInfo,
+			String logoType, java.sql.Blob logoData, String packageInfo,
 			Integer packageNumber, Date planDate, Timestamp planBegin,
 			Timestamp planEnd, Timestamp actBegin, Timestamp actEnd,
 			Double planFee, Double actFee, Timestamp createTime,

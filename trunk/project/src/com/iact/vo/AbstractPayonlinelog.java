@@ -12,7 +12,7 @@ public abstract class AbstractPayonlinelog implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private User user;
+	private Long user;
 	private String orderId;
 	private String productId;
 	private String serialNumber;
@@ -29,13 +29,13 @@ public abstract class AbstractPayonlinelog implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public AbstractPayonlinelog(Long id, User user) {
+	public AbstractPayonlinelog(Long id, Long user) {
 		this.id = id;
 		this.user = user;
 	}
 
 	/** full constructor */
-	public AbstractPayonlinelog(Long id, User user, String orderId,
+	public AbstractPayonlinelog(Long id, Long user, String orderId,
 			String productId, String serialNumber, String payMode,
 			Integer payAmount, String payContext, Timestamp addTime,
 			String ipadress) {
@@ -61,11 +61,11 @@ public abstract class AbstractPayonlinelog implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public User getUser() {
+	public Long getUser() {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Long user) {
 		this.user = user;
 	}
 
