@@ -210,6 +210,12 @@ function submitOrder() {
 	} else {
 		$("#pnerr").html("");
 	}
+	var subtitle = $("#subtitle").val();
+	if (!subtitle) {
+		alert("请选择资源并输入必要资源字段");
+		return;
+	}
+	
 	$("#orderform").submit();
 }
 
@@ -220,6 +226,30 @@ function caltotalprice(obj) {
 	}
 	var total = num * price;
 	$("#totalprice").get(0).innerHTML  = "" + total + "￥";
+}
+
+function submitRes(resType) {
+	var subtitle = null;
+	var desc = null;
+	var resfile = null;
+	if (resType == 0) {
+		subtitle = $("#tsubtitle").val();
+		desc = $("#tdesc").val();
+	} else {
+		subtitle = $("#isubtitle").val();
+		desc = $("#idesc").val();
+		var scale = $("iscale").val();
+		$("imgscale").val(scale);
+	}
+	
+	$("#subtitle").val(subtitle);	
+	$("#desc").val(desc);
+	
+	if (resType == 0) {
+		hideDiv('poptext');
+	} else {
+		hideDiv('popimg');
+	}
 }
 
 </script>
@@ -300,7 +330,7 @@ function caltotalprice(obj) {
 		    <img src="images/130s.png" width="24" height="24" />
 		    </a> 
        </li>
-       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" type="text" value="1" class="searchinput" onblur="caltotalprice(this);"/>
+       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" id="pnum" type="text" value="1" class="searchinput" onblur="caltotalprice(this);"/>
        <span class='failmsg' id='pnerr'></span></li>
        <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=p.getPrice() %>￥</li>
        <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();"><img src="images/by_button.png" width="86" height="33" /></a></li>
@@ -310,11 +340,17 @@ function caltotalprice(obj) {
   </div>
 </div>
 <jsp:include page="footer.jsp" flush="true" />
+
+<input type="hidden" name="subtitle" id="subtitle"/>
+<input type="hidden" name="desc" id="desc"/>
+<input type="hidden" name="imgScale" id="imgscale"/>
+<input type="hidden" name="fileName" id="fileName"/>
+</form>
 <div id="popimg" class="popimg">
 	<div class="poptitle">发布图片
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('popimg')" /></div>
     <div><ul><li class="poplefttitle">图片规格：</li><li class="popinfo">
-      <select name="imgScale" id="imgScale">
+      <select name="imgScale" id="iscale">
         <option value="0">120×80(最佳)</option>
         <option value="1">160×120</option>
       </select>
@@ -327,35 +363,34 @@ function caltotalprice(obj) {
      </ul>
      </div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo"><img src="images/truck.png" width="120" height="80" id="prevImg"/></li></ul></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="isubtitle" type="text" /></li></ul></div>
+    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="isubtitle" type="text" id="isubtitle"/></li></ul></div>
     <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
       <label for="textarea"></label>
-      <textarea name="idesc" id="textarea" cols="45" rows="5"></textarea>
+      <textarea name="idesc" id="idesc"" cols="45" rows="5"></textarea>
     </li>
     </ul></div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="hideDiv('popimg');">
+    <a href="javascript:void(0);" onclick="submitRes(1);">
     <img src="images/img_button.png" width="86" height="33" />
     </a></li>
     </ul></div>
-  
 </div>
 
 <div id="poptext" class="popimg" style="height:300px;">
 	<div class="poptitle">发布文字
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('poptext')" /></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="tsubtitle" type="text" /></li></ul></div>
+    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="tsubtitle" type="text" id="tsubtitle" /></li></ul></div>
     <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
       <label for="textarea"></label>
-      <textarea name="tdesc" id="textarea" cols="45" rows="5"></textarea>
+      <textarea name="tdesc" id="tdesc" cols="45" rows="5"></textarea>
     </li>
     </ul></div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="hideDiv('poptext');">
+    <a href="javascript:void(0);" onclick="submitRes(0);">
     <img src="images/img_button.png" width="86" height="33" />
     </a></li>
     </ul></div>
 </div>
-</form>
+
 </body>
 </html>
