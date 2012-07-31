@@ -25,6 +25,7 @@ public class UserOrderAction extends AbstractAction {
 
 	private static final String USER_ORDER_DAO = "UserorderDAO";
 	private static final int PAGE_SIZE = 10;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -45,7 +46,10 @@ public class UserOrderAction extends AbstractAction {
 
 				return getUserOrders(req, res);
 			}
+		} else if ("viewOrder".equalsIgnoreCase(stype)) {
+			return viewOrder(req, res);
 		}
+		
 		return ErrorCode.OK;
 	}
 
@@ -66,6 +70,26 @@ public class UserOrderAction extends AbstractAction {
 		} finally {
 			DAO.closeSession();
 		}
+		return ErrorCode.OK;
+	}
+
+	private int viewOrder(HttpServletRequest req, HttpServletResponse res) throws IActException {
+
+		UserorderDAO DAO = (UserorderDAO) DAOFactory.getDAO(USER_ORDER_DAO);
+
+		String oid = (String) reqParams.get("sid");
+		long orderid = Long.parseLong(oid);
+		Userorder order = DAO.findById(orderid);
+		req.setAttribute("order", order);
+		
+		String status = (String) reqParams.get("status");
+		if (status.equalsIgnoreCase("新增")) {
+			reqParams.put("page", "vieworder.jsp");
+		} else {
+			reqParams.put("page", "vieworder1.jsp");
+		}
+		_forward(req, res);
+		
 		return ErrorCode.OK;
 	}
 
