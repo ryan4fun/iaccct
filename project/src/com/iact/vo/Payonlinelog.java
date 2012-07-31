@@ -15,12 +15,12 @@ public class Payonlinelog extends AbstractPayonlinelog implements
 	}
 
 	/** minimal constructor */
-	public Payonlinelog(Long id, User user) {
+	public Payonlinelog(Long id, Long user) {
 		super(id, user);
 	}
 
 	/** full constructor */
-	public Payonlinelog(Long id, User user, String orderId, String productId,
+	public Payonlinelog(Long id, Long user, String orderId, String productId,
 			String serialNumber, String payMode, Integer payAmount,
 			String payContext, Timestamp addTime, String ipadress) {
 		super(id, user, orderId, productId, serialNumber, payMode, payAmount,
