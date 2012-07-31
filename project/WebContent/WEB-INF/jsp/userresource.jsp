@@ -39,6 +39,7 @@ function popResDiv(pid) {
 }
 	
 function uploadImage() {
+	$("#imgerr").html("");
 	$.ajaxFileUpload({
 		  url:'user.do?action=UserResourceAction&type=upload',
 		  secureuri:false,
@@ -52,13 +53,24 @@ function uploadImage() {
 		    	$("#prevImg").get(0).src="images/temp/"+data.fileName;
 		    	$("#fileName").get(0).value=data.fileName;
 		    } else{
-		       alert('上传失败！');
+		    	$("#imgerr").html("&nbsp;&nbsp;" + data.errorMsg);
 		    }
 		 }
 	});
 }
 
-function submitUserRes(fid) {
+function submitUserRes(fid, t) {
+	if (t == 1) {
+		if (!$("#ititle").val()) {
+			$("#ititleerr").html("&nbsp;&nbsp;标题字幕不能为空");		
+			return;
+		}
+	} else {
+		if (!$("#ttitle").val()) {
+			$("#ttitleerr").html("&nbsp;&nbsp;标题字幕不能为空");		
+			return;
+		}
+	}
 	$("#" + fid).get(0).submit();
 }
 
@@ -132,7 +144,7 @@ ul li{
         <li class="byinfolist">
         <ul>
         <li><input name="allChecked" type="checkbox" value="" id="allch"/></li>
-        <li class="byinfolistt">资源名称</li>
+        <li class="byinfolistt">字幕</li>
         <li class="byinfolistt">资源类型</li>
         <li class="byinfolistt">日期</li>
         <li class="byinfolistt">状态</li>
@@ -147,7 +159,7 @@ ul li{
         <li class="byinfolists">
         <ul>
         <li><input name="checkbox1" type="checkbox" value="<%=r.getId()%>" /></li>
-        <li class="byinfolistt"><%=r.getSubtitle() %></li>
+        <li class="byinfolistt"><a href="javascript:void(0);" title="<%=r.getSubtitle() %>"><%=r.getSubtitle() %></a></li>
         <li class="byinfolistt"><%=r.getSpotType() %></li>
         <li class="byinfolistt"><%=sf.format(r.getAddTime()) %></li>
         <li class="byinfolistt"><%=r.getVerifyStatus()%></li>
@@ -174,7 +186,7 @@ ul li{
 	<input type="hidden" value="1" name="resType" />
 	<input type="hidden" value="save" name="type" />
 	<input type="hidden" value="save" name="fileName" id="fileName" />
-	<div class="poptitle">发布图片
+	<div class="poptitle">创建图片资源
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('popimg')" /></div>
     <div><ul><li class="poplefttitle">图片规格：</li><li class="popinfo">
       <select name="select" id="imgScale">
@@ -186,18 +198,18 @@ ul li{
      <div>
      <ul>
      <li class="poplefttitle">选择图片：</li>
-     <li class="popinfo"><input type="file" size="40" onchange="uploadImage();" id="f" name="f"/></li>
+     <li class="popinfo"><input type="file" size="40" onchange="uploadImage();" id="f" name="f"/><span id="imgerr" class="errmsg"></span></li>
      </ul>
      </div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo"><img src="images/truck.png" width="120" height="80" id="prevImg"/></li></ul></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="subTitle" type="text" /></li></ul></div>
-    <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
+    <div><ul><li class="poplefttitle">资源标题：</li><li class="popinfo"><input name="subTitle" type="text" id="ititle"/><span id="ititleerr" class="errmsg"></span></li></ul></div>
+    <div><ul><li class="poplefttitle">资源描述：</li><li class="popinfo">
       <label for="textarea"></label>
       <textarea name="desc" id="textarea" cols="45" rows="5"></textarea>
     </li>
     </ul></div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="submitUserRes('iForm');">
+    <a href="javascript:void(0);" onclick="submitUserRes('iForm', 1);">
     <img src="images/img_button.png" width="86" height="33" />
     </a></li>
     </ul></div>
@@ -209,16 +221,16 @@ ul li{
 	<input type="hidden" value="UserResourceAction" name="action" />
 	<input type="hidden" value="0" name="resType" />
 	<input type="hidden" value="save" name="type" />
-	<div class="poptitle">发布文字
+	<div class="poptitle">创建文字资源
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('poptext')" /></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="subTitle" type="text" /></li></ul></div>
-    <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
+    <div><ul><li class="poplefttitle">资源标题：</li><li class="popinfo"><input name="subTitle" type="text" id="ttitle"/><span id="ttitleerr" class="errmsg"></span></li></ul></div>
+    <div><ul><li class="poplefttitle">资源描述：</li><li class="popinfo">
       <label for="textarea"></label>
       <textarea name="desc" id="textarea" cols="45" rows="5"></textarea>
     </li>
     </ul></div>
     <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="submitUserRes('tForm');">
+    <a href="javascript:void(0);" onclick="submitUserRes('tForm', 0);">
     <img src="images/img_button.png" width="86" height="33" />
     </a></li>
     </ul></div>

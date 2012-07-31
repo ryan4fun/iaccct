@@ -56,6 +56,13 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			} 
 		}
 	}
+	function viewOrder(oid, status) {	
+		if (oid != null) {
+			$("#vid").val(oid);
+			$("#status").val(status);
+			$("#viewForm").submit();
+		} 
+	}
 </script>
 <!--[if lte IE 7]>
 <style type="text/css">
@@ -103,7 +110,6 @@ ul li{
         <li class="byinfolistt" style="width:50px;">套数</li>
         <li class="byinfolistt" style="width:60px;">处理状态</li>
         <li class="byinfolistt">日期</li>
-        <li class="byinfolistt" style="width:50px;">明细</li>
         <li class="byinfolistt" style="width:50px;">删除</li>
         </ul>
         </li>
@@ -115,13 +121,12 @@ ul li{
         %>
 	    	<li class="byinfolists">
 	        <ul >
-	        <li class="byinfolistt"><%=u.getOrderId() %></li>
-	        <li class="byinfolistt"><%=u.getBizPackage() %></li>
+	        <li class="byinfolistt"><a href="javascript:void(0);" title="查看订单明细" onclick="viewOrder('<%=u.getId() %>', '<%=u.getHandleStatus() %>');"><%=u.getOrderId() %></a></li>
+	        <li class="byinfolistt"><a href="javascript:void(0);" title="<%=u.getBizPackage().getName() %>"><%=u.getBizPackage().getName() %></a></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPlanFee()%></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPackageNumber() %></li>
 	        <li class="byinfolistt" style="width:60px;"><%=u.getHandleStatus()%></li>
 	        <li class="byinfolistt"><%=sf.format(u.getCreateTime())%></li>
-	        <li class="byinfolistt" style="width:50px;">明细</li>
 	        <li class="byinfolistt" style="width:50px;"><a href="javascript:void(0);" onclick="deleOrder('<%=u.getId() %>', '<%=u.getHandleStatus() %>');">删除</a></li>
 	        </ul> 
 	        </li>
@@ -144,6 +149,12 @@ ul li{
 	<input type="hidden" name="action" value="UserOrderAction"/>
 	<input type="hidden" name="stype" value="deleOrder"/>
 	<input type="hidden" name="sid" id="sid"/>
+</form>
+<form id="viewForm" action="user.do" method="post">
+	<input type="hidden" name="action" value="UserOrderAction"/>
+	<input type="hidden" name="stype" value="viewOrder"/>
+	<input type="hidden" name="sid" id="vid"/>
+	<input type="hidden" name="status" id="status"/>
 </form>
 
 </body>
