@@ -5,6 +5,8 @@
  */
 package com.iact.action;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -14,6 +16,8 @@ import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.Hibernate;
 
 import com.iact.ErrorCode;
 import com.iact.IActException;
@@ -76,7 +80,7 @@ public class BizPackageAction extends AbstractAction {
 			throws IActException {
 		SessionContainer sc = getSessionContainer(req);
 
-		Userorder order = genUserOrder();
+		Userorder order = genUserOrder(req);
 		if (sc.getUser() == null) {
 			ShoppingCart cart = sc.getCart();
 			cart.addOrder(order);
@@ -115,7 +119,7 @@ public class BizPackageAction extends AbstractAction {
 		return ErrorCode.OK;
 	}
 
-	private Userorder genUserOrder() throws IActException {
+	private Userorder genUserOrder(HttpServletRequest req) throws IActException {
 		Userorder order = new Userorder();
 		String orderId = Tools.getOrderID();
 		order.setOrderId(orderId);
@@ -124,7 +128,9 @@ public class BizPackageAction extends AbstractAction {
 		order.setTransactionId(transId);
 
 		long pid = Long.parseLong((String) reqParams.get("pid"));
-		order.setBizPackage(pid);
+		BizpackageDAO packageDAO = (BizpackageDAO)DAOFactory.getDAO(BIZ_PACKAGE_DAO);
+		Bizpackage pack = packageDAO.findById(pid);
+		order.setBizPackage(pack);
 
 		Timestamp createTime = new Timestamp(System.currentTimeMillis());
 		order.setCreateTime(createTime);
@@ -188,14 +194,31 @@ public class BizPackageAction extends AbstractAction {
 		if (resfrom.equalsIgnoreCase("0")) {
 			String restype = (String) reqParams.get("restype");
 			if (restype.equalsIgnoreCase("0")) {
-				String subTitle = (String) reqParams.get("tsubtitle");
+				String subTitle = (String) reqParams.get("subtitle");
 				order.setSubtitle(subTitle);
 				order.setSpotType("文字");
 			} else {
-				String subTitle = (String) reqParams.get("tsubtitle");
+				String subTitle = (String) reqParams.get("subtitle");
 				order.setSubtitle(subTitle);
 				order.setSpotType("图文");
 				// upload image
+				// image
+				String fileName = (String) reqParams.get("fileName");
+				String fileFullPath = req.getSession().getServletContext()
+						.getRealPath("/")
+						+ "images/temp/" + fileName;
+				File f = new File(fileFullPath);
+				FileInputStream in;
+				try {
+					in = new FileInputStream(f);
+					order.setLogoData(Hibernate.createBlob(in));
+				} catch (IOException e) {
+					throw new IActException(e);
+				}
+				//TODO image scale
+				String imgScale = (String) reqParams.get("imgScale");
+				
+				order.setLogoType(Tools.getFileSuffix(fileName));
 			}
 		} else {
 			String resid = (String) reqParams.get("resid");
