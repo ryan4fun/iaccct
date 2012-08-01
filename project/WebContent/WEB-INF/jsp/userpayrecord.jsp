@@ -79,7 +79,8 @@ ul li{
         <li><input type="text" class="searchinput" id="sdate" name="sdate" readonly="readonly"/></li>
         <li>&nbsp;</li>
         <li><input type="text" class="searchinput" id="edate" name="edate" readonly="readonly"/></li>
-        <li><a href="javascript:void(0);" onclick="searchForm.submit();"><img src="images/search_button.png" width="120" height="33"/></a></li>
+        <li><a href="javascript:void(0);" onclick="searchForm.submit();">
+        <img src="images/search_button.png" width="120" height="33" onmouseover="this.src='images/search_button-2.png';" onmouseout="this.src='images/search_button.png';"/></a></li>
         </ul>
         </form>
         </li>

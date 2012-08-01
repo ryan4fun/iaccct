@@ -95,7 +95,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<a href="javascript:void(0);" onclick="refreshAuth('<%=basePath%>');">看不清？换一张</a>
 					</div>
                     <div class="reglabel">&nbsp;</div>
-                    <div><a href="javascript:void(0);" onclick="login();"><img src="images/login_button.png" width="107" height="40" /></a></div>
+                    <div><a href="javascript:void(0);" onclick="login();"><img src="<%=basePath%>/images/login_button.png" width="107" height="40"  onmouseover="this.src='images/login_button-2.png';" onmouseout="this.src='images/login_button.png';" /></a></div>
                 	</li>
                 </ul>  
             </div>

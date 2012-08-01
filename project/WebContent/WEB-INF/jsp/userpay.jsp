@@ -190,7 +190,8 @@ ul li{
       </tr>
 	    <tr>
 	     <td colspan="2" bgcolor="#FFFFFF" align="center">
-	     <input id="pay_btn" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 169px; HEIGHT: 30px; BORDER-RIGHT-WIDTH: 0px" type="image" src="images/pay.gif" name="pay_btn" alt="确认无误,付款" />   
+	     <input id="pay_btn" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 86px; HEIGHT: 33px; BORDER-RIGHT-WIDTH: 0px" type="image" src="images/bys_button.png" 
+	     name="pay_btn" alt="确认无误,付款" onmouseover="this.src='images/bys_button-2.png';" onmouseout="this.src='images/bys_button.png';"/>   
 	     </td>
 	    </tr>
   </tbody>

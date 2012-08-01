@@ -41,7 +41,7 @@ function popResDiv(pid) {
 function uploadImage() {
 	$("#imgerr").html("");
 	$.ajaxFileUpload({
-		  url:'user.do?action=UserResourceAction&type=upload',
+		  url:'user.do?action=UserResourceAction&type=upload&imageScale='+$("#imageScale").val(),
 		  secureuri:false,
 		  fileElementId:'f',
 		  dataType: 'json',
@@ -103,6 +103,17 @@ function deleRes(sid) {
 			$("#ids").get(0).value = checkedids.join(",");
 			$("#deleForm").get(0).submit();
 		}
+	}
+}
+
+function changeScale(sel) {
+	var v = sel.value;
+	if (v == 0) {
+		$("#prevImg").width(120);
+		$("#prevImg").height(80);
+	} else {
+		$("#prevImg").width(160);
+		$("#prevImg").height(120);
 	}
 }
 	
@@ -189,7 +200,7 @@ ul li{
 	<div class="poptitle">创建图片资源
 	<img src="images/close_button.png" style="float:right" onclick="hideDiv('popimg')" /></div>
     <div><ul><li class="poplefttitle">图片规格：</li><li class="popinfo">
-      <select name="select" id="imgScale">
+      <select name="select" id="imgScale" onchange="changeScale(this);">
         <option value="0">120×80(最佳)</option>
         <option value="1">160×120</option>
       </select>

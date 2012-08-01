@@ -125,7 +125,9 @@ String packTitle = (String)request.getAttribute("packTitle");
         %>
 
         <ul>
-        <li class="cb"><a href="detail.do?action=BizPackageAction&pid=1"><img src="images/bydt_button_h.png" width="120" height="33" /></a></li>
+        <li class="cb"><a href="detail.do?action=BizPackageAction&pid=1">
+        <img src="images/bydt_button_n.png" width="120" height="33" onmouseover="this.src='images/bydt_button_h.png';" onmouseout="this.src='images/bydt_button_n.png';"/>
+         </a></li>
         </ul>
          <div>
      	 <%=pageNav%>      
