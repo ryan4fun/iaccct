@@ -14,9 +14,11 @@ import com.iact.ErrorCode;
 import com.iact.IActException;
 import com.iact.dao.DAOFactory;
 import com.iact.dao.UserorderDAO;
+import com.iact.dao.UserresourceDAO;
 import com.iact.util.PageResultSet;
 import com.iact.vo.User;
 import com.iact.vo.Userorder;
+import com.iact.vo.Userresource;
 
 /**
  * @author Andy
@@ -25,7 +27,7 @@ public class UserOrderAction extends AbstractAction {
 
 	private static final String USER_ORDER_DAO = "UserorderDAO";
 	private static final int PAGE_SIZE = 10;
-
+	private static final String USER_RESOURCE_DAO = "UserresourceDAO";
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -49,7 +51,7 @@ public class UserOrderAction extends AbstractAction {
 		} else if ("viewOrder".equalsIgnoreCase(stype)) {
 			return viewOrder(req, res);
 		}
-		
+
 		return ErrorCode.OK;
 	}
 
@@ -73,7 +75,8 @@ public class UserOrderAction extends AbstractAction {
 		return ErrorCode.OK;
 	}
 
-	private int viewOrder(HttpServletRequest req, HttpServletResponse res) throws IActException {
+	private int viewOrder(HttpServletRequest req, HttpServletResponse res)
+			throws IActException {
 
 		UserorderDAO DAO = (UserorderDAO) DAOFactory.getDAO(USER_ORDER_DAO);
 
@@ -81,15 +84,17 @@ public class UserOrderAction extends AbstractAction {
 		long orderid = Long.parseLong(oid);
 		Userorder order = DAO.findById(orderid);
 		req.setAttribute("order", order);
-		
+
 		String status = (String) reqParams.get("status");
 		if (status.equalsIgnoreCase("新增")) {
 			reqParams.put("page", "vieworder.jsp");
 		} else {
 			reqParams.put("page", "vieworder1.jsp");
 		}
-		_forward(req, res);
+		getUserResouces(req, res);
 		
+		_forward(req, res);
+
 		return ErrorCode.OK;
 	}
 
@@ -136,5 +141,23 @@ public class UserOrderAction extends AbstractAction {
 
 		return ErrorCode.OK;
 
+	}
+
+	private void getUserResouces(HttpServletRequest req, HttpServletResponse res)
+			throws IActException {
+
+		UserresourceDAO dao = (UserresourceDAO) DAOFactory
+				.getDAO(USER_RESOURCE_DAO);
+		User user = super.getSessionContainer(req).getUser();
+		if (user == null) {
+			return;
+		}
+
+		long userid = user.getId();
+		String hsql = "from Userresource o where o.user=" + userid
+				+ " order by o.id desc";
+
+		List<Userresource> resources = dao.findByHSQL(hsql, 0, 100);
+		req.setAttribute("resources", resources);
 	}
 }
