@@ -2,17 +2,29 @@
 								 java.util.List,
 								 java.util.Set,
 								 com.iact.vo.Bizpackageitem,
+								 com.iact.action.SessionContainer,
 								 com.iact.vo.Userorder,
+								 java.text.SimpleDateFormat,
 								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.iact.vo.Userresource"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
+
+boolean login = true;
+if (sc == null || sc.getUser() == null) {	
+	login = false;
+} 
+List<Userresource> resources = (List<Userresource> )request.getAttribute("resources");
+int rsize = resources == null ? 0 : resources.size();
 
 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 Userorder order = (Userorder)request.getAttribute("order");
 Bizpackage p = order.getBizPackage();
+
 %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -46,16 +58,48 @@ Bizpackage p = order.getBizPackage();
 	<![endif]-->
 	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 <style>
-	.mask {
-        background-color:#eee;
-        position:absolute;
-        top:0px;
-        left:0px;
-        opacity:0.6;
-	}
-	.failmsg{
-		color:#a40000;
-	}
+	form *{
+	padding:0; 
+	margin:0
+}
+
+form {
+	margin:20px; 
+	background:#eee; 
+	padding:5px 10px;
+}
+
+.pinput {
+	line-height: 36px;
+	height: 27px;
+	width: 200px;
+	border: 1px solid #83a4c5;
+	border-radius: 5px;
+	padding: 5px;
+	margin-top:5px;
+	text-align: left;
+}
+
+.pcheckbox {
+	line-height: 36px;
+	height: 37px;
+	width: 20px;
+}
+
+.pselect {
+	line-height: 36px;
+	height: 36px;
+	width: 210px;
+	border: 1px solid #83a4c5;
+	border-radius:5px;
+	padding: 5px;
+	margin-top:5px;
+	text-align: left;
+}
+
+.failmsg{
+	color:#a40000;
+}
 </style>
 <script type="text/javascript">
 var basePath = "<%=basePath%>";
@@ -115,75 +159,8 @@ function refreshAuth(basePath) {
 	$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
 }
 
-function popDiv(pid) {
-
- if (pid == 'poptext') {
- 	$("#textcheck").get(0).checked = "checked";
- } else {
- 	$("#imgcheck").get(0).checked = "checked";
- }
- var pobj = $("#"+pid);
- var w = document.body.clientWidth;
- var h = document.body.clientHeight ;
- 
-    var ph = pobj.height();       
-    var pw = pobj.width();    
-     
-$("<div class='mask'/>")
-	 				.width(document.body.scrollWidth)
-	 				.height(document.body.scrollHeight)
-	 				.appendTo("body");
- pobj.css({"position":"absolute"})
- 				.animate({left: w/2-pw/2,    
-                     top: h/2-ph/2, opacity: "show" }, "slow");
-}
-	
-function hideDiv(pid) {
-	$(".mask").remove();
-	var pobj = $("#"+pid);
-	pobj.animate({left: 0, top: 0, opacity: "hide" }, "slow");   
-}
-
-function uploadImage() {
-	$.ajaxFileUpload({
-		  url:'user.do?action=UserResourceAction&type=upload',
-		  secureuri:false,
-		  fileElementId:'f',
-		  dataType: 'json',
-		  beforeSend:function(){
-		  	alert("before");
-		  },
-		  success: function (data, status){
-		    if(data.errorCode == 0){
-		    	$("#prevImg").get(0).src="images/temp/"+data.fileName;
-		    	$("#fileName").get(0).value=data.fileName;
-		    } else{
-		       alert('上传失败！');
-		    }
-		 }
-	});
-}
-
-function showResArea(type) {
-	if (type == 0) {
-		$("#restitle").get(0).innerHTML="创建资源：";
-		$("#resarea").get(0).innerHTML='<input type="radio" name="restype" checked="checked" onclick="popDiv(\'poptext\');"/><a href="javascript:void(0);"  title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>'
-		   +'&nbsp;&nbsp;&nbsp;&nbsp;'
-		   +'<input type="radio" name="restype" onclick="popDiv(\'popimg\')";/>' 
-		   +'<a href="javascript:void(0);" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>'
- 			;
-	} else {
-		$("#restitle").get(0).innerHTML="选择资源：";
-		$("#resarea").get(0).innerHTML='<select name="resid" style="width:160px;">'+
-          '<option value="文字1">文字1</option>'+
-          '<option value="文字2">文字2</option>'+
-          '<option value="文字3">文字3</option>'+
-          '<option value="文字4">文字4</option>'+
-          '<option value="文字5">文字5</option>'+
-          '<option value="图片1">图片1</option>'+
-          '</select>'+
-          ' <span style="color:#F60;padding-left:10px;">(该项只对登陆用户开放)</span>';
-	}
+function fUserRes() {
+	window.location.href="user.do?action=UserInfoAction&type=2";
 }
 
 function submitOrder() {
@@ -206,7 +183,6 @@ function submitOrder() {
 	} else {
 		$("#eperr").html("");
 	}
-	
 	var pnum = $("#pnum").val();
 	var reg = new RegExp("^[0-9]*$");
 	if (!pnum || !reg.test(pnum)) {
@@ -226,6 +202,7 @@ function caltotalprice(obj) {
 	var total = num * price;
 	$("#totalprice").get(0).innerHTML  = "" + total + "￥";
 }
+
 
 </script>
 </head>
@@ -283,31 +260,27 @@ function caltotalprice(obj) {
 		        </table>
         </li>
         <li class="myinfo_title">计划日期：</li>  
-        <li><input type="text" class="searchinput" id="plandate" name="plandate" readonly="readonly" value="<%=sf.format(order.getPlanDate()) %>"/><span class='failmsg' id='lperr'></span></li>
+        <li><input type="text" class="pinput" id="plandate" name="plandate" readonly="readonly" value="<%=sf.format(order.getPlanDate()) %>"/><span class='failmsg' id='lperr'></span></li>
         <li class="myinfo_title">计划开始：</li>  
-        <li><input type="text" class="searchinput" id="sdate" name="psdate" readonly="readonly" value="<%=sf.format(order.getPlanBegin()) %>"/><span class='failmsg' id='sperr'></span></li>
+        <li><input type="text" class="pinput" id="sdate" name="psdate" readonly="readonly" value="<%=sf.format(order.getPlanBegin()) %>"/><span class='failmsg' id='sperr'></span></li>
         <li class="myinfo_title">计划结束：</li>  
-        <li><input type="text" class="searchinput" id="edate" name="pedate" readonly="readonly" value="<%=sf.format(order.getPlanEnd()) %>"/><span class='failmsg' id='eperr'></span></li>
-        <li class="myinfo_title">资源类型：</li>
+        <li><input type="text" class="pinput" id="edate" name="pedate" readonly="readonly" value="<%=sf.format(order.getPlanEnd()) %>"/><span class='failmsg' id='eperr'></span></li>
+        <li class="myinfo_title">选择资源：</li>
         <li>
-         <input type="radio" name="resfrom" onclick="showResArea(0);" checked="checked" value="0"/><label> 创建资源</label>
-         &nbsp;&nbsp;&nbsp;<input type="radio" name="resfrom" onclick="showResArea(1);"; value="1"/><label>选择资源</label>
+        	<select id="ressel" name="resource" <% if(!login) {%>disabled="disabled"<% }%> class="pselect" >
+        		<% 
+        			for (int i = 0; i < rsize; i++) {
+        				Userresource r = resources.get(i);
+        		%>
+        			<option value="<%=r.getId()%>"> <%=r.getSubtitle() %> </option>
+        		<%		
+        			}
+        		%>
+        	</select><a href="javascript:void(0);" title="创建资源" <% if(login) {%>onclick="fUserRes();"<% }%> ><img src="images/newres.gif" /></a>
         </li>
-        <li class="myinfo_title" id="restitle">创建资源：</li>
-        <li id="resarea">
-			<input type="radio" name="restype"  onclick="popDiv('poptext');" value="0" checked="checked" id="textcheck"/>
-			<a href="javascript:void(0);" onclick="popDiv('poptext');" title="注意：最多可以输入140个文字">
-			<img src="images/131s.png" width="24" height="24" />
-			</a>
-		    &nbsp;&nbsp;&nbsp;&nbsp;
-		    <input type="radio" name="restype"  onclick="popDiv('popimg');"  value="1" id="imgcheck"/>
-		    <a href="javascript:void(0);" onclick="popDiv('popimg');"  title="图片格式：jpg、png；图片大小：100px x 100px">
-		    <img src="images/130s.png" width="24" height="24" />
-		    </a> 
-       </li>
-       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" type="text" value="<%=order.getPackageNumber() %>" class="searchinput" onblur="caltotalprice(this);"/>
+       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" id="pnum" type="text" value="<%=order.getPackageNumber() %>" class="pinput" onblur="caltotalprice(this);"/>
        <span class='failmsg' id='pnerr'></span></li>
-       <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=order.getPlanFee() %>￥</li>
+       <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=p.getPrice() %>￥</li>
        <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();"><img src="images/by_button.png" width="86" height="33" /></a></li>
        </ul>        
        </div>
@@ -315,52 +288,6 @@ function caltotalprice(obj) {
   </div>
 </div>
 <jsp:include page="footer.jsp" flush="true" />
-<div id="popimg" class="popimg">
-	<div class="poptitle">发布图片
-	<img src="images/close_button.png" style="float:right" onclick="hideDiv('popimg')" /></div>
-    <div><ul><li class="poplefttitle">图片规格：</li><li class="popinfo">
-      <select name="imgScale" id="imgScale">
-        <option value="0">120×80(最佳)</option>
-        <option value="1">160×120</option>
-      </select>
-    </li>
-    </ul></div>
-     <div>
-     <ul>
-     <li class="poplefttitle">选择图片：</li>
-     <li class="popinfo"><input type="file" size="40" onchange="uploadImage();" id="f" name="f"/></li>
-     </ul>
-     </div>
-    <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo"><img src="images/truck.png" width="120" height="80" id="prevImg"/></li></ul></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="isubtitle" type="text" /></li></ul></div>
-    <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
-      <label for="textarea"></label>
-      <textarea name="idesc" id="textarea" cols="45" rows="5"></textarea>
-    </li>
-    </ul></div>
-    <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="hideDiv('popimg');">
-    <img src="images/img_button.png" width="86" height="33" />
-    </a></li>
-    </ul></div>
-  
-</div>
-
-<div id="poptext" class="popimg" style="height:300px;">
-	<div class="poptitle">发布文字
-	<img src="images/close_button.png" style="float:right" onclick="hideDiv('poptext')" /></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="tsubtitle" type="text" /></li></ul></div>
-    <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
-      <label for="textarea"></label>
-      <textarea name="tdesc" id="textarea" cols="45" rows="5"></textarea>
-    </li>
-    </ul></div>
-    <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="hideDiv('poptext');">
-    <img src="images/img_button.png" width="86" height="33" />
-    </a></li>
-    </ul></div>
-</div>
 </form>
 </body>
 </html>

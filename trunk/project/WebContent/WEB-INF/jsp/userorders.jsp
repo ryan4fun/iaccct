@@ -97,7 +97,8 @@ ul li{
         <li><input type="text" class="searchinput" id="sdate" name="sdate" readonly="readonly"/></li>
         <li>&nbsp;</li>
         <li><input type="text" class="searchinput" id="edate" name="edate" readonly="readonly"/></li>
-        <li><a href="javascript:void(0);" onclick="searchForm.submit();"><img src="images/search_button.png" width="120" height="33"/></a></li>
+        <li><a href="javascript:void(0);" onclick="searchForm.submit();">
+        <img src="images/search_button.png" width="120" height="33" onmouseover="this.src='images/search_button-2.png';" onmouseout="this.src='images/search_button.png';"/></a></li>
         </ul>
         </form>
         </li>
@@ -122,7 +123,7 @@ ul li{
 	    	<li class="byinfolists">
 	        <ul >
 	        <li class="byinfolistt"><a href="javascript:void(0);" title="查看订单明细" onclick="viewOrder('<%=u.getId() %>', '<%=u.getHandleStatus() %>');"><%=u.getOrderId() %></a></li>
-	        <li class="byinfolistt"><a href="javascript:void(0);" title="<%=u.getBizPackage().getName() %>"><%=u.getBizPackage().getName() %></a></li>
+	        <li class="byinfolistt"><%=u.getBizPackage().getName() %></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPlanFee()%></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPackageNumber() %></li>
 	        <li class="byinfolistt" style="width:60px;"><%=u.getHandleStatus()%></li>

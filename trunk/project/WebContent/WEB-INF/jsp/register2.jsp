@@ -97,6 +97,16 @@ input.failformcss,select.failformcss,textarea.failformcss{
 	border:none;
 	background-image:url(images/reg_button-2.png);
 }
+
+.sb_h {
+	width:86px;
+	text-align:center;
+	line-height: 33px;
+	height:33px;
+	border:none;
+	background-image:url(images/reg_button-2.png);
+}
+
 </style>
 <script>
 /*
@@ -469,7 +479,7 @@ Vanadium.addValidatorTypes([
                   	<td>
                   	</td>
                   	<td align="left">	
-                  	<input type="submit" class="sb" value="" />
+                  	<input type="submit" class="sb" value="" onmouseover="this.className='sb_h';" onmouseout="this.className='sb';"/>
                		</td>
                		</tr>
 							</table>	

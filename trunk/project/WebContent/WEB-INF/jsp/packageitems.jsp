@@ -2,13 +2,22 @@
 								 java.util.List,
 								 java.util.Set,
 								 com.iact.vo.Bizpackageitem,
+								 com.iact.action.SessionContainer,
 								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
+<%@page import="com.iact.vo.Userresource"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 Bizpackage p = (Bizpackage)request.getAttribute("bizpackage");
-%>
+SessionContainer sc = (SessionContainer)session.getAttribute("sessionContainer");	
 
+boolean login = true;
+if (sc == null || sc.getUser() == null) {	
+	login = false;
+} 
+List<Userresource> resources = (List<Userresource> )request.getAttribute("resources");
+int rsize = resources == null ? 0 : resources.size();
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -41,16 +50,48 @@ Bizpackage p = (Bizpackage)request.getAttribute("bizpackage");
 	<![endif]-->
 	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 <style>
-	.mask {
-        background-color:#eee;
-        position:absolute;
-        top:0px;
-        left:0px;
-        opacity:0.6;
-	}
-	.failmsg{
+form *{
+	padding:0; 
+	margin:0
+}
+
+form {
+	margin:20px; 
+	background:#eee; 
+	padding:5px 10px;
+}
+
+.pinput {
+	line-height: 36px;
+	height: 27px;
+	width: 200px;
+	border: 1px solid #83a4c5;
+	border-radius: 5px;
+	padding: 5px;
+	margin-top:5px;
+	text-align: left;
+}
+
+.pcheckbox {
+	line-height: 36px;
+	height: 37px;
+	width: 20px;
+}
+
+.pselect {
+	line-height: 36px;
+	height: 36px;
+	width: 210px;
+	border: 1px solid #83a4c5;
+	border-radius:5px;
+	padding: 5px;
+	margin-top:5px;
+	text-align: left;
+}
+
+.failmsg{
 		color:#a40000;
-	}
+}
 </style>
 <script type="text/javascript">
 var basePath = "<%=basePath%>";
@@ -110,75 +151,8 @@ function refreshAuth(basePath) {
 	$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
 }
 
-function popDiv(pid) {
-
- if (pid == 'poptext') {
- 	$("#textcheck").get(0).checked = "checked";
- } else {
- 	$("#imgcheck").get(0).checked = "checked";
- }
- var pobj = $("#"+pid);
- var w = document.body.clientWidth;
- var h = document.body.clientHeight ;
- 
-    var ph = pobj.height();       
-    var pw = pobj.width();    
-     
-$("<div class='mask'/>")
-	 				.width(document.body.scrollWidth)
-	 				.height(document.body.scrollHeight)
-	 				.appendTo("body");
- pobj.css({"position":"absolute"})
- 				.animate({left: w/2-pw/2,    
-                     top: h/2-ph/2, opacity: "show" }, "slow");
-}
-	
-function hideDiv(pid) {
-	$(".mask").remove();
-	var pobj = $("#"+pid);
-	pobj.animate({left: 0, top: 0, opacity: "hide" }, "slow");   
-}
-
-function uploadImage() {
-	$.ajaxFileUpload({
-		  url:'user.do?action=UserResourceAction&type=upload',
-		  secureuri:false,
-		  fileElementId:'f',
-		  dataType: 'json',
-		  beforeSend:function(){
-		  	alert("before");
-		  },
-		  success: function (data, status){
-		    if(data.errorCode == 0){
-		    	$("#prevImg").get(0).src="images/temp/"+data.fileName;
-		    	$("#fileName").get(0).value=data.fileName;
-		    } else{
-		       alert('上传失败！');
-		    }
-		 }
-	});
-}
-
-function showResArea(type) {
-	if (type == 0) {
-		$("#restitle").get(0).innerHTML="创建资源：";
-		$("#resarea").get(0).innerHTML='<input type="radio" name="restype" checked="checked" onclick="popDiv(\'poptext\');"/><a href="javascript:void(0);"  title="注意：最多可以输入140个文字"><img src="images/131s.png" width="24" height="24" /></a>'
-		   +'&nbsp;&nbsp;&nbsp;&nbsp;'
-		   +'<input type="radio" name="restype" onclick="popDiv(\'popimg\')";/>' 
-		   +'<a href="javascript:void(0);" title="图片格式：jpg、png；图片大小：100px x 100px"><img src="images/130s.png" width="24" height="24" /></a>'
- 			;
-	} else {
-		$("#restitle").get(0).innerHTML="选择资源：";
-		$("#resarea").get(0).innerHTML='<select name="resid" style="width:160px;">'+
-          '<option value="文字1">文字1</option>'+
-          '<option value="文字2">文字2</option>'+
-          '<option value="文字3">文字3</option>'+
-          '<option value="文字4">文字4</option>'+
-          '<option value="文字5">文字5</option>'+
-          '<option value="图片1">图片1</option>'+
-          '</select>'+
-          ' <span style="color:#F60;padding-left:10px;">(该项只对登陆用户开放)</span>';
-	}
+function fUserRes() {
+	window.location.href="user.do?action=UserInfoAction&type=2";
 }
 
 function submitOrder() {
@@ -201,7 +175,6 @@ function submitOrder() {
 	} else {
 		$("#eperr").html("");
 	}
-	
 	var pnum = $("#pnum").val();
 	var reg = new RegExp("^[0-9]*$");
 	if (!pnum || !reg.test(pnum)) {
@@ -210,12 +183,6 @@ function submitOrder() {
 	} else {
 		$("#pnerr").html("");
 	}
-	var subtitle = $("#subtitle").val();
-	if (!subtitle) {
-		alert("请选择资源并输入必要资源字段");
-		return;
-	}
-	
 	$("#orderform").submit();
 }
 
@@ -228,29 +195,6 @@ function caltotalprice(obj) {
 	$("#totalprice").get(0).innerHTML  = "" + total + "￥";
 }
 
-function submitRes(resType) {
-	var subtitle = null;
-	var desc = null;
-	var resfile = null;
-	if (resType == 0) {
-		subtitle = $("#tsubtitle").val();
-		desc = $("#tdesc").val();
-	} else {
-		subtitle = $("#isubtitle").val();
-		desc = $("#idesc").val();
-		var scale = $("iscale").val();
-		$("imgscale").val(scale);
-	}
-	
-	$("#subtitle").val(subtitle);	
-	$("#desc").val(desc);
-	
-	if (resType == 0) {
-		hideDiv('poptext');
-	} else {
-		hideDiv('popimg');
-	}
-}
 
 </script>
 </head>
@@ -261,7 +205,6 @@ function submitRes(resType) {
 <input type="hidden" name="ptype" value="order" />
 <input type="hidden" name="pinfo" value="<%=p.getDescription()%>" />
 <input type="hidden" name="price" value="<%=p.getPrice()%>" />
-
 <jsp:include page="topline.jsp" flush="true" />
 <jsp:include page="loginpanel.jsp" flush="true" />
 <div id="main"> 
@@ -270,7 +213,6 @@ function submitRes(resType) {
 <div class="leftinfo">
  	<jsp:include page="online.jsp" flush="true" />
 </div>
-
  <div class="rightinfo">
     <div id="wbg">
         <div>
@@ -308,89 +250,36 @@ function submitRes(resType) {
 		        </table>
         </li>
         <li class="myinfo_title">计划日期：</li>  
-        <li><input type="text" class="searchinput" id="plandate" name="plandate" readonly="readonly"/><span class='failmsg' id='lperr'></span></li>
+        <li><input type="text" class="pinput" id="plandate" name="plandate" readonly="readonly"/><span class='failmsg' id='lperr'></span></li>
         <li class="myinfo_title">计划开始：</li>  
-        <li><input type="text" class="searchinput" id="sdate" name="psdate" readonly="readonly"/><span class='failmsg' id='sperr'></span></li>
+        <li><input type="text" class="pinput" id="sdate" name="psdate" readonly="readonly"/><span class='failmsg' id='sperr'></span></li>
         <li class="myinfo_title">计划结束：</li>  
-        <li><input type="text" class="searchinput" id="edate" name="pedate" readonly="readonly"/><span class='failmsg' id='eperr'></span></li>
-        <li class="myinfo_title">资源类型：</li>
+        <li><input type="text" class="pinput" id="edate" name="pedate" readonly="readonly"/><span class='failmsg' id='eperr'></span></li>
+        <li class="myinfo_title">选择资源：</li>
         <li>
-         <input type="radio" name="resfrom" onclick="showResArea(0);" checked="checked" value="0"/><label> 创建资源</label>
-         &nbsp;&nbsp;&nbsp;<input type="radio" name="resfrom" onclick="showResArea(1);"; value="1"/><label>选择资源</label>
+        	<select id="ressel" name="resource" <% if(!login) {%>disabled="disabled"<% }%> class="pselect" >
+        		<% 
+        			for (int i = 0; i < rsize; i++) {
+        				Userresource r = resources.get(i);
+        		%>
+        			<option value="<%=r.getId()%>"> <%=r.getSubtitle() %> </option>
+        		<%		
+        			}
+        		%>
+        	</select><a href="javascript:void(0);" title="如果可选资源项中没有您需要的资源,请先创建资源" <% if(login) {%>onclick="fUserRes();"<% }%> ><img src="images/newres.gif" /></a>
+        	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f60;">(资源项仅对登陆用户开放)</span>
         </li>
-        <li class="myinfo_title" id="restitle">创建资源：</li>
-        <li id="resarea">
-			<input type="radio" name="restype"  onclick="popDiv('poptext');" value="0" checked="checked" id="textcheck"/>
-			<a href="javascript:void(0);" onclick="popDiv('poptext');" title="注意：最多可以输入140个文字">
-			<img src="images/131s.png" width="24" height="24" />
-			</a>
-		    &nbsp;&nbsp;&nbsp;&nbsp;
-		    <input type="radio" name="restype"  onclick="popDiv('popimg');"  value="1" id="imgcheck"/>
-		    <a href="javascript:void(0);" onclick="popDiv('popimg');"  title="图片格式：jpg、png；图片大小：100px x 100px">
-		    <img src="images/130s.png" width="24" height="24" />
-		    </a> 
-       </li>
-       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" id="pnum" type="text" value="1" class="searchinput" onblur="caltotalprice(this);"/>
+       <li class="myinfo_title">套餐数量：</li><li><input name="pnum" id="pnum" type="text" value="1" class="pinput" onblur="caltotalprice(this);"/>
        <span class='failmsg' id='pnerr'></span></li>
        <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=p.getPrice() %>￥</li>
-       <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();"><img src="images/by_button.png" width="86" height="33" /></a></li>
+       <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();">
+       <img src="images/by_button.png" width="86" height="33" onmouseover="this.src='images/by_button-2.png';" onmouseout="this.src='images/by_button.png';"/></a></li>
        </ul>        
        </div>
     </div>
   </div>
 </div>
 <jsp:include page="footer.jsp" flush="true" />
-
-<input type="hidden" name="subtitle" id="subtitle"/>
-<input type="hidden" name="desc" id="desc"/>
-<input type="hidden" name="imgScale" id="imgscale"/>
-<input type="hidden" name="fileName" id="fileName"/>
 </form>
-<div id="popimg" class="popimg">
-	<div class="poptitle">发布图片
-	<img src="images/close_button.png" style="float:right" onclick="hideDiv('popimg')" /></div>
-    <div><ul><li class="poplefttitle">图片规格：</li><li class="popinfo">
-      <select name="imgScale" id="iscale">
-        <option value="0">120×80(最佳)</option>
-        <option value="1">160×120</option>
-      </select>
-    </li>
-    </ul></div>
-     <div>
-     <ul>
-     <li class="poplefttitle">选择图片：</li>
-     <li class="popinfo"><input type="file" size="40" onchange="uploadImage();" id="f" name="f"/></li>
-     </ul>
-     </div>
-    <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo"><img src="images/truck.png" width="120" height="80" id="prevImg"/></li></ul></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="isubtitle" type="text" id="isubtitle"/></li></ul></div>
-    <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
-      <label for="textarea"></label>
-      <textarea name="idesc" id="idesc"" cols="45" rows="5"></textarea>
-    </li>
-    </ul></div>
-    <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="submitRes(1);">
-    <img src="images/img_button.png" width="86" height="33" />
-    </a></li>
-    </ul></div>
-</div>
-
-<div id="poptext" class="popimg" style="height:300px;">
-	<div class="poptitle">发布文字
-	<img src="images/close_button.png" style="float:right" onclick="hideDiv('poptext')" /></div>
-    <div><ul><li class="poplefttitle">标题：</li><li class="popinfo"><input name="tsubtitle" type="text" id="tsubtitle" /></li></ul></div>
-    <div><ul><li class="poplefttitle">描述：</li><li class="popinfo">
-      <label for="textarea"></label>
-      <textarea name="tdesc" id="tdesc" cols="45" rows="5"></textarea>
-    </li>
-    </ul></div>
-    <div><ul><li class="poplefttitle">&nbsp;</li><li class="popinfo">
-    <a href="javascript:void(0);" onclick="submitRes(0);">
-    <img src="images/img_button.png" width="86" height="33" />
-    </a></li>
-    </ul></div>
-</div>
-
 </body>
 </html>

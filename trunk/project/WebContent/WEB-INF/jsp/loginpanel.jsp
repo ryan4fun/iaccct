@@ -19,7 +19,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			            <li class="pass"></li>
 			            <li><input type="password" name="password" id="password"/></li>
 			            <li><input type="text" name="authCode" id="authCode"/></li>
-			            <li><a href="javascript:void(0);" onclick="login();"><img src="<%=basePath%>/images/login_button.png" width="107" height="40"/></a></li>
+			            <li><a href="javascript:void(0);" onclick="login();">
+			            <img src="<%=basePath%>/images/login_button.png" width="107" height="40"  onmouseover="this.src='images/login_button-2.png';" onmouseout="this.src='images/login_button.png';" /></a></li>
 			        </ul>
 			        </div>
 		        <div>
@@ -45,6 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<div class="logopansub">
 			<div class="logo"></div>
 			   <div class="login">
+			   <div id="topinfos"><a href="logout.do?action=LogoutAction">[退出]</a></div>
 		       <div id="topinfos">我的资源：（<%=user.getResNum() %>/10）</div>
 		       <div id="topinfos"><%= user.getBalance()%>￥</div>
 		   	   <div id="topinfos">我的余额：</div>
