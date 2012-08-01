@@ -720,7 +720,13 @@ p{
 	margin-top: 40px;
 }
 
+.logopan .logopansub .login #topinfos a {
+	color:#f60;
+}
 
+.logopan .logopansub .login #topinfos a:hover {
+	color:#c60;
+}
 
 #main .rightinfo #wbg .product_info li.b {
 	display: inline-block;
