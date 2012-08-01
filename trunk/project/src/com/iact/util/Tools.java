@@ -6,30 +6,43 @@
  */
 package com.iact.util;
 
+import java.awt.Canvas;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.iact.ErrorCode;
-import com.iact.ResultFile;
 import com.iact.IActException;
-import com.iact.util.json.JSONException;
-import com.iact.util.json.JSONObject;
+import com.iact.ResultFile;
+import com.jhlabs.image.ScaleFilter;
 
 public class Tools {
-
+	protected static final Log log = LogFactory.getLog(Tools.class);
 	/**
 	 * User order id
 	 * 
@@ -205,13 +218,38 @@ public class Tools {
 	/**
 	 * The max size of upload resource image
 	 */
-	private static final long MAX_SIZE = 300 * 1024;
+	private static final long MAX_SIZE;
 
 	/**
 	 * File type of allowed upload
 	 */
-	private static final String[] ALLOWED_EXT = new String[] { "jpg", "jpeg",
-			"png", "bmp" };
+	private static final String[] ALLOWED_EXT;
+
+	/**
+	 * need to scale image size or not
+	 */
+	private static final boolean SCALE_IMAGE_SIZE;
+
+	private static final String[] IMAGE_SCALES = new String[]{"120*80", "160*120"};
+
+	static {
+		Properties config = new Properties();
+		InputStream ins = Tools.class.getClassLoader().getResourceAsStream(
+				"config.properties");
+		try {
+			config.load(ins);
+		} catch (IOException e) {
+			log.error(e);
+		}
+		MAX_SIZE = Integer.parseInt(config.getProperty("MAX_SIZE")) * 1024;
+
+		String ext = config.getProperty("ALLOWED_IMAGE", "png");
+		ALLOWED_EXT = ext.split(",");
+
+		SCALE_IMAGE_SIZE = Boolean.parseBoolean(config.getProperty(
+				"SCALE_IMAGE_SIZE", "false"));
+
+	}
 
 	public static ResultFile uploadLogo(HttpServletRequest req)
 			throws IActException {
@@ -220,6 +258,14 @@ public class Tools {
 		ServletFileUpload fileload = new ServletFileUpload(factory);
 		String fileRes = null;
 		fileload.setSizeMax(MAX_SIZE);
+		
+		String imageScaleStr = req.getParameter("imageScale");
+		int imageW = 120;
+		int imageH = 80;
+		if (imageScaleStr != null && imageScaleStr.equalsIgnoreCase("1")) {
+			imageW = 160;
+			imageH = 120;
+		}
 		try {
 			List<FileItem> files = fileload.parseRequest(req);
 			if (files != null) {
@@ -260,19 +306,28 @@ public class Tools {
 						throw new IActException(e1);
 					}
 
-					FileOutputStream out = null;
-					try {
-						out = new FileOutputStream(f);
-						out.write(logo);
-					} catch (IOException e) {
-						throw new IActException(e);
-					} finally {
-						if (out != null) {
-							try {
-								out.flush();
-								out.close();
-							} catch (IOException e) {
-								throw new IActException(e);
+					if (SCALE_IMAGE_SIZE) {
+						boolean succeed = scaleImage(logo, imageW,
+								imageH, fileRes);
+						if (!succeed) {
+							return new ResultFile(ErrorCode.ERROR,
+									"缩放不符合规格图片出错");
+						}
+					} else {
+						FileOutputStream out = null;
+						try {
+							out = new FileOutputStream(f);
+							out.write(logo);
+						} catch (IOException e) {
+							throw new IActException(e);
+						} finally {
+							if (out != null) {
+								try {
+									out.flush();
+									out.close();
+								} catch (IOException e) {
+									throw new IActException(e);
+								}
 							}
 						}
 					}
@@ -300,6 +355,124 @@ public class Tools {
 		int pos = fileName.lastIndexOf(".") + 1;
 		String ext = fileName.substring(pos);
 		return ext;
+	}
+
+	/**
+	 * Write a image to file
+	 * 
+	 * @param buffImage
+	 * @param fileName
+	 * @throws IOException
+	 */
+	public static void writeImageToFile(BufferedImage buffImage, String fileName)
+			throws IActException {
+
+		String ext;
+		Iterator imageWriters;
+		ImageOutputStream ios;
+		ImageWriter imageWriter = null;
+
+		ext = fileName.substring(fileName.indexOf('.') + 1);
+		imageWriters = ImageIO.getImageWritersBySuffix(ext);
+
+		try {
+			ios = ImageIO.createImageOutputStream(new File(fileName));
+
+			if (imageWriters.hasNext()) {
+				imageWriter = (ImageWriter) imageWriters.next();
+			}
+			imageWriter.setOutput(ios);
+			imageWriter.write(buffImage);
+			ios.close();
+		} catch (IOException e) {
+			throw new IActException(e);
+		}
+
+	}
+
+	/**
+	 * Read byte array to buffered image
+	 * 
+	 * @param bs
+	 * @throws IActException
+	 */
+	public static BufferedImage readImageFromByte(byte[] bs)
+			throws IActException {
+
+		BufferedImage ret = null;
+		try {
+			ret = ImageIO.read(new ByteArrayInputStream(bs));
+		} catch (IOException e) {
+			throw new IActException(e);
+		}
+
+		return ret;
+
+	}
+
+	/**
+	 * Scale image to specified width, height and color mode.
+	 * 
+	 * @param src
+	 * @param distW
+	 * @param distH
+	 * @param imageType
+	 * @return
+	 */
+	public static BufferedImage filterImage(BufferedImage src, int distW,
+			int distH) {
+		BufferedImage dist = new BufferedImage(distW, distH, BufferedImage.TYPE_3BYTE_BGR);
+
+		ScaleFilter scale = new ScaleFilter(distW, distH);
+		scale.filter(src, dist);
+
+		return dist;
+
+	}
+
+	private static Component component = new Canvas();
+
+	public static BufferedImage filterImageByAVG(BufferedImage image,
+			int width, int height) {
+
+		AreaAveragingScaleFilter areaAveragingScaleFilter = new AreaAveragingScaleFilter(
+				width, height);
+		FilteredImageSource filteredImageSource = new FilteredImageSource(image
+				.getSource(), areaAveragingScaleFilter);
+		BufferedImage bufferedImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_3BYTE_BGR);
+		Graphics graphics = bufferedImage.createGraphics();
+		graphics.drawImage(component.createImage(filteredImageSource), 0, 0,
+				null);
+
+		return bufferedImage;
+	}
+
+	public static boolean scaleImage(byte[] bs, int width, int height,
+			 String fileName) throws IActException {
+		BufferedImage src = readImageFromByte(bs);
+		int w = src.getWidth();
+		int h = src.getHeight();
+		boolean matched = matchedScale(w, h);
+		if (matched) {
+			return true;
+		}
+		//BufferedImage dist = filterImage(src, width, height);
+		BufferedImage dist = filterImageByAVG(src, width, height);
+		writeImageToFile(dist, fileName);
+
+		return true;
+
+	}
+
+	public static boolean matchedScale(int w, int h) {
+		String scale = Integer.toString(w) + "*" + Integer.toString(h);
+		for (int i = 0, len = IMAGE_SCALES.length; i < len; i++) {
+			if (scale.equalsIgnoreCase(IMAGE_SCALES[i])) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
