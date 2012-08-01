@@ -27,6 +27,7 @@ public class LogoutAction extends AbstractAction {
 		User  user = super.getSessionContainer(req).getUser();
 		if (user != null) {
 			super.getSessionContainer(req).setUser(null);
+			super.getSessionContainer(req).getCart().empty();
 		}
 		try {
 			req.getRequestDispatcher("index.do?action=IndexAction").forward(req, res);

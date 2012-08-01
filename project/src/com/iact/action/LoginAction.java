@@ -89,7 +89,7 @@ public class LoginAction extends AbstractAction {
 								int size = orders.size();
 								for (int i = 0; i < size; i++) {
 									Userorder order = orders.get(i);
-									order.setUser(user.getId());
+									order.setUser(user.getId());	
 									DAO.save(orders.get(i));
 								}
 								DAO.commitTransaction();

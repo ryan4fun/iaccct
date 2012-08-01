@@ -5,19 +5,16 @@
  */
 package com.iact.action;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.hibernate.Hibernate;
 
 import com.iact.ErrorCode;
 import com.iact.IActException;
@@ -27,7 +24,7 @@ import com.iact.dao.UserorderDAO;
 import com.iact.dao.UserresourceDAO;
 import com.iact.util.Tools;
 import com.iact.vo.Bizpackage;
-import com.iact.vo.ShoppingCart;
+import com.iact.vo.User;
 import com.iact.vo.Userorder;
 import com.iact.vo.Userresource;
 
@@ -62,6 +59,8 @@ public class BizPackageAction extends AbstractAction {
 			if (pack != null) {
 				req.setAttribute("bizpackage", pack);
 			}
+			getUserResouces(req, res);
+
 			reqParams.put("page", "packageitems.jsp");
 			_forward(req, res);
 			return ErrorCode.OK;
@@ -82,9 +81,10 @@ public class BizPackageAction extends AbstractAction {
 
 		Userorder order = genUserOrder(req);
 		if (sc.getUser() == null) {
+			/*
 			ShoppingCart cart = sc.getCart();
 			cart.addOrder(order);
-
+			*/
 			reqParams.put("page", "login.jsp");
 			_forward(req, res);
 		} else {
@@ -128,7 +128,8 @@ public class BizPackageAction extends AbstractAction {
 		order.setTransactionId(transId);
 
 		long pid = Long.parseLong((String) reqParams.get("pid"));
-		BizpackageDAO packageDAO = (BizpackageDAO)DAOFactory.getDAO(BIZ_PACKAGE_DAO);
+		BizpackageDAO packageDAO = (BizpackageDAO) DAOFactory
+				.getDAO(BIZ_PACKAGE_DAO);
 		Bizpackage pack = packageDAO.findById(pid);
 		order.setBizPackage(pack);
 
@@ -190,48 +191,17 @@ public class BizPackageAction extends AbstractAction {
 		}
 		order.setPlanDate(plandate);
 
-		String resfrom = (String) reqParams.get("resfrom");
-		if (resfrom.equalsIgnoreCase("0")) {
-			String restype = (String) reqParams.get("restype");
-			if (restype.equalsIgnoreCase("0")) {
-				String subTitle = (String) reqParams.get("subtitle");
-				order.setSubtitle(subTitle);
-				order.setSpotType("文字");
-			} else {
-				String subTitle = (String) reqParams.get("subtitle");
-				order.setSubtitle(subTitle);
-				order.setSpotType("图文");
-				// upload image
-				// image
-				String fileName = (String) reqParams.get("fileName");
-				String fileFullPath = req.getSession().getServletContext()
-						.getRealPath("/")
-						+ "images/temp/" + fileName;
-				File f = new File(fileFullPath);
-				FileInputStream in;
-				try {
-					in = new FileInputStream(f);
-					order.setLogoData(Hibernate.createBlob(in));
-				} catch (IOException e) {
-					throw new IActException(e);
-				}
-				//TODO image scale
-				String imgScale = (String) reqParams.get("imgScale");
-				
-				order.setLogoType(Tools.getFileSuffix(fileName));
-			}
-		} else {
-			String resid = (String) reqParams.get("resid");
-			if (resid != null) {
-				long rid = Long.parseLong(resid);
-				UserresourceDAO resDAO = (UserresourceDAO) DAOFactory
-						.getDAO(USER_RESOURCE_DAO);
-				Userresource res = resDAO.findById(rid);
-				order.setSpotType(res.getSpotType());
-				order.setSubtitle(res.getSubtitle());
-				if (res.getSpotType().equalsIgnoreCase("图文")) {
-					// save image
-				}
+		String resid = (String) reqParams.get("resource");
+		if (resid != null) {
+			long rid = Long.parseLong(resid);
+			UserresourceDAO resDAO = (UserresourceDAO) DAOFactory
+					.getDAO(USER_RESOURCE_DAO);
+			Userresource res = resDAO.findById(rid);
+			order.setSpotType(res.getSpotType());
+			order.setSubtitle(res.getSubtitle());
+			if (res.getSpotType().equalsIgnoreCase("图文")) {
+				order.setLogoType(res.getLogoType());
+				order.setLogoData(res.getLogoData());
 			}
 		}
 
@@ -253,4 +223,21 @@ public class BizPackageAction extends AbstractAction {
 		return order;
 	}
 
+	private void getUserResouces(HttpServletRequest req, HttpServletResponse res)
+			throws IActException {
+
+		UserresourceDAO dao = (UserresourceDAO) DAOFactory
+				.getDAO(USER_RESOURCE_DAO);
+		User user = super.getSessionContainer(req).getUser();
+		if (user == null) {
+			return;
+		} 
+		
+		long userid = user.getId();
+		String hsql = "from Userresource o where o.user=" + userid
+				+ " order by o.id desc";
+
+		List<Userresource> resources = dao.findByHSQL(hsql, 0, 100);
+		req.setAttribute("resources", resources);
+	}
 }
