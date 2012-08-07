@@ -74,7 +74,7 @@ ul li{
   </tbody>
 </table>
 <p style="padding-left: 27px;">&nbsp;</p>
-<table width="89%" border="0" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC" id="RadioButtonList1" align="center">
+<table width="89%" border="0" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC" id="RadioButtonList1" align="center" >
   <tbody>
     <tr>
       <td width="51%" height="70" bgcolor="#FFFFFF"><div align="left">
@@ -189,9 +189,9 @@ ul li{
         </label></td>
       </tr>
 	    <tr>
-	     <td colspan="2" bgcolor="#FFFFFF" align="center">
+	     <td colspan="2" bgcolor="#FFFFFF" align="center" height="50px">
 	     <input id="pay_btn" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 86px; HEIGHT: 33px; BORDER-RIGHT-WIDTH: 0px" type="image" src="images/bys_button.png" 
-	     name="pay_btn" alt="确认无误,付款" onmouseover="this.src='images/bys_button-2.png';" onmouseout="this.src='images/bys_button.png';"/>   
+	     name="pay_btn" title="确认无误,付款" onmouseover="this.src='images/bys_button-2.png';" onmouseout="this.src='images/bys_button.png';"/>   
 	     </td>
 	    </tr>
   </tbody>
