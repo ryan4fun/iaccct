@@ -10,12 +10,22 @@
             <column name="ID" />
             <generator class="assigned"></generator>
         </id>
+        <!-- 
         <property name="bizPackage" type="java.lang.Long">
             <column name="BizPackage" not-null="true" />
         </property>
+        -->
+        <many-to-one name="bizPackage" class="com.iact.vo.Bizpackage" fetch="select">
+            <column name="BizPackage" not-null="true" />
+        </many-to-one>
+        <!-- 
         <property name="bizProgram" type="java.lang.Long">
             <column name="BizProgram" not-null="true" />
         </property>
+        -->
+         <many-to-one name="bizProgram" class="com.iact.vo.Bizprogram" fetch="select">
+            <column name="BizProgram" not-null="true" />
+        </many-to-one>
         <property name="sequenceId" type="java.lang.String">
             <column name="SequenceID" length="32" />
         </property>

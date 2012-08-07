@@ -10,9 +10,15 @@
             <column name="ID" />
             <generator class="assigned"></generator>
         </id>
+        <!-- 
         <property name="bizArea" type="java.lang.Long">
             <column name="BizArea" not-null="true" />
         </property>
+		-->
+        <many-to-one name="bizArea" class="com.iact.vo.Bizarea" fetch="select">
+            <column name="BizArea" not-null="true" />
+        </many-to-one>
+        
         <property name="bizCode" type="java.lang.String">
             <column name="BizCode" length="32" />
         </property>

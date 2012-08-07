@@ -15,7 +15,7 @@ public class Bizpackage extends AbstractBizpackage implements
 	}
 
 	/** minimal constructor */
-	public Bizpackage(Long id, Long bizArea, String sequenceId, String name,
+	public Bizpackage(Long id, Bizarea bizArea, String sequenceId, String name,
 			String spotType, Integer subtitleSpec, Integer logoSpec,
 			Integer playNumber, Double price, Integer status) {
 		super(id, bizArea, sequenceId, name, spotType, subtitleSpec, logoSpec,
@@ -23,7 +23,7 @@ public class Bizpackage extends AbstractBizpackage implements
 	}
 
 	/** full constructor */
-	public Bizpackage(Long id, Long bizArea, String bizCode, String sequenceId,
+	public Bizpackage(Long id, Bizarea bizArea, String bizCode, String sequenceId,
 			String name, String description, String beginTime, String endTime,
 			String spotType, Integer subtitleSpec, String subtitleInfo,
 			Integer logoSpec, String logoInfo, Integer playNumber,
