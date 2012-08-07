@@ -54,11 +54,16 @@ public class BaseHibernateDAO implements IBaseHibernateDAO {
 	 */
 	public List findByHSQL(String hsql, int start, int limit) {
 		Query q = getSession().createQuery(hsql);
-		q.setFirstResult(start);
-		q.setMaxResults(limit);
 		
-		List l = q.list();
-		return l;
+		if (start == -1 && start== limit) {
+			return q.list();
+		} else {
+			q.setFirstResult(start);
+			q.setMaxResults(limit);
+			
+			List l = q.list();
+			return l;
+		}
 	}
 	
 	/**
