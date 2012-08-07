@@ -3,8 +3,9 @@
 								 java.util.Set,
 								 com.iact.vo.Bizpackageitem,
 								 com.iact.action.SessionContainer,
-								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
-<%@page import="com.iact.vo.Userresource"%>
+								 com.iact.util.PageResultSet,
+								 com.iact.vo.Userresource,
+								 com.iact.util.Tools" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -97,21 +98,21 @@ form {
 var basePath = "<%=basePath%>";
 var price = <%=p.getPrice() %>;
 $(function() {
-	$( "#sdate" ).datepicker({
+	$("#sdate").datepicker({
 		showOn: "button",
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
 		prevText:'',
 		nextText:''
 	});
-	$( "#edate" ).datepicker({
+	$("#edate").datepicker({
 		showOn: "button",
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
 		prevText:'',
 		nextText:''
 	});
-	$( "#plandate" ).datepicker({
+	$( "#plandate").datepicker({
 		showOn: "button",
 		buttonImage: "images/calendar.png",
 		buttonImageOnly: true,
@@ -120,56 +121,25 @@ $(function() {
 	});
  });
 
-function login() {
- 	var un = $("#loginName").val();
- 	var pd = $("#password").val();
- 	var at = $("#authCode").val();
- 	var params = "action=LoginAction&ajax=true"
- 			+"&loginName="+un
- 			+"&password="+pd
- 			+"&authCode="+at
- 			+"&ts="+ new Date();
- 	$.ajax({
- 		type:"post",
- 		url:"login.do",
- 		beforeSend:function(){
- 			$("#errpanel")[0].innerText = "ddddd";
- 		},
- 		dataType:"json",
- 		async:true,
- 		data:params,
- 		success:function(data) {
- 			if (data.errorCode == 0) {
- 				window.location.href = basePath +"index.do?action=IndexAction";		
- 			} else {
- 				$("#errpanel")[0].innerHTML = data.errorMsg;
- 			}
- 		}
- 	});
- }
-function refreshAuth(basePath) {
-	$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
-}
-
 function fUserRes() {
 	window.location.href="user.do?action=UserInfoAction&type=2";
 }
 
 function submitOrder() {
 	
-	if (!$(plandate).val()) {
+	if (!$("#plandate").val()) {
 		$("#lperr").html("&nbsp;&nbsp;计划日期不能为空");
 		return;
 	} else {
 		$("#lperr").html("");
 	}
-	if (!$(sdate).val()) {
+	if (!$("#sdate").val()) {
 		$("#sperr").html("&nbsp;&nbsp;计划开始时间不能为空");
 		return;
 	} else {
 		$("#sperr").html("");
 	}
-	if (!$(edate).val()) {
+	if (!$("#edate").val()) {
 		$("#eperr").html("&nbsp;&nbsp;计划结束不能为空");
 		return;
 	} else {
@@ -218,7 +188,7 @@ function caltotalprice(obj) {
         <div>
         <ul>
         <li class="product_info_titles"><%=p.getName() %></li>
-        <li class="myinfo_title">开通地区：</li><li><%=p.getBizArea() %></li>   
+        <li class="myinfo_title">开通地区：</li><li><%=p.getBizArea().getName() %></li>   
         <li class="myinfo_title">开始时间：</li><li><%=p.getBeginTime() %></li>   
         <li class="myinfo_title">结束时间：</li><li><%=p.getEndTime()%></li>   
         <li class="myinfo_title">套餐单价：</li><li><%=p.getPrice() %>￥</li>
@@ -231,16 +201,17 @@ function caltotalprice(obj) {
 		        	<tr class="product_info">
 		        	<% 
 		        		Set<Bizpackageitem> items = p.getItems();
-        	    		for (Bizpackageitem item: items) {
+		        		List<Bizpackageitem> list = Tools.sortPackageItems(items);
+        	    		for (Bizpackageitem item: list) {
 					%>
-					<td class="product_info_title">昆明1台</td>
+					<td class="product_info_title"><%=item.getBizProgram().getName() %></td>
         	    	<%
         	    		}
         	    	%>
         	    	</tr> 
         	    	<tr class="product_info">
         	    	<% 
-        	    		for (Bizpackageitem item: items) {
+        	    		for (Bizpackageitem item: list) {
 					%>
 					 <td class="product_info_title" style="background-color:#fff;"><%= item.getName()%></td>
         	    	<%

@@ -5,9 +5,9 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 User user = (User)session.getAttribute("tempUser");
-
+List<Area> provinces = (List<Area>)request.getAttribute("provinces");
+List<Area> cities = (List<Area>)request.getAttribute("cities");
 List<Area> areas = (List<Area>)request.getAttribute("areas");
-List<Area> subAreas = (List<Area>)request.getAttribute("subAreas");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -343,27 +343,18 @@ Vanadium.addValidatorTypes([
   if (typeof(VanadiumCustomValidationTypes) !== "undefined" && VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
 };
 
-	function getCascadingAreas(area, type) {
+	function getCascadingAreas(area,sub, tip) {
 		var v = area.value;
 		if (v) {
 			$.getJSON(
 				"reg.do?action=RegisterAction&type=5&parent=" + v,
 				function(json){
-					if (type == 0) {
-						$("#city").html("");
-						var len = json.length;
-						for (var i = 0; i<len; i++) {
-							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
-							$("#city").append(op);
-						}
-					} else {
-						$("#mcity").html("");
-						var len = json.length;
-						for (var i = 0; i<len; i++) {
-							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
-							$("#mcity").append(op);
-						}
-					}
+					$("#"+sub).html("<option value=''>" + tip + "</option>");
+					var len = json.length;
+					for (var i = 0; i<len; i++) {
+						var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+						$("#"+sub).append(op);
+					}	
 				}
 			);
 		}	
@@ -439,17 +430,41 @@ Vanadium.addValidatorTypes([
                     省：
                   </td>
                   <td align="left">
-                     <select name="province" onchange="getCascadingAreas(this, 0);">
+                     <select name="province" onchange="getCascadingAreas(this, 'city', '--请选择市');">
                         <option value="">--请选择省份</option>
                       	<% 
-                      		int isize = areas.size();
+                      		int isize = provinces == null ? 0 :  provinces.size();
                       		for (int i = 0; i < isize; i++) {
-                      			Area a = areas.get(i);
-                      			if (user.getProvince().longValue() == a.getId().longValue()) {
-                      				System.out.println(a.getName());
+                      			Area a = provinces.get(i);
+                      			boolean selected = false;
+                      			if ( user.getProvince() != null && user.getProvince().longValue() == a.getId().longValue()) {
+                      				selected = true;
                       			}
                       	%>
-                      	 	<option value="<%=a.getId()%>" <%if(user.getProvince().longValue() == a.getId().longValue()){ %> selected <%}%> ><%=a.getName()%></option>
+                      	 	<option value="<%=a.getId()%>" <%if(selected){ %> selected <%}%> ><%=a.getName()%></option>
+                      	<%	
+                      		}
+                      	%>
+                      </select>
+                  </td>
+                  </tr>
+                               <tr>
+                    <td class="reglabel" align="right">	
+                    市：
+                  </td>
+                  <td align="left">
+                     <select name="city" id="city" onchange="getCascadingAreas(this, 'area', '--请选择地区');">
+                        <option value="">--请选择市</option>
+                      	<% 
+                      		int csize = cities == null ? 0 :  cities.size();
+                      		for (int i = 0; i < csize; i++) {
+                      			Area a = cities.get(i);
+                      			boolean selected = false;
+                      			if (user.getCity() != null && user.getCity().longValue() == a.getId().longValue()) {
+                      				selected = true;
+                      			}
+                      	%>
+                      	 	<option value="<%=a.getId()%>" <%if(selected){ %> selected <%}%> ><%=a.getName()%></option>
                       	<%	
                       		}
                       	%>
@@ -461,12 +476,12 @@ Vanadium.addValidatorTypes([
                  地区：
                   </td>
                   <td align="left">
-                      <select name="area" id="city">
+                      <select name="area" id="area">
                          <option value="">--请选择地区</option>
                          <% 
-                      		int jsize = subAreas.size();
+                      		int jsize = areas == null ? 0 : areas.size();
                       		for (int i = 0; i < jsize; i++) {
-                      			Area a = subAreas.get(i);
+                      			Area a = areas.get(i);
                       	 %>
                       	 	<option value="<%=a.getId()%>" <%if(user.getArea().longValue() == a.getId().longValue()){%> selected <%}%> ><%=a.getName()%></option>
                       	 <%	

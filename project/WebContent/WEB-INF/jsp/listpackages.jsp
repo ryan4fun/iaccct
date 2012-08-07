@@ -4,6 +4,8 @@
 								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.iact.vo.Bizpackageitem"%>
+<%@page import="java.util.Collections"%>
+<%@page import="com.iact.util.Tools"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -41,40 +43,6 @@ String packTitle = (String)request.getAttribute("packTitle");
 	}
 	</style>
 	<![endif]-->
-	
-	<script type="text/javascript">
-		 var basePath = "<%=basePath%>";
-		 function login() {
-		 	var un = $("#loginName").val();
-		 	var pd = $("#password").val();
-		 	var at = $("#authCode").val();
-		 	var params = "action=LoginAction&ajax=true"
-		 			+"&loginName="+un
-		 			+"&password="+pd
-		 			+"&authCode="+at
-		 			+"&ts="+ new Date();
-		 	$.ajax({
-		 		type:"post",
-		 		url:"login.do",
-		 		beforeSend:function(){
-		 			$("#errpanel")[0].innerText = "ddddd";
-		 		},
-		 		dataType:"json",
-		 		async:true,
-		 		data:params,
-		 		success:function(data) {
-		 			if (data.errorCode == 0) {
-		 				window.location.href = basePath +"index.do?action=IndexAction";		
-		 			} else {
-		 				$("#errpanel")[0].innerHTML = data.errorMsg;
-		 			}
-		 		}
-		 	});
-		 }
-		function refreshAuth(basePath) {
-			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
-		}
-	</script>
 </head>
 <body>
 <jsp:include page="topline.jsp" flush="true" />
@@ -95,7 +63,9 @@ String packTitle = (String)request.getAttribute("packTitle");
         	for (int i = 0, size = packages.size(); i < size; i++) {
         		Bizpackage p = packages.get(i);
         		Set<Bizpackageitem> items = p.getItems();
-        		int isize = items == null ? 0 : items.size();
+        		List<Bizpackageitem> list = Tools.sortPackageItems(items);
+        		
+        		int isize = list == null ? 0 : list.size();
         %> 
 		         <ul class="product_type">
 		        <li><%=p.getName() %></li>
@@ -103,16 +73,16 @@ String packTitle = (String)request.getAttribute("packTitle");
 		        <table cellspacing="0" cellpadding="0" style="margin:5px;">
 		        	<tr class="product_info">
 		        	<% 
-        	    		for (Bizpackageitem item: items) {
+        	    		for (Bizpackageitem item: list) {
 					%>
-					<td class="product_info_title">昆明1台</td>
+					<td class="product_info_title"><%=item.getBizProgram().getName() %></td>
         	    	<%
         	    		}
         	    	%>
         	    	</tr> 
         	    	<tr class="product_info">
         	    	<% 
-        	    		for (Bizpackageitem item: items) {
+        	    		for (Bizpackageitem item: list) {
 					%>
 					 <td class="product_info_title" style="background-color:#fff;"><%= item.getName()%></td>
         	    	<%
@@ -120,15 +90,14 @@ String packTitle = (String)request.getAttribute("packTitle");
         	    	%> 
         	    	</tr>
 		        </table>
+		        <ul>
+		        <li class="cb"><a href="detail.do?action=BizPackageAction&pid=<%=p.getId()%>">
+		        <img src="images/bydt_button_n.png" width="120" height="33" onmouseover="this.src='images/bydt_button_h.png';" onmouseout="this.src='images/bydt_button_n.png';"/>
+		         </a></li>
+		        </ul>
         <% 
        		 }
         %>
-
-        <ul>
-        <li class="cb"><a href="detail.do?action=BizPackageAction&pid=1">
-        <img src="images/bydt_button_n.png" width="120" height="33" onmouseover="this.src='images/bydt_button_h.png';" onmouseout="this.src='images/bydt_button_n.png';"/>
-         </a></li>
-        </ul>
          <div>
      	 <%=pageNav%>      
         </div>

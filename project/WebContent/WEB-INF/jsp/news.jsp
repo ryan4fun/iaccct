@@ -30,41 +30,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		/*float:left;*/
 	}
 	</style>
-	<![endif]-->
-	
-	<script type="text/javascript">
-		 var basePath = "<%=basePath%>";
-		 function login() {
-		 	var un = $("#loginName").val();
-		 	var pd = $("#password").val();
-		 	var at = $("#authCode").val();
-		 	var params = "action=LoginAction&ajax=true"
-		 			+"&loginName="+un
-		 			+"&password="+pd
-		 			+"&authCode="+at
-		 			+"&ts="+ new Date();
-		 	$.ajax({
-		 		type:"post",
-		 		url:"login.do",
-		 		beforeSend:function(){
-		 			$("#errpanel")[0].innerText = "ddddd";
-		 		},
-		 		dataType:"json",
-		 		async:true,
-		 		data:params,
-		 		success:function(data) {
-		 			if (data.errorCode == 0) {
-		 				window.location.href = basePath +"index.do?action=IndexAction";		
-		 			} else {
-		 				$("#errpanel")[0].innerHTML = data.errorMsg;
-		 			}
-		 		}
-		 	});
-		 }
-		function refreshAuth(basePath) {
-			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
-		}
-	</script>
+	<![endif]-->	
 </head>
 <body>
 <jsp:include page="topline.jsp" flush="true" />

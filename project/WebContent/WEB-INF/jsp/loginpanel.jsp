@@ -28,7 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        <li class="spaecst"></li>
 		       	  <li><a href="reg.do?action=RegisterAction&type=4">免费注册</a> | <a href="javascript:void(0);" onclick="popForgetDiv();" >忘记密码</a></li>
 		        	<li class="spaecs">
-		        	<span class="err" id="errpanel"></span>
+		        	<span class="errmsg" id="errpanel"></span>
 		        	</li>
 		            <li><img src="<%=basePath%>/auth" width="61" height="21" id="authImg"/></li>
 		        	<li><a href="javascript:void(0);" onclick="refreshAuth('<%=basePath%>');">看不清？换一张</a></li>
@@ -46,7 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	<div class="logopansub">
 			<div class="logo"></div>
 			   <div class="login">
-			   <div id="topinfos"><a href="logout.do?action=LogoutAction">[退出]</a></div>
+			   <div id="topinfos"><a href="logout.do?action=LogoutAction" title="退出登陆">[退出]</a></div>
 		       <div id="topinfos">我的资源：（<%=user.getResNum() %>/10）</div>
 		       <div id="topinfos"><%= user.getBalance()%>￥</div>
 		   	   <div id="topinfos">我的余额：</div>

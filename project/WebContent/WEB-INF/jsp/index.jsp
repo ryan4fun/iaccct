@@ -33,39 +33,6 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 	</style>
 	<![endif]-->
 	
-	<script type="text/javascript">
-		 var basePath = "<%=basePath%>";
-		 
-		 function login() {
-		 	var un = $("#loginName").val();
-		 	var pd = $("#password").val();
-		 	var at = $("#authCode").val();
-		 	var params = "action=LoginAction&ajax=true"
-		 			+"&loginName="+un
-		 			+"&password="+pd
-		 			+"&authCode="+at
-		 			+"&ts="+ new Date();
-		 	$.ajax({
-		 		type:"post",
-		 		url:"login.do",
-		 		beforeSend:function(){
-		 		},
-		 		dataType:"json",
-		 		async:true,
-		 		data:params,
-		 		success:function(data) {
-		 			if (data.errorCode == 0) {
-		 				window.location.href = basePath +"index.do?action=IndexAction";		
-		 			} else {
-		 				$("#errpanel")[0].innerHTML = data.errorMsg;
-		 			}
-		 		}
-		 	});
-		 }
-		function refreshAuth(basePath) {
-			$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
-		}
-	</script>
 	</head>
   <body>
   	 <!--  topline area -->
@@ -128,7 +95,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         %>
         </ul>
         </div>
-        <div class="more"><a href="more.do?page=listarea.jsp">更多...</a></div>
+        <div class="more"><a href="more.do?action=OpenAreasAction">更多...</a></div>
         </div>
         <div id="wbg">
         <div>
@@ -151,13 +118,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         %>
         </ul>
         </div>
-        <% 
-        	if (adsSize > 5) {
-        %>
          <div class="more"><a href="more.do?action=ListNewsAction">更多...</a></div>
-        <% 
-        	}
-        %>
         </div>
         <div id="wbg">
         <div>
@@ -180,13 +141,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         %>
         </ul>
         </div>
-        <% 
-        	if (newsSize > 5) {
-        %>
          <div class="more"><a href="more.do?action=ListNewsAction" >更多...</a></div>
-        <% 
-        	}
-        %>
     </div>
   </div>  
 </div>	

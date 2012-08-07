@@ -413,27 +413,18 @@ function checkUserExisted() {
 	 	});
 	}
 	
-	function getCascadingAreas(area, type) {
+	function getCascadingAreas(area,sub, tip) {
 		var v = area.value;
 		if (v) {
 			$.getJSON(
 				"reg.do?action=RegisterAction&type=5&parent=" + v,
 				function(json){
-					if (type == 0) {
-						$("#city").html("");
-						var len = json.length;
-						for (var i = 0; i<len; i++) {
-							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
-							$("#city").append(op);
-						}
-					} else {
-						$("#mcity").html("");
-						var len = json.length;
-						for (var i = 0; i<len; i++) {
-							var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
-							$("#mcity").append(op);
-						}
-					}
+					$("#"+sub).html("<option value=''>" + tip + "</option>");
+					var len = json.length;
+					for (var i = 0; i<len; i++) {
+						var op = "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
+						$("#"+sub).append(op);
+					}	
 				}
 			);
 		}	
@@ -587,7 +578,7 @@ function checkUserExisted() {
                     省：
                   </td>
                   <td align="left">
-                      <select name="province" onchange="getCascadingAreas(this, 0);">
+                      <select name="province" onchange="getCascadingAreas(this, 'city', '--请选择市');">
                        <option value="">--请选择省份</option>
                       	<% 
                       		int size = areas.size();
@@ -602,12 +593,22 @@ function checkUserExisted() {
                       </select>
                   </td>
                   </tr>
+                                           <tr>
+                    <td class="reglabel" align="right">	
+                  	  市：
+                  </td>
+                  <td align="left">
+                      <select name="city" id="city" onchange="getCascadingAreas(this, 'area','--请选择地区');">
+                       <option value="">--请选择市</option> 
+                      </select>
+                  </td>
+                  </tr>
 									<tr>
 										<td class="reglabel" align="right">
                  地区：
                   </td>
                   <td align="left">
-                      <select name="area" id="city">
+                      <select name="area" id="area">
                         <option value="">--请选择地区</option>
                       </select>
                    </td>
@@ -704,7 +705,7 @@ function checkUserExisted() {
                     省：
                   </td>
                   <td align="left">
-                      <select name="province" onchange="getCascadingAreas(this, 1);">
+                      <select name="province" onchange="getCascadingAreas(this, 'mcity', '--请选择市');">
                        <option value="">--请选择省份</option>
                       	<% 
                       		int isize = areas.size();
@@ -719,12 +720,22 @@ function checkUserExisted() {
                       </select>
                   </td>
                   </tr>
+                             <tr>
+                    <td class="reglabel" align="right">	
+                    市：
+                  </td>
+                  <td align="left">
+                      <select name="city" id="mcity" onchange="getCascadingAreas(this, 'marea', '--请选择地区');">
+                       <option value="">--请选择市</option> 
+                      </select>
+                  </td>
+                  </tr>
 									<tr>
 										<td class="reglabel" align="right">
                  地区：
                   </td>
                   <td align="left">
-                      <select name="area" id="mcity">
+                      <select name="area" id="marea">
                         <option value="">--请选择地区</option>
                       </select>
                    </td>

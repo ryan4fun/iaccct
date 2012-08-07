@@ -15,7 +15,7 @@
         	} else {
         		String realName = sc.getUser().getRealName();
         %>
-        <li class="toplilogin">欢迎您，<%=realName%>！&nbsp;&nbsp;<a href="f.do?page=userbasic.jsp">我的应用</a></li>     
+        <li class="toplilogin">欢迎您，<%=realName%>！&nbsp;&nbsp;<a href="f.do?action=UserInfoAction&type=0" title="进入我的应用中心">我的应用</a></li>     
         <% 		
         	}
         %>
