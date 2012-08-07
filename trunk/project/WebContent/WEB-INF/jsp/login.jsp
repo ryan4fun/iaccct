@@ -55,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 				if (data.forder) {
 		 					window.location.href = basePath +"user.do?action=UserInfoAction&type=1";		
 		 				} else {
-		 					window.location.href = basePath +"index.do?action=IndexAction";		
+		 					window.location.href = basePath +"user.do?action=UserInfoAction&type=0";		
 		 				}
 		 			} else {
 		 				$("#errpanel").html(data.errorMsg);

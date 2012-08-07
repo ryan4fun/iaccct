@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="content">
               <ul>
                 <li>
-                    <p><img src="images/regok.png" width="660" height="492" /></p>
+                    <p><img src="images/regok.png" width="660" height="492" onclick="window.location.href='index.do?action=IndexAction';" /></p>
                 </li>
               </ul>
             </div>
