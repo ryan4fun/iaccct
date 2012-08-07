@@ -46,35 +46,45 @@ ul li{
         <img src="images/my_title5.png" width="160" height="30" />
         <form action="pay.do" id="payform" method="post" target="_blank" style="margin:10px;">
         <input type="hidden" name="action" value="AlipaytoAction" />
-<table style="margin-left: 24px;" width="559" border="0" cellpadding="0" cellspacing="0" id="amount">
+        <table width="100%" border="0" cellspacing="6">
+  <tr>
+    <td class="paytitle">选择充值金额</td>
+  </tr>
+  <tr>
+    <td><table align="center"  width="90%" border="0" cellpadding="0" cellspacing="0" id="amount">
   <tbody>
     <tr>
       <td height="41"><input checked="checked" class="input" id="amount_100" type="radio" value="100" name="amount" />
-        <label for="amount_100"><img src="images/charge_100.gif" onclick="fee_select('amount_100')" /></label></td>
+        <label for="amount_100">
+        <div class="meonys">充100送5元</div>
+        </label></td>
       <td><input class="input" id="amount_200" type="radio" value="200" name="amount">
-        <label for="amount_200"><img src="images/charge_200.gif" onclick="fee_select('amount_200')"/></label></td>
+        <label for="amount_200"><div class="meonys">充200送15元</div></label></td>
       <td width="225"><input class="input" id="amount_500" type="radio" value="500" name="amount">
-        <label for="amount_500"><img src="images/charge_500.gif" onclick="fee_select('amount_500')"/></label></td>
+        <label for="amount_500"><div class="meonys">充500送05元</div></label></td>
 
       </tr>
     <tr>
       <td height="40"><input class="input" id="amount_800" type="radio" value="800" name="amount"/>
-        <label for="amount_800"><img src="images/charge_800.gif" onclick="fee_select('amount_800')"/></label></td>
+        <label for="amount_800"><div class="meonys">充800送100元</div></label></td>
       <td><input class="input" id="amount_1000" type="radio" value="1000" name="amount">
-        <label for="amount_1000"><img src="images/charge_1000.gif" width="126" height="32" onclick="fee_select('amount_1000')"/><br>
-        </label></td>
+        <label for="amount_1000"><div class="meonys">充1000送150元</div></label></td>
       <td><input class="input" id="amount_2000" type="radio" value="2000" name="amount">
-        <label for="amount_2000"><img src="images/charge_2000.gif" onclick="fee_select('amount_2000')"/></label></td>
+        <label for="amount_2000"><div class="meonys">充2000送350元</div></label></td>
       </tr>
     <tr>
       <td width="169" height="34"><input class="input" id="amount_50" type="radio" value="50" name="amount"/>
-          <label for="amount_50"><img src="images/charge_50.gif" onclick="fee_select('amount_50')"/></label></td>
+          <label for="amount_50"><div class="meonys">充50元</div></label></td>
       <td width="165"></td>
       </tr>
   </tbody>
-</table>
-<p style="padding-left: 27px;">&nbsp;</p>
-<table width="89%" border="0" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC" id="RadioButtonList1" align="center" >
+</table></td>
+  </tr>
+  <tr>
+    <td class="paytitle">选择付款方式</td>
+  </tr>
+  <tr>
+    <td><table width="90%" border="0" cellpadding="6" cellspacing="0" bgcolor="#CCCCCC" id="RadioButtonList1" align="center" >
   <tbody>
     <tr>
       <td width="51%" height="70" bgcolor="#FFFFFF"><div align="left">
@@ -188,15 +198,19 @@ ul li{
         <img src="images/gdfzyh.gif" alt="广东发展银行" width="180" height="40" align="middle" onclick="bank_select('ggfzh')" />
         </label></td>
       </tr>
+      <tr>
+       <td colspan="2" bgcolor="#FFFFFF" align="center" height="10px"></td>
+      </tr>
 	    <tr>
 	     <td colspan="2" bgcolor="#FFFFFF" align="center" height="50px">
-	     <input id="pay_btn" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 86px; HEIGHT: 33px; BORDER-RIGHT-WIDTH: 0px" type="image" src="images/bys_button.png" 
-	     name="pay_btn" title="确认无误,付款" onmouseover="this.src='images/bys_button-2.png';" onmouseout="this.src='images/bys_button.png';"/>   
+	     <input id="pay_btn" style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 216px; HEIGHT: 50px; BORDER-RIGHT-WIDTH: 0px" type="image" src="images/pay_button.png" 
+	     name="pay_btn" title="确认无误,付款" onmouseover="this.src='images/pay_button2.png';" onmouseout="this.src='images/pay_button.png';"/>   
 	     </td>
 	    </tr>
   </tbody>
+</table></td>
+  </tr>
 </table>
-
 </form>
       </div>
   </div> 
