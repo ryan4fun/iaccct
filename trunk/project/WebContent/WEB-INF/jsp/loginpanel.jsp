@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   <div class="login">
 			   <div id="topinfos"><a href="logout.do?action=LogoutAction" title="退出登陆">[退出]</a></div>
 		       <div id="topinfos">我的资源：（<%=user.getResNum() %>/10）</div>
-		       <div id="topinfos"><%= user.getBalance()%>￥</div>
+		       <div id="topinfos" class="money"><%= user.getBalance()%>￥</div>
 		   	   <div id="topinfos">我的余额：</div>
 		       <div id="topinfos">我的订单：（<%=user.getOrderNum() %>）</div>
 		       <div id="topinfos">
