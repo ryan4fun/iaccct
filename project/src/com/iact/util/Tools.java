@@ -17,11 +17,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
@@ -39,6 +44,7 @@ import org.apache.commons.logging.LogFactory;
 import com.iact.ErrorCode;
 import com.iact.IActException;
 import com.iact.ResultFile;
+import com.iact.vo.Bizpackageitem;
 import com.jhlabs.image.ScaleFilter;
 
 public class Tools {
@@ -230,7 +236,8 @@ public class Tools {
 	 */
 	private static final boolean SCALE_IMAGE_SIZE;
 
-	private static final String[] IMAGE_SCALES = new String[]{"120*80", "160*120"};
+	private static final String[] IMAGE_SCALES = new String[] { "120*80",
+			"160*120" };
 
 	static {
 		Properties config = new Properties();
@@ -258,7 +265,7 @@ public class Tools {
 		ServletFileUpload fileload = new ServletFileUpload(factory);
 		String fileRes = null;
 		fileload.setSizeMax(MAX_SIZE);
-		
+
 		String imageScaleStr = req.getParameter("imageScale");
 		int imageW = 120;
 		int imageH = 80;
@@ -307,8 +314,8 @@ public class Tools {
 					}
 
 					if (SCALE_IMAGE_SIZE) {
-						boolean succeed = scaleImage(logo, imageW,
-								imageH, fileRes);
+						boolean succeed = scaleImage(logo, imageW, imageH,
+								fileRes);
 						if (!succeed) {
 							return new ResultFile(ErrorCode.ERROR,
 									"缩放不符合规格图片出错");
@@ -421,7 +428,8 @@ public class Tools {
 	 */
 	public static BufferedImage filterImage(BufferedImage src, int distW,
 			int distH) {
-		BufferedImage dist = new BufferedImage(distW, distH, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage dist = new BufferedImage(distW, distH,
+				BufferedImage.TYPE_3BYTE_BGR);
 
 		ScaleFilter scale = new ScaleFilter(distW, distH);
 		scale.filter(src, dist);
@@ -449,7 +457,7 @@ public class Tools {
 	}
 
 	public static boolean scaleImage(byte[] bs, int width, int height,
-			 String fileName) throws IActException {
+			String fileName) throws IActException {
 		BufferedImage src = readImageFromByte(bs);
 		int w = src.getWidth();
 		int h = src.getHeight();
@@ -457,7 +465,7 @@ public class Tools {
 		if (matched) {
 			return true;
 		}
-		//BufferedImage dist = filterImage(src, width, height);
+		// BufferedImage dist = filterImage(src, width, height);
 		BufferedImage dist = filterImageByAVG(src, width, height);
 		writeImageToFile(dist, fileName);
 
@@ -473,6 +481,54 @@ public class Tools {
 			}
 		}
 		return false;
+	}
+
+	public static String getLatest30Days() {
+		Date date = new Date();
+		int year = Integer.parseInt(new SimpleDateFormat("yyyy").format(date));
+		int month = Integer.parseInt(new SimpleDateFormat("MM").format(date)) - 1;
+		int day = Integer.parseInt(new SimpleDateFormat("dd").format(date));
+
+		if (month == 0) {
+			year -= 1;
+			month = 12;
+		} else if (day > 28) {
+			if (month == 2) {
+				if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+					day = 29;
+				} else
+					day = 28;
+			} else if ((month == 4 || month == 6 || month == 9 || month == 11)
+					&& day == 31) {
+				day = 30;
+			}
+		}
+		String y = year + "";
+		String m = "";
+		String d = "";
+		if (month < 10)
+			m = "0" + month;
+		else
+			m = month + "";
+		if (day < 10)
+			d = "0" + day;
+		else
+			d = day + "";
+
+		return y + "-" + m + "-" + d + " 00:00:00";
+	}
+	
+	public static List<Bizpackageitem> sortPackageItems(Set<Bizpackageitem> items) {
+		if (items == null) {
+			return null;
+		}
+		List<Bizpackageitem> list = new ArrayList<Bizpackageitem>();
+		for (Bizpackageitem item: items) {
+			list.add(item);
+		}
+		Collections.sort(list);
+		return list;
+		
 	}
 
 }

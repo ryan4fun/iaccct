@@ -64,6 +64,14 @@ public class PageResultSet {
 		this.pageCount = (int) Math.ceil((double) rowsCount / pageSize);
 	}
 
+	public PageResultSet(Collection data, int curPage, int pageSize, int total) {
+		this.data = data;
+		this.curPage = curPage;
+		this.pageSize = pageSize;
+		this.rowsCount = total;
+		this.pageCount = (int) Math.ceil((double) rowsCount / pageSize);
+	}
+	
 	/**
 	 * getCurPage:返回当前的页数
 	 * 
@@ -160,40 +168,7 @@ public class PageResultSet {
 	 * @return Collection
 	 */
 	public Collection getData() {
-		Collection curData = null;
-		if (data != null) {
-			int start = (curPage - 1) * pageSize;
-			int end = 0;
-			if (start + pageSize > rowsCount)
-				end = rowsCount;
-			else
-				end = start + pageSize;
-			ArrayList arrayCurData = new ArrayList();
-			ArrayList arrayData = null;
-			Vector vectorCurData = new Vector();
-			Vector vectorData = null;
-			boolean isArray = true;
-			if (data instanceof ArrayList) {
-				arrayData = (ArrayList) data;
-				isArray = true;
-			} else if (data instanceof Vector) {
-				vectorData = (Vector) data;
-				isArray = false;
-			}
-			for (int i = start; i < end; i++) {
-				if (isArray) {
-					arrayCurData.add(arrayData.get(i));
-				} else {
-					vectorData.add(vectorData.elementAt(i));
-				}
-			}
-			if (isArray) {
-				curData = (Collection) arrayCurData;
-			} else {
-				curData = (Collection) vectorCurData;
-			}
-		}
-		return curData;
+		return data;
 	}
 
 	/**
