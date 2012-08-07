@@ -38,14 +38,12 @@ public class UserOrderAction extends AbstractAction {
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
 		String stype = (String) reqParams.get("stype");
+		User user = getSessionContainer(req).getUser();
 		if (stype != null && stype.equalsIgnoreCase("deleOrder")) {
-			int ret = deleOrder();
-			if (ret == ErrorCode.OK) {
-				User user = getSessionContainer(req).getUser();
+			int ret = deleOrder(user);
+			if (ret == ErrorCode.OK) {		
 				int orderNum = user.getOrderNum();
-				orderNum--;
 				user.setOrderNum(orderNum);
-
 				return getUserOrders(req, res);
 			}
 		} else if ("viewOrder".equalsIgnoreCase(stype)) {
@@ -55,7 +53,7 @@ public class UserOrderAction extends AbstractAction {
 		return ErrorCode.OK;
 	}
 
-	private int deleOrder() throws IActException {
+	private int deleOrder(User user) throws IActException {
 
 		UserorderDAO DAO = (UserorderDAO) DAOFactory.getDAO(USER_ORDER_DAO);
 
@@ -64,8 +62,14 @@ public class UserOrderAction extends AbstractAction {
 		try {
 			DAO.beginTransaction();
 			Userorder order = DAO.findById(orderid);
-			DAO.delete(order);
+			order.setHandleStatus("删除");
+			DAO.merge(order);
 			DAO.commitTransaction();
+
+			double prePayMoney = user.getPrepayMoney();
+			prePayMoney = prePayMoney - order.getPlanFee();
+			user.setPrepayMoney(prePayMoney);
+			
 		} catch (Throwable t) {
 			DAO.rollbackTransaction();
 			return ErrorCode.FAIL_DELE_ORDER;
@@ -82,10 +86,11 @@ public class UserOrderAction extends AbstractAction {
 
 		String oid = (String) reqParams.get("sid");
 		long orderid = Long.parseLong(oid);
+		DAO.getSession().flush();
 		Userorder order = DAO.findById(orderid);
 		req.setAttribute("order", order);
 
-		String status = (String) reqParams.get("status");
+		String status = (String) reqParams.get("hstatus");
 		if (status.equalsIgnoreCase("新增")) {
 			reqParams.put("page", "vieworder.jsp");
 		} else {
@@ -132,6 +137,8 @@ public class UserOrderAction extends AbstractAction {
 		int start = (curPage - 1) * PAGE_SIZE;
 		int limit = PAGE_SIZE;
 
+		dao.beginTransaction();
+		dao.commitTransaction();
 		List<Userorder> orders = dao.findByHSQL(hsql, start, limit);
 
 		PageResultSet result = new PageResultSet(orders, curPage, PAGE_SIZE);
@@ -160,4 +167,6 @@ public class UserOrderAction extends AbstractAction {
 		List<Userresource> resources = dao.findByHSQL(hsql, 0, 100);
 		req.setAttribute("resources", resources);
 	}
+	
+	
 }

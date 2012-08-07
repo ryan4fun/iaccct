@@ -46,7 +46,6 @@ public class LoginAction extends AbstractAction {
 		String password = (String) reqParams.get("password");
 
 		if (!authCode.equalsIgnoreCase(pAuthCode)) {
-
 			String errMsg = "验证码错误！";
 			getSessionContainer(req).setUser(null);
 			writeErrorMessage(ErrorCode.AUTH_FAILURE, errMsg, res);
@@ -57,64 +56,100 @@ public class LoginAction extends AbstractAction {
 
 			UserDAO userDAO = (UserDAO) DAOFactory.getDAO(DAO);
 			List<User> users = userDAO.findByLogin(loginName);
-			if (users != null) {
-				for (User user : users) {
-					boolean matched = user.getPwd().equals(pMD5);
-					if (matched) {
-						user.setResNum(getUserResourceNum(user.getId()));
-						user.setOrderNum(getUserOrderNum(user.getId()));
+			if (users != null && users.size() > 0) {
+				User user = users.get(0);
+				/**
+				 * Locked user
+				 */
+				if (user.getStatus() == -1) {
+					String errMsg = "您的帐户已被锁定,不能登陆,请联系我们客服！";
+					getSessionContainer(req).setUser(null);
+					writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
+					return ErrorCode.OK;
+				}
+				/**
+				 * Login successfully
+				 */
+				boolean matched = user.getPwd().equals(pMD5);
+				if (matched) {
+					user.setResNum(getUserResourceNum(user.getId()));
+					user.setOrderNum(getUserOrderNum(user.getId()));
+					user.setPrepayMoney(getPreparedPayMoney(user.getId()));
 
-						getSessionContainer(req).setUser(user);
-						user.setLoginIp(req.getRemoteAddr());
-						user.setLoginTime(new Timestamp(System
-								.currentTimeMillis()));
+					getSessionContainer(req).setUser(user);
+					user.setLoginIp(req.getRemoteAddr());
+					user
+							.setLoginTime(new Timestamp(System
+									.currentTimeMillis()));
+					userDAO.merge(user);
+					JSONObject jo = new JSONObject();
+					try {
+						jo.put("errorCode", ErrorCode.OK);
+					} catch (JSONException e) {
+						throw new IActException(e);
+					}
 
-						userDAO.merge(user);
-						JSONObject jo = new JSONObject();
+					SessionContainer sc = getSessionContainer(req);
+					ShoppingCart cart = sc.getCart();
+					if (!cart.isEmptyCart()) {
+						List<Userorder> orders = cart.getOrders();
+						UserorderDAO DAO = (UserorderDAO) DAOFactory
+								.getDAO(USER_ORDER_DAO);
 						try {
-							jo.put("errorCode", ErrorCode.OK);
+							DAO.beginTransaction();
+							// 1. save order
+							int size = orders.size();
+							for (int i = 0; i < size; i++) {
+								Userorder order = orders.get(i);
+								order.setUser(user.getId());
+								DAO.save(orders.get(i));
+							}
+							DAO.commitTransaction();
+							int orderNum = sc.getUser().getOrderNum();
+							sc.getUser().setOrderNum(orderNum + size);
+							cart.empty();
+						} catch (Throwable t) {
+							DAO.rollbackTransaction();
+						} finally {
+							DAO.closeSession();
+						}
+						try {
+							jo.put("forder", "true");
 						} catch (JSONException e) {
 							throw new IActException(e);
 						}
-
-						SessionContainer sc = getSessionContainer(req);
-						ShoppingCart cart = sc.getCart();
-						if (!cart.isEmptyCart()) {
-							List<Userorder> orders = cart.getOrders();
-							UserorderDAO DAO = (UserorderDAO) DAOFactory
-									.getDAO(USER_ORDER_DAO);
-							try {
-								DAO.beginTransaction();
-								// 1. save order
-								int size = orders.size();
-								for (int i = 0; i < size; i++) {
-									Userorder order = orders.get(i);
-									order.setUser(user.getId());	
-									DAO.save(orders.get(i));
-								}
-								DAO.commitTransaction();
-								int orderNum = sc.getUser().getOrderNum();
-								sc.getUser().setOrderNum(orderNum + size);
-								cart.empty();
-							} catch (Throwable t) {
-								DAO.rollbackTransaction();
-							} finally {
-								DAO.closeSession();
-							}
-							try {
-								jo.put("forder", "true");
-							} catch (JSONException e) {
-								throw new IActException(e);
-							}
-						}
-						writeResponse(jo.toString(), res);
-						return 0;
+					}
+					// reset to zero of login fail count
+					getSessionContainer(req).setLoginFailCnt(0);
+					
+					writeResponse(jo.toString(), res);
+					return ErrorCode.OK;
+				} else {
+					getSessionContainer(req).addLoginFailCnt();
+					int loginFailCnt = getSessionContainer(req)
+							.getLoginFailCnt();
+					if (loginFailCnt >= 6) {
+						/**
+						 * Set user lock status
+						 */
+						user.setStatus(-1);
+						userDAO.merge(user);
+						String errMsg = "您输入密码错误已超过最大次数,帐号暂且锁定一天！";
+						getSessionContainer(req).setUser(null);
+						writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
+						return ErrorCode.OK;
+					} else {
+						int chance = 6 - loginFailCnt;
+						String errMsg = "您还有" + chance
+								+ "次机会输入,6次出错,帐号将被锁定一天 !";
+						getSessionContainer(req).setUser(null);
+						writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
+						return ErrorCode.OK;
 					}
 				}
 			}
 		}
-
-		String errMsg = "用户名或密码错误！";
+		String errMsg = "用户名错误！";
 		getSessionContainer(req).setUser(null);
 		writeErrorMessage(ErrorCode.UN_UP, errMsg, res);
 		return 0;
@@ -135,5 +170,19 @@ public class LoginAction extends AbstractAction {
 		String sql = "select count(*) from Userorder as r where r.user = "
 				+ userid;
 		return orderDAO.findCount(sql);
+	}
+
+	private double getPreparedPayMoney(long userid) throws IActException {
+		double ret = 0;
+		UserorderDAO orderDAO = (UserorderDAO) DAOFactory
+				.getDAO(USER_ORDER_DAO);
+
+		String hsql = "from Userorder o where o.user=" + userid
+				+ " and o.handleStatus='新增'";
+		List<Userorder> orders = orderDAO.findByHSQL(hsql, -1, -1);
+		for (Userorder o : orders) {
+			ret += o.getPlanFee();
+		}
+		return ret;
 	}
 }

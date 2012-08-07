@@ -45,7 +45,11 @@ public class ListNewsAction extends AbstractAction {
 		String hsql = "from Platforminformation p order by p.addTime desc";
 		List<Platforminformation> infos = infoDAO.findByHSQL(hsql, start, limit);
 
-		PageResultSet result = new PageResultSet(infos, curPage, PAGE_SIZE);
+		// get total count
+		String tsql = "select count(*) " + hsql;
+		int total = infoDAO.findCount(tsql);
+		PageResultSet result = new PageResultSet(infos, curPage, PAGE_SIZE, total);
+		
 		req.setAttribute("result", result);
 		reqParams.put("page", "listnews.jsp");
 		_forward(req, res);
