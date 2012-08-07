@@ -14,6 +14,9 @@
         <%
         	} else {
         		String realName = sc.getUser().getRealName();
+        		if (realName == null || realName.trim().length() == 0) {
+        			realName = sc.getUser().getLogin();
+        		}
         %>
         <li class="toplilogin">欢迎您，<%=realName%>！&nbsp;&nbsp;<a href="f.do?action=UserInfoAction&type=0" title="进入我的应用中心">我的应用</a></li>     
         <% 		
