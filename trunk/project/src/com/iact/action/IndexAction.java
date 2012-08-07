@@ -41,9 +41,9 @@ public class IndexAction extends AbstractAction {
 	 */
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
-
 		// 1. Fetch Biz area
 		BizareaDAO areaDAO = (BizareaDAO) DAOFactory.getDAO(DAO_AREA);
+		//clear session cache
 		areaDAO.beginTransaction();
 		areaDAO.commitTransaction();
 		List<Bizarea> areas = areaDAO.findAll();

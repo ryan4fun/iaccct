@@ -5,6 +5,7 @@
  */
 package com.iact.action;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,23 +60,24 @@ public class UserOrderAction extends AbstractAction {
 
 		String oid = (String) reqParams.get("sid");
 		long orderid = Long.parseLong(oid);
+		Userorder order = DAO.findById(orderid);
 		try {
 			DAO.beginTransaction();
-			Userorder order = DAO.findById(orderid);
 			order.setHandleStatus("删除");
+			order.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			DAO.merge(order);
 			DAO.commitTransaction();
-
-			double prePayMoney = user.getPrepayMoney();
-			prePayMoney = prePayMoney - order.getPlanFee();
-			user.setPrepayMoney(prePayMoney);
-			
 		} catch (Throwable t) {
 			DAO.rollbackTransaction();
 			return ErrorCode.FAIL_DELE_ORDER;
 		} finally {
 			DAO.closeSession();
 		}
+		
+		double prePayMoney = user.getPrepayMoney();
+		prePayMoney = prePayMoney - order.getPlanFee();
+		user.setPrepayMoney(prePayMoney);
+		
 		return ErrorCode.OK;
 	}
 
@@ -137,6 +139,8 @@ public class UserOrderAction extends AbstractAction {
 		int start = (curPage - 1) * PAGE_SIZE;
 		int limit = PAGE_SIZE;
 
+		//clear cache, because other process handled by IAct background service
+		// will modify orders
 		dao.beginTransaction();
 		dao.commitTransaction();
 		List<Userorder> orders = dao.findByHSQL(hsql, start, limit);

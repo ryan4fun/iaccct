@@ -96,18 +96,21 @@ public class BizPackageAction extends AbstractAction {
 					DAO.beginTransaction();
 					DAO.save(order);
 					DAO.commitTransaction();
-					int orderNum = sc.getUser().getOrderNum();
-					sc.getUser().setOrderNum(orderNum + 1);
-
-					User user = sc.getUser();
-					double prePayMoney = user.getPrepayMoney();
-					prePayMoney = prePayMoney - order.getPlanFee();
-					user.setPrepayMoney(prePayMoney);
 				} catch (Throwable t) {
 					DAO.rollbackTransaction();
+					throw new IActException(t);
 				} finally {
 					DAO.closeSession();
 				}
+
+				int orderNum = sc.getUser().getOrderNum();
+				sc.getUser().setOrderNum(orderNum + 1);
+
+				User user = sc.getUser();
+				double prePayMoney = user.getPrepayMoney();
+				prePayMoney = prePayMoney - order.getPlanFee();
+				user.setPrepayMoney(prePayMoney);
+
 				// 2. forward to user order
 				try {
 					req.getRequestDispatcher(
@@ -125,8 +128,6 @@ public class BizPackageAction extends AbstractAction {
 
 	private int editPackage(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
-		SessionContainer sc = getSessionContainer(req);
-
 		Userorder order = genUserOrder(req);
 
 		// 1. merge order
@@ -135,9 +136,10 @@ public class BizPackageAction extends AbstractAction {
 			try {
 				DAO.beginTransaction();
 				DAO.merge(order);
-				DAO.commitTransaction();		
+				DAO.commitTransaction();
 			} catch (Throwable t) {
 				DAO.rollbackTransaction();
+				throw new IActException(t);
 			} finally {
 				DAO.closeSession();
 			}
@@ -153,7 +155,7 @@ public class BizPackageAction extends AbstractAction {
 				throw new IActException(e);
 			}
 		}
-		
+
 		/**
 		 * Reset prepared money
 		 */
@@ -161,13 +163,13 @@ public class BizPackageAction extends AbstractAction {
 		long userid = user.getId();
 		double preMoney = getPreparedPayMoney(userid);
 		user.setPrepayMoney(preMoney);
-		
+
 		return ErrorCode.OK;
 	}
 
 	private Userorder genUserOrder(HttpServletRequest req) throws IActException {
 		Userorder order = null;
-		String orderid = (String)reqParams.get("oid");
+		String orderid = (String) reqParams.get("oid");
 		if (orderid != null && orderid.trim().length() != 0) {
 			UserorderDAO DAO = (UserorderDAO) DAOFactory.getDAO(USER_ORDER_DAO);
 			order = DAO.findById(Long.parseLong(orderid));
@@ -178,7 +180,7 @@ public class BizPackageAction extends AbstractAction {
 			String transId = Tools.getTransID();
 			order.setTransactionId(transId);
 		}
-		
+
 		long pid = Long.parseLong((String) reqParams.get("pid"));
 		BizpackageDAO packageDAO = (BizpackageDAO) DAOFactory
 				.getDAO(BIZ_PACKAGE_DAO);
@@ -292,7 +294,7 @@ public class BizPackageAction extends AbstractAction {
 		List<Userresource> resources = dao.findByHSQL(hsql, 0, 100);
 		req.setAttribute("resources", resources);
 	}
-	
+
 	private double getPreparedPayMoney(long userid) throws IActException {
 		double ret = 0;
 		UserorderDAO orderDAO = (UserorderDAO) DAOFactory
