@@ -895,3 +895,24 @@ p{
 .money {
 	color:#ff0000;
 }
+
+.meonys {
+ color: #FFF;
+ background-color: #036;
+ margin: 6px;
+ height: 32px;
+ width: 130px;
+ border: 1px solid #CCC;
+ font-weight: bold;
+ text-align: center;
+ line-height: 32px;
+}
+.paytitle {
+ font-size: 18px;
+ line-height: 32px;
+ font-weight: bold;
+ color: #F60;
+ border-bottom-width: 1px;
+ border-bottom-style: solid;
+ border-bottom-color: #CCC;
+}
