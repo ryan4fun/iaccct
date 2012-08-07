@@ -42,6 +42,8 @@ public class SessionContainer implements HttpSessionBindingListener {
 	 */
 	private Locale locale;
 	
+	private int loginFailCnt = 0;
+	
 	/**
 	 * Default Constructor
 	 */
@@ -123,6 +125,18 @@ public class SessionContainer implements HttpSessionBindingListener {
 	public void cleanUp()
 	{
 		setUser(null);
+	}
+
+	public int getLoginFailCnt() {
+		return loginFailCnt;
+	}
+	
+	public void addLoginFailCnt() {
+		loginFailCnt++;
+	}
+	
+	public void setLoginFailCnt(int loginFailCnt) {
+		this.loginFailCnt = loginFailCnt;
 	}
 
 }

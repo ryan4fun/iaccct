@@ -5,6 +5,8 @@
  */
 package com.iact.action;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,12 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.iact.ErrorCode;
 import com.iact.IActException;
+import com.iact.dao.AccountlogDAO;
 import com.iact.dao.DAOFactory;
 import com.iact.dao.ExpendrecordDAO;
 import com.iact.dao.PayrecordDAO;
 import com.iact.dao.UserorderDAO;
 import com.iact.dao.UserresourceDAO;
 import com.iact.util.PageResultSet;
+import com.iact.util.Tools;
+import com.iact.vo.Accountlog;
 import com.iact.vo.Expendrecord;
 import com.iact.vo.Payrecord;
 import com.iact.vo.User;
@@ -41,6 +46,8 @@ public class UserInfoAction extends AbstractAction {
 	private static final String PAY_RECORD_DAO = "PayrecordDAO";
 
 	private static final String EXPEND_RECORD_DAO = "ExpendrecordDAO";
+	
+	private static final String ACCOUNT_LOG_DAO = "AccountlogDAO";
 
 	/*
 	 * (non-Javadoc)
@@ -78,27 +85,41 @@ public class UserInfoAction extends AbstractAction {
 		wherePortion.append(" where o.user=" + userid);
 		if (sdate != null && sdate.trim().length() != 0) {
 			sdate = sdate + " 00:00:00";
-			wherePortion.append(" and o.createTime >= '" + sdate + "'");
+		}else {
+			sdate = Tools.getLatest30Days();
 		}
-
+		wherePortion.append(" and o.createTime >= '" + sdate + "'");
 		String edate = (String) reqParams.get("edate");
 		if (edate != null && edate.trim().length() != 0) {
-			edate = edate + " 23:59:59";
-			wherePortion.append(" and o.createTime <= '" + edate + "'");
+			edate = edate + " 23:59:59";	
+		}else {
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			edate = sf.format(new Date()) + " 23:59:59";
 		}
-
+		wherePortion.append(" and o.createTime <= '" + edate + "'");
+		
+		String status = (String)reqParams.get("status");
+		if (status != null && status.trim().length() > 0) {
+			wherePortion.append(" and o.handleStatus = '" + status + "'");
+		}
+		
 		String hsql = "from Userorder o" + wherePortion.toString()
 				+ " order by o.createTime desc";
 
-		String pStr = (String) reqParams.get("pn");
+		String pStr = (String) reqParams.get("cur_page");
 		int curPage = pStr == null ? 1 : Integer.parseInt(pStr);
 
 		int start = (curPage - 1) * PAGE_SIZE;
 		int limit = PAGE_SIZE;
 
 		List<Userorder> orders = dao.findByHSQL(hsql, start, limit);
-
-		PageResultSet result = new PageResultSet(orders, curPage, PAGE_SIZE);
+		
+		// get total count
+		String tsql = "select count(*) " + hsql;
+		int total = dao.findCount(tsql);
+		
+		PageResultSet result = new PageResultSet(orders, curPage, PAGE_SIZE, total);
+		
 		req.setAttribute("result", result);
 		reqParams.put("page", "userorders.jsp");
 		_forward(req, res);
@@ -119,15 +140,19 @@ public class UserInfoAction extends AbstractAction {
 		wherePortion.append(" where o.user=" + userid);
 		if (sdate != null) {
 			sdate = sdate + " 00:00:00";
-			wherePortion.append(" and o.addTime >= '" + sdate + "'");
+		} else {
+			sdate = Tools.getLatest30Days();
 		}
-
+		wherePortion.append(" and o.addTime >= '" + sdate + "'");
+		
 		String edate = (String) reqParams.get("edate");
 		if (edate != null) {
 			edate = edate + " 23:59:59";
-			wherePortion.append(" and o.addTime <= '" + edate + "'");
+		} else {
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			edate = sf.format(new Date()) + " 23:59:59";
 		}
-
+		wherePortion.append(" and o.addTime <= '" + edate + "'");
 		String hsql = "from Payrecord o" + wherePortion.toString()
 				+ " order by o.addTime desc";
 
@@ -138,8 +163,10 @@ public class UserInfoAction extends AbstractAction {
 		int limit = PAGE_SIZE;
 
 		List<Payrecord> records = dao.findByHSQL(hsql, start, limit);
-
-		PageResultSet result = new PageResultSet(records, curPage, PAGE_SIZE);
+		// get total count
+		String tsql = "select count(*) " + hsql;
+		int total = dao.findCount(tsql);
+		PageResultSet result = new PageResultSet(records, curPage, PAGE_SIZE, total);
 		req.setAttribute("result", result);
 		reqParams.put("page", "userpayrecord.jsp");
 		_forward(req, res);
@@ -161,15 +188,20 @@ public class UserInfoAction extends AbstractAction {
 		wherePortion.append(" where o.user=" + userid);
 		if (sdate != null) {
 			sdate = sdate + " 00:00:00";
-			wherePortion.append(" and o.finalpaidTime >= '" + sdate + "'");
+			
+		} else {
+			sdate = Tools.getLatest30Days();
 		}
-
+		wherePortion.append(" and o.finalpaidTime >= '" + sdate + "'");
+		
 		String edate = (String) reqParams.get("edate");
 		if (edate != null) {
-			edate = edate + " 23:59:59";
-			wherePortion.append(" and o.finalpaidTime <= '" + edate + "'");
+			edate = edate + " 23:59:59";	
+		}else {
+			sdate = Tools.getLatest30Days();
 		}
-
+		
+		wherePortion.append(" and o.finalpaidTime <= '" + edate + "'");
 		String hsql = "from Expendrecord o" + wherePortion.toString()
 				+ " order by o.finalpaidTime desc";
 
@@ -180,8 +212,11 @@ public class UserInfoAction extends AbstractAction {
 		int limit = PAGE_SIZE;
 
 		List<Expendrecord> records = dao.findByHSQL(hsql, start, limit);
-
-		PageResultSet result = new PageResultSet(records, curPage, PAGE_SIZE);
+		// get total count
+		String tsql = "select count(*) " + hsql;
+		int total = dao.findCount(tsql);
+		PageResultSet result = new PageResultSet(records, curPage, PAGE_SIZE, total);
+		
 		req.setAttribute("result", result);
 		reqParams.put("page", "userexpendrecord.jsp");
 		_forward(req, res);
@@ -192,9 +227,41 @@ public class UserInfoAction extends AbstractAction {
 
 	private int getUserBasicInfo(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
-		reqParams.put("page", "userbasic.jsp");
+		AccountlogDAO DAO = (AccountlogDAO)DAOFactory.getDAO(ACCOUNT_LOG_DAO);
+		String sdate = Tools.getLatest30Days();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		String edate = sf.format(new Date()) + " 23:59:59";
+		
+		String pStr = (String) reqParams.get("pn");
+		int curPage = pStr == null ? 1 : Integer.parseInt(pStr);
+		int start = (curPage - 1) * PAGE_SIZE;
+		int limit = PAGE_SIZE;
+		
+		User user = super.getSessionContainer(req).getUser();
+
+		long userid = user.getId();
+		StringBuilder wherePortion = new StringBuilder();
+
+		wherePortion.append(" where o.user=" + userid);
+		wherePortion.append(" and o.addTime >= '" + sdate + "'");
+		wherePortion.append(" and o.addTime <= '" + edate + "'");
+		
+		String hsql = "from Accountlog o" + wherePortion.toString()
+				+ " order by o.addTime desc";
+		List<Accountlog> logs = DAO.findByHSQL(hsql, start, limit);
+		
+		// get total count
+		String tsql = "select count(*) " + hsql;
+		int total = DAO.findCount(tsql);
+		PageResultSet result = new PageResultSet(logs, curPage, PAGE_SIZE, total);
+		
+		req.setAttribute("logs", result);
+
+		reqParams.put("page", "userbasic.jsp");	
 		_forward(req, res);
+		
 		return ErrorCode.OK;
+	
 	}
 
 	private int getUserResouces(HttpServletRequest req, HttpServletResponse res)

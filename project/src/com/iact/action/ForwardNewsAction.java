@@ -37,11 +37,13 @@ public class ForwardNewsAction extends AbstractAction {
 		PlatforminformationDAO infoDAO
 				= (PlatforminformationDAO)DAOFactory.getDAO(DAO_PLATFORM);
 		
-		List<Platforminformation> news = infoDAO.findByBizType(1);
+
+		// 2. Fetch plaform information's news
+		List<Platforminformation> news = getNews();
 		req.setAttribute("news", news);
-		
-		// 3. Fetch plafrom infromation's AD
-		List<Platforminformation> ads = infoDAO.findByBizType(2);
+
+		// 3. Fetch platform infromation's AD
+		List<Platforminformation> ads = getAds();
 		req.setAttribute("ads", ads);
 		
 		try {
@@ -53,6 +55,26 @@ public class ForwardNewsAction extends AbstractAction {
 		}
 		
 		return ErrorCode.OK;
+	}
+	private List<Platforminformation> getNews() throws IActException {
+		PlatforminformationDAO infoDAO = (PlatforminformationDAO) DAOFactory
+				.getDAO(DAO_PLATFORM);
+		String hsql = "from Platforminformation p where p.bizType = 20 order by p.addTime desc";
+		int first = 0;
+		int limit = 5;
+		List<Platforminformation> infos = infoDAO.findByHSQL(hsql, first, limit);
+		return infos;
+	}
+	
+	private List<Platforminformation> getAds() throws IActException {
+		PlatforminformationDAO infoDAO = (PlatforminformationDAO) DAOFactory
+				.getDAO(DAO_PLATFORM);
+		String hsql = "from Platforminformation p where p.bizType = 10 order by p.addTime desc";
+		int first = 0;
+		int limit = 5;
+		List<Platforminformation> infos = infoDAO.findByHSQL(hsql, first, limit);
+		
+		return infos;
 	}
 
 }

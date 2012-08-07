@@ -57,12 +57,18 @@ public class RegisterAction extends AbstractAction {
 		} else if (intType == 2) {
 			User user = nextStep();
 			req.getSession().setAttribute("tempUser", user);
-			List<Area> areas = getAreas();
-			req.setAttribute("areas", areas);
-			long parent = user.getProvince();
-			
-			List<Area> subAreas = getCascadingAreas(parent);
-			req.setAttribute("subAreas",subAreas);
+			List<Area> provinces = getAreas();
+			req.setAttribute("provinces", provinces);
+			Long province = user.getProvince();
+			if (province != null) {	
+				List<Area> cities = getCascadingAreas(province);
+				req.setAttribute("cities", cities);
+				Long city = user.getCity();
+				if (city != null) {
+					List<Area> areas = getCascadingAreas(city);
+					req.setAttribute("areas", areas);			
+				}
+			}
 			_forward(req, res);
 		} else if (intType == 3) {
 			User user = (User) req.getSession().getAttribute("tempUser");
@@ -146,10 +152,7 @@ public class RegisterAction extends AbstractAction {
 
 		String pwd = (String) reqParams.get("pwd");
 		user.setPwd(DigestUtils.md5Hex(pwd));
-		String area = (String) reqParams.get("area");
-		if (area != null && area.trim().length()!= 0) {
-			user.setArea(Long.parseLong(area));
-		}
+	
 		user.setCreateDate(new Timestamp(System.currentTimeMillis()));
 		
 		int createMode = Integer.parseInt((String) reqParams
@@ -169,13 +172,26 @@ public class RegisterAction extends AbstractAction {
 		if (province != null && province.trim().length()!= 0) {
 			user.setProvince(Long.parseLong(province));
 		}
+		String city = (String) reqParams.get("city");
+		if (city != null && city.trim().length()!= 0) {
+			user.setCity(Long.parseLong(city));
+		}
+		
+		String area = (String) reqParams.get("area");
+		if (area != null && area.trim().length()!= 0) {
+			user.setArea(Long.parseLong(area));
+		}
 		
 		return user;
 	}
 
 	private boolean save(User user) throws IActException {
-
-		user.setArea(Long.parseLong((String) reqParams.get("area")));
+		
+		String sarea = (String) reqParams.get("area");
+		if (sarea != null && sarea.trim().length() > 0) {
+			user.setArea(Long.parseLong(sarea));		
+		}
+		
 		user.setEmail((String) reqParams.get("email"));
 		user.setRealName((String) reqParams.get("realName"));
 		user.setSex((String) reqParams.get("sex"));

@@ -45,10 +45,12 @@ public class ListPackagesAction extends AbstractAction {
 		int limit = PAGE_SIZE;
 
 		String bizAreaStr = (String) reqParams.get("bizarea");
-
+		
+		packageDAO.getSession().flush();
 		List<Bizpackage> packages = null;
 		
 		String packTitle = null;
+		int total = 0;
 		if (bizAreaStr == null) {
 			/**
 			 * IP location for biz area or find all packages, if using IP
@@ -58,9 +60,14 @@ public class ListPackagesAction extends AbstractAction {
 			String hsql = "from Bizpackage";
 			packages = packageDAO.findByHSQL(hsql, start, limit);
 			packTitle = "所有开通地区节目套餐";
+			
+			// get total count
+			String tsql = "select count(*) " + hsql;
+			total = packageDAO.findCount(tsql);
+			
 		} else {
 			long bizArea = Long.parseLong(bizAreaStr);
-			String hsql = "from Bizpackage o where o.bizArea = " + bizArea;
+			String hsql = "from Bizpackage o where o.bizArea = " + bizArea + " order by o.sequenceId";
 			packages = packageDAO.findByHSQL(hsql, start, limit);
 			
 			BizareaDAO areaDAO  = (BizareaDAO)DAOFactory.getDAO(BIZ_AREA_DAO);
@@ -68,9 +75,14 @@ public class ListPackagesAction extends AbstractAction {
 			
 			packTitle = area.getName() + "节目套餐";
 		
+			// get total count
+			String tsql = "select count(*) " + hsql;
+			total = packageDAO.findCount(tsql);
 		}
 		
-		PageResultSet result = new PageResultSet(packages, curPage, PAGE_SIZE);
+		
+		
+		PageResultSet result = new PageResultSet(packages, curPage, PAGE_SIZE, total);
 		req.setAttribute("result", result);
 		req.setAttribute("packTitle", packTitle);
 		reqParams.put("page", "listpackages.jsp");
