@@ -47,6 +47,10 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 	});
 	
 	function deleOrder(oid, status) {
+		var con = confirm("确定删除该记录?");
+		if (!con) {
+			return;
+		}
 		if (status != '新增') {
 			alert(status+"订单不能删除!");
 		} else {
@@ -56,10 +60,10 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			} 
 		}
 	}
-	function viewOrder(oid, status) {	
+	function viewOrder(oid, st) {	
 		if (oid != null) {
 			$("#vid").val(oid);
-			$("#status").val(status);
+			$("#hstatus").val(st);
 			$("#viewForm").submit();
 		} 
 	}
@@ -89,7 +93,7 @@ ul li{
         <li><img src="images/my_title2.png" width="160" height="30" /></li>
         <li>&nbsp;</li>
         <li class="search">
-        <form action="user.do" id="searchForm">
+        <form action="user.do" id="searchForm" method="post">
         <input type="hidden" value="UserInfoAction" name="action" />
          <input type="hidden" value="1" name="type" />
         <ul>
@@ -97,6 +101,17 @@ ul li{
         <li><input type="text" class="searchinput" id="sdate" name="sdate" readonly="readonly"/></li>
         <li>&nbsp;</li>
         <li><input type="text" class="searchinput" id="edate" name="edate" readonly="readonly"/></li>
+        <li>&nbsp;</li>
+        <li>
+        <select id="status" name="status" class="searchselect">
+          <option value="">--请选择状态</option>
+       	  <option value="新增">新增</option>
+          <option value="计划">计划</option>
+          <option value="播出">播出</option>
+          <option value="完成">完成</option>
+          <option value="删除">删除</option>
+        </select>   
+        </li>
         <li><a href="javascript:void(0);" onclick="searchForm.submit();">
         <img src="images/search_button.png" width="120" height="33" onmouseover="this.src='images/search_button-2.png';" onmouseout="this.src='images/search_button.png';"/></a></li>
         </ul>
@@ -119,6 +134,11 @@ ul li{
         	for (int i = 0, size = (userOrders 
         						== null ? 0 :userOrders.size()); i < size; i++ ) {
         		Userorder u = userOrders.get(i);
+        		String marked = "";
+        		if (u.getHandleStatus().equalsIgnoreCase("删除")) {
+        			marked="color:#f60;";
+        		}
+        		
         %>
 	    	<li class="byinfolists">
 	        <ul >
@@ -126,7 +146,7 @@ ul li{
 	        <li class="byinfolistt"><%=u.getBizPackage().getName() %></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPlanFee()%></li>
 	        <li class="byinfolistt" style="width:50px;"><%=u.getPackageNumber() %></li>
-	        <li class="byinfolistt" style="width:60px;"><%=u.getHandleStatus()%></li>
+	        <li class="byinfolistt" style="width:60px;<%=marked%>" ><%=u.getHandleStatus()%></li>
 	        <li class="byinfolistt"><%=sf.format(u.getCreateTime())%></li>
 	        <li class="byinfolistt" style="width:50px;"><a href="javascript:void(0);" onclick="deleOrder('<%=u.getId() %>', '<%=u.getHandleStatus() %>');">删除</a></li>
 	        </ul> 
@@ -155,7 +175,7 @@ ul li{
 	<input type="hidden" name="action" value="UserOrderAction"/>
 	<input type="hidden" name="stype" value="viewOrder"/>
 	<input type="hidden" name="sid" id="vid"/>
-	<input type="hidden" name="status" id="status"/>
+	<input type="hidden" name="hstatus" id="hstatus"/>
 </form>
 
 </body>

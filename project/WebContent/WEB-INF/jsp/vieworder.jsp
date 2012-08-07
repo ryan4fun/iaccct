@@ -5,7 +5,8 @@
 								 com.iact.action.SessionContainer,
 								 com.iact.vo.Userorder,
 								 java.text.SimpleDateFormat,
-								 com.iact.util.PageResultSet" pageEncoding="UTF-8"%>
+								 com.iact.util.PageResultSet,
+								 com.iact.util.Tools" pageEncoding="UTF-8"%>
 <%@page import="com.iact.vo.Userresource"%>
 <%
 String path = request.getContextPath();
@@ -127,38 +128,6 @@ $(function() {
 		nextText:''
 	});
  });
-
-function login() {
- 	var un = $("#loginName").val();
- 	var pd = $("#password").val();
- 	var at = $("#authCode").val();
- 	var params = "action=LoginAction&ajax=true"
- 			+"&loginName="+un
- 			+"&password="+pd
- 			+"&authCode="+at
- 			+"&ts="+ new Date();
- 	$.ajax({
- 		type:"post",
- 		url:"login.do",
- 		beforeSend:function(){
- 			$("#errpanel")[0].innerText = "ddddd";
- 		},
- 		dataType:"json",
- 		async:true,
- 		data:params,
- 		success:function(data) {
- 			if (data.errorCode == 0) {
- 				window.location.href = basePath +"index.do?action=IndexAction";		
- 			} else {
- 				$("#errpanel")[0].innerHTML = data.errorMsg;
- 			}
- 		}
- 	});
- }
-function refreshAuth(basePath) {
-	$('#authImg')[0].src=basePath+"/auth?ts=" + new Date();
-}
-
 function fUserRes() {
 	window.location.href="user.do?action=UserInfoAction&type=2";
 }
@@ -209,8 +178,9 @@ function caltotalprice(obj) {
 <body>
 <form id="orderform" action="order.do" method="post">
 <input type="hidden" name="action" value="BizPackageAction" />
+<input type="hidden" name="oid" value="<%=order.getId()%>" />
 <input type="hidden" name="pid" value="<%=p.getId()%>" />
-<input type="hidden" name="ptype" value="order" />
+<input type="hidden" name="ptype" value="edit" />
 <input type="hidden" name="pinfo" value="<%=p.getDescription()%>" />
 <input type="hidden" name="price" value="<%=p.getPrice()%>" />
 
@@ -228,7 +198,7 @@ function caltotalprice(obj) {
         <div>
         <ul>
         <li class="product_info_titles"><%=p.getName() %></li>
-        <li class="myinfo_title">开通地区：</li><li><%=p.getBizArea() %></li>   
+        <li class="myinfo_title">开通地区：</li><li><%=p.getBizArea().getName() %></li>   
         <li class="myinfo_title">开始时间：</li><li><%=p.getBeginTime() %></li>   
         <li class="myinfo_title">结束时间：</li><li><%=p.getEndTime()%></li>   
         <li class="myinfo_title">套餐单价：</li><li><%=p.getPrice() %>￥</li>
@@ -241,16 +211,17 @@ function caltotalprice(obj) {
 		        	<tr class="product_info">
 		        	<% 
 		        		Set<Bizpackageitem> items = p.getItems();
-        	    		for (Bizpackageitem item: items) {
+		        		List<Bizpackageitem> list = Tools.sortPackageItems(items);
+        	    		for (Bizpackageitem item: list) {
 					%>
-					<td class="product_info_title">昆明1台</td>
+					<td class="product_info_title"><%=item.getBizProgram().getName() %></td>
         	    	<%
         	    		}
         	    	%>
         	    	</tr> 
         	    	<tr class="product_info">
         	    	<% 
-        	    		for (Bizpackageitem item: items) {
+        	    		for (Bizpackageitem item: list) {
 					%>
 					 <td class="product_info_title" style="background-color:#fff;"><%= item.getName()%></td>
         	    	<%
@@ -271,8 +242,13 @@ function caltotalprice(obj) {
         		<% 
         			for (int i = 0; i < rsize; i++) {
         				Userresource r = resources.get(i);
+        				String selected = "";
+        				String orderSubtitle = order.getSubtitle();
+        				if (r.getSubtitle() != null && r.getSubtitle().equalsIgnoreCase(orderSubtitle)) {
+        					selected = "selected";
+        				}
         		%>
-        			<option value="<%=r.getId()%>"> <%=r.getSubtitle() %> </option>
+        			<option value="<%=r.getId()%>" <%=selected%> > <%=r.getSubtitle() %> </option>
         		<%		
         			}
         		%>
@@ -281,7 +257,8 @@ function caltotalprice(obj) {
        <li class="myinfo_title">套餐数量：</li><li><input name="pnum" id="pnum" type="text" value="<%=order.getPackageNumber() %>" class="pinput" onblur="caltotalprice(this);"/>
        <span class='failmsg' id='pnerr'></span></li>
        <li class="myinfo_title">价格合计：</li><li style="color:#ff0000;" id="totalprice"><%=p.getPrice() %>￥</li>
-       <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();"><img src="images/by_button.png" width="86" height="33" /></a></li>
+        <li class="myinfo_title">&nbsp;</li><li><a href="javascript:void(0);" onclick="submitOrder();">
+       <img src="images/by_button.png" width="86" height="33" onmouseover="this.src='images/by_button-2.png';" onmouseout="this.src='images/by_button.png';"/></a></li>
        </ul>        
        </div>
     </div>
