@@ -1,5 +1,6 @@
 package com.iact.vo;
 
+
 /**
  * AbstractBizpackageitem entity provides the base persistence definition of the
  * Bizpackageitem entity. @author MyEclipse Persistence Tools
@@ -10,8 +11,8 @@ public abstract class AbstractBizpackageitem implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private Long bizPackage;
-	private Long bizProgram;
+	private Bizpackage bizPackage;
+	private Bizprogram bizProgram;
 	private String sequenceId;
 	private String name;
 	private String description;
@@ -23,14 +24,14 @@ public abstract class AbstractBizpackageitem implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public AbstractBizpackageitem(Long id, Long bizPackage, Long bizProgram) {
+	public AbstractBizpackageitem(Long id, Bizpackage bizPackage, Bizprogram bizProgram) {
 		this.id = id;
 		this.bizPackage = bizPackage;
 		this.bizProgram = bizProgram;
 	}
 
 	/** full constructor */
-	public AbstractBizpackageitem(Long id, Long bizPackage, Long bizProgram,
+	public AbstractBizpackageitem(Long id, Bizpackage bizPackage, Bizprogram bizProgram,
 			String sequenceId, String name, String description) {
 		this.id = id;
 		this.bizPackage = bizPackage;
@@ -50,19 +51,19 @@ public abstract class AbstractBizpackageitem implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Long getBizPackage() {
+	public Bizpackage getBizPackage() {
 		return this.bizPackage;
 	}
 
-	public void setBizPackage(Long bizPackage) {
+	public void setBizPackage(Bizpackage bizPackage) {
 		this.bizPackage = bizPackage;
 	}
 
-	public Long getBizProgram() {
+	public Bizprogram getBizProgram() {
 		return this.bizProgram;
 	}
 
-	public void setBizProgram(Long bizProgram) {
+	public void setBizProgram(Bizprogram bizProgram) {
 		this.bizProgram = bizProgram;
 	}
 

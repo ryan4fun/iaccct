@@ -13,7 +13,7 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 	// Fields
 
 	private Long id;
-	private Long bizArea;
+	private Bizarea bizArea;
 	private String bizCode;
 	private String sequenceId;
 	private String name;
@@ -38,7 +38,7 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public AbstractBizpackage(Long id, Long bizArea, String sequenceId,
+	public AbstractBizpackage(Long id, Bizarea bizArea, String sequenceId,
 			String name, String spotType, Integer subtitleSpec,
 			Integer logoSpec, Integer playNumber, Double price, Integer status) {
 		this.id = id;
@@ -54,7 +54,7 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AbstractBizpackage(Long id, Long bizArea, String bizCode,
+	public AbstractBizpackage(Long id, Bizarea bizArea, String bizCode,
 			String sequenceId, String name, String description,
 			String beginTime, String endTime, String spotType,
 			Integer subtitleSpec, String subtitleInfo, Integer logoSpec,
@@ -89,11 +89,11 @@ public abstract class AbstractBizpackage implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Long getBizArea() {
+	public Bizarea getBizArea() {
 		return this.bizArea;
 	}
 
-	public void setBizArea(Long bizArea) {
+	public void setBizArea(Bizarea bizArea) {
 		this.bizArea = bizArea;
 	}
 

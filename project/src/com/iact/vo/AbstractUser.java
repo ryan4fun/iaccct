@@ -12,9 +12,9 @@ import java.util.Set;
 public abstract class AbstractUser implements java.io.Serializable {
 
 	// Fields
-
 	private Long id;
 	private Long area;
+	private Long city;
 	private Long province;
 	private String login;
 	private String pwd;
@@ -41,6 +41,8 @@ public abstract class AbstractUser implements java.io.Serializable {
 	private int resNum = 0;
 	
 	private int orderNum = 0;
+	
+	private double prepayMoney;
 	
 	// Constructors
 
@@ -306,6 +308,21 @@ public abstract class AbstractUser implements java.io.Serializable {
 	public void setProvince(Long province) {
 		this.province = province;
 	}
-	
+
+	public Long getCity() {
+		return city;
+	}
+
+	public void setCity(Long city) {
+		this.city = city;
+	}
+
+	public double getPrepayMoney() {
+		return prepayMoney;
+	}
+
+	public void setPrepayMoney(double prepayMoney) {
+		this.prepayMoney = prepayMoney;
+	}
 
 }
