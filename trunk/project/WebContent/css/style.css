@@ -1,6 +1,6 @@
 .container{
 	width:900px;
-	height:650px;
+	height:700px;
 	display: inline-block;
 	margin-top: 20px;
 	margin-right: auto;
@@ -54,9 +54,10 @@
 .content{
 	background:#F9F9F9;
 	width:900px;
-	height:610px;
+	height:690px;
 	box-shadow:2px 2px 2px rgba(0,0,0,0.1);
 	border: 1px solid #ddd;
+	text-align:center;
 }
 
 .content ul{
@@ -66,7 +67,7 @@
 	margin-top: 20px;
 	margin-right: 0px;
 	margin-bottom: 20px;
-	margin-left: 0px;
+	margin-left: 150px;
 }
 
 .content li{
