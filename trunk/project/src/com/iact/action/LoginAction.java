@@ -55,7 +55,12 @@ public class LoginAction extends AbstractAction {
 			String pMD5 = DigestUtils.md5Hex(password);
 
 			UserDAO userDAO = (UserDAO) DAOFactory.getDAO(DAO);
+			
 			List<User> users = userDAO.findByLogin(loginName);
+			if (users == null || users.size() == 0) {
+				users = userDAO.findByPhoneNumber(loginName);
+			}
+			
 			if (users != null && users.size() > 0) {
 				User user = users.get(0);
 				/**
@@ -87,38 +92,17 @@ public class LoginAction extends AbstractAction {
 						jo.put("errorCode", ErrorCode.OK);
 					} catch (JSONException e) {
 						throw new IActException(e);
-					}
-
-					SessionContainer sc = getSessionContainer(req);
-					ShoppingCart cart = sc.getCart();
-					if (!cart.isEmptyCart()) {
-						List<Userorder> orders = cart.getOrders();
-						UserorderDAO DAO = (UserorderDAO) DAOFactory
-								.getDAO(USER_ORDER_DAO);
-						try {
-							DAO.beginTransaction();
-							// 1. save order
-							int size = orders.size();
-							for (int i = 0; i < size; i++) {
-								Userorder order = orders.get(i);
-								order.setUser(user.getId());
-								DAO.save(orders.get(i));
-							}
-							DAO.commitTransaction();
-							int orderNum = sc.getUser().getOrderNum();
-							sc.getUser().setOrderNum(orderNum + size);
-							cart.empty();
-						} catch (Throwable t) {
-							DAO.rollbackTransaction();
-						} finally {
-							DAO.closeSession();
-						}
+					}					
+					String pid = (String)reqParams.get("pid");
+					if (pid != null) {
 						try {
 							jo.put("forder", "true");
+							jo.put("pid", pid);
 						} catch (JSONException e) {
 							throw new IActException(e);
 						}
 					}
+
 					// reset to zero of login fail count
 					getSessionContainer(req).setLoginFailCnt(0);
 					

@@ -43,8 +43,6 @@ public class UserOrderAction extends AbstractAction {
 		if (stype != null && stype.equalsIgnoreCase("deleOrder")) {
 			int ret = deleOrder(user);
 			if (ret == ErrorCode.OK) {		
-				int orderNum = user.getOrderNum();
-				user.setOrderNum(orderNum);
 				return getUserOrders(req, res);
 			}
 		} else if ("viewOrder".equalsIgnoreCase(stype)) {
