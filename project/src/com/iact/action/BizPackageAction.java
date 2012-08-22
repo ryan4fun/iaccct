@@ -59,8 +59,6 @@ public class BizPackageAction extends AbstractAction {
 			if (pack != null) {
 				req.setAttribute("bizpackage", pack);
 			}
-			getUserResouces(req, res);
-
 			reqParams.put("page", "packageitems.jsp");
 			_forward(req, res);
 			return ErrorCode.OK;
@@ -69,10 +67,31 @@ public class BizPackageAction extends AbstractAction {
 			return orderPackage(req, res);
 		} else if (ptype.equalsIgnoreCase("edit")) {
 			return editPackage(req, res);
+		} else if (ptype.equalsIgnoreCase("forder")) {
+			return forwardorder(req, res);
 		}
-
 		return ErrorCode.OK;
 
+	}
+	
+	private int forwardorder(HttpServletRequest req, HttpServletResponse res)
+		throws IActException {
+		
+		long pid = Long.parseLong((String)reqParams.get("pid"));
+		
+		SessionContainer sc = getSessionContainer(req);
+		if (sc == null || sc.getUser() == null) {
+			reqParams.put("page", "login.jsp?pid=" + pid);
+		} else {
+			BizpackageDAO packageDAO = (BizpackageDAO) DAOFactory
+				.getDAO(BIZ_PACKAGE_DAO);
+			Bizpackage pack = packageDAO.findById(pid);
+			req.setAttribute("bizpackage", pack);
+			getUserResouces(req, res);
+			reqParams.put("page", "neworder.jsp");
+		}
+		_forward(req, res);
+		return ErrorCode.OK;		
 	}
 
 	private int orderPackage(HttpServletRequest req, HttpServletResponse res)
@@ -103,14 +122,17 @@ public class BizPackageAction extends AbstractAction {
 					DAO.closeSession();
 				}
 
-				int orderNum = sc.getUser().getOrderNum();
-				sc.getUser().setOrderNum(orderNum + 1);
-
+				/**
+				 * Reset user value
+				 */
 				User user = sc.getUser();
-				double prePayMoney = user.getPrepayMoney();
-				prePayMoney = prePayMoney - order.getPlanFee();
-				user.setPrepayMoney(prePayMoney);
+				
+				long userid = user.getId();
+				int orderNum = getUserOrderNum(userid);
+				sc.getUser().setOrderNum(orderNum);
 
+				double preMoney = getPreparedPayMoney(userid);
+				user.setPrepayMoney(preMoney);
 				// 2. forward to user order
 				try {
 					req.getRequestDispatcher(
@@ -307,5 +329,13 @@ public class BizPackageAction extends AbstractAction {
 			ret += o.getPlanFee();
 		}
 		return ret;
+	}
+	
+	private int getUserOrderNum(long userid) throws IActException {
+		UserorderDAO orderDAO = (UserorderDAO) DAOFactory
+				.getDAO(USER_ORDER_DAO);
+		String sql = "select count(*) from Userorder as r where r.user = "
+				+ userid;
+		return orderDAO.findCount(sql);
 	}
 }

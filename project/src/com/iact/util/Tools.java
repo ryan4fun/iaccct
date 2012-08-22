@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -264,7 +265,7 @@ public class Tools {
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload fileload = new ServletFileUpload(factory);
 		String fileRes = null;
-		fileload.setSizeMax(MAX_SIZE);
+		//fileload.setSizeMax(MAX_SIZE);
 
 		String imageScaleStr = req.getParameter("imageScale");
 		int imageW = 120;
@@ -379,7 +380,7 @@ public class Tools {
 		ImageOutputStream ios;
 		ImageWriter imageWriter = null;
 
-		ext = fileName.substring(fileName.indexOf('.') + 1);
+		ext = fileName.substring(fileName.lastIndexOf('.') + 1);
 		imageWriters = ImageIO.getImageWritersBySuffix(ext);
 
 		try {
@@ -528,6 +529,46 @@ public class Tools {
 		}
 		Collections.sort(list);
 		return list;
+		
+	}
+	
+	public static String getMobileAuthCode() {
+		Random r = new Random();
+		int base = r.nextInt(10000);		
+		
+		int res = 0;
+		if (base < 10) {
+			res = base * 1000;
+		} else if (base < 100) {
+			res = base * 100;
+		} else if (base < 1000) {
+			res = base * 10;
+		} else {
+			res = base;
+		}
+		return Integer.toString(res);
+		
+	}
+	
+	public static String getRandomPWD() {
+		Random r = new Random();
+		int base = r.nextInt(1000000);		
+		
+		int res = 0;
+		if (base < 10) {
+			res = base * 100000;
+		} else if (base < 100) {
+			res = base * 10000;
+		} else if (base < 1000) {
+			res = base * 1000;
+		} else if (base < 10000) {
+			res = base * 100;
+		} else if (base < 100000) {
+			res = base * 10;
+		} else {
+			res = base;
+		}
+		return Integer.toString(res);
 		
 	}
 

@@ -17,11 +17,14 @@ import com.iact.ErrorCode;
 import com.iact.IActException;
 import com.iact.dao.AreaDAO;
 import com.iact.dao.DAOFactory;
+import com.iact.dao.SmssendDAO;
 import com.iact.dao.UserDAO;
+import com.iact.util.Tools;
 import com.iact.util.json.JSONArray;
 import com.iact.util.json.JSONException;
 import com.iact.util.json.JSONObject;
 import com.iact.vo.Area;
+import com.iact.vo.Smssend;
 import com.iact.vo.User;
 
 /**
@@ -33,6 +36,8 @@ public class RegisterAction extends AbstractAction {
 	private static final String USER_DAO = "UserDAO";
 
 	private static final String AREA_DAO = "AreaDAO";
+	
+	private static final String SMS_SEND_DAO = "SmssendDAO";
 
 	protected int _doAction(HttpServletRequest req, HttpServletResponse res)
 			throws IActException {
@@ -72,8 +77,18 @@ public class RegisterAction extends AbstractAction {
 			_forward(req, res);
 		} else if (intType == 3) {
 			User user = (User) req.getSession().getAttribute("tempUser");
+			/**
+			 * No verify
+			 */
+			user.setPhoneVerify(0);
+			getSessionContainer(req).setUser(user);
+			user.setLoginIp(req.getRemoteAddr());
+			user
+					.setLoginTime(new Timestamp(System
+							.currentTimeMillis()));
 			save(user);
 			req.getSession().removeAttribute("tempUser");
+			reqParams.put("page", "register3.jsp");
 			_forward(req, res);
 		} else if (intType == 4) {
 			// forward to register page
@@ -92,7 +107,6 @@ public class RegisterAction extends AbstractAction {
 				Area area = areas.get(i);
 				try {
 					o.put("name", area.getName());
-
 					o.put("id", area.getId());
 				} catch (JSONException e) {
 					throw new IActException(e);
@@ -110,21 +124,137 @@ public class RegisterAction extends AbstractAction {
 				super.writeErrorMessage(ErrorCode.OK, "ok", res);
 			}
 		} else if (intType == 8) {
-			//send auth code
-			String mAuthCode = "8888";
-			req.getSession().setAttribute("mauthCode", mAuthCode);
+			String mAuthCode = Tools.getMobileAuthCode();
+			SmssendDAO SMS = (SmssendDAO)DAOFactory.getDAO(SMS_SEND_DAO);
+			Smssend vo = new Smssend();
+			Timestamp addTime = new Timestamp(System.currentTimeMillis());
+			vo.setAddTime(addTime);
+			vo.setBizCode("SYZ");
+			
+			String phoneNum = (String)reqParams.get("phoneNum");
+			vo.setPhoneNumber(phoneNum);
+			vo.setMessage("尊敬的用户，您在iact平台上申请的手机验证码为：" + mAuthCode);
+			try {
+				SMS.beginTransaction();
+				SMS.save(vo);
+				SMS.commitTransaction();
+				req.getSession().setAttribute("mauthCode", mAuthCode);
+			} catch (Exception e) {
+				SMS.rollbackTransaction();
+				super.writeErrorMessage(ErrorCode.ERROR, "手机验证码获取错误。", res);
+			} finally {
+				SMS.closeSession();
+			}
 		} else if (intType == 7) {
 			String mAuthCode = (String)req.getSession().getAttribute("mauthCode");
 			String fmAuthCode = (String)reqParams.get("mauthCode");
 			
 			if (!fmAuthCode.equalsIgnoreCase(mAuthCode)) {
 				super.writeErrorMessage(ErrorCode.AUTH_FAILURE, "手机验证码错误", res);
+			} else {
+				User user = getSessionContainer(req).getUser();
+				/**
+				 *  verify OK
+				 */
+				user.setPhoneVerify(1);
+				UserDAO DAO = (UserDAO)DAOFactory.getDAO(USER_DAO);
+				try {
+					DAO.beginTransaction();
+					DAO.merge(user);
+					DAO.commitTransaction();
+				} catch (Exception e) {
+					DAO.rollbackTransaction();
+				} finally {
+					DAO.closeSession();
+				}
+				super.writeErrorMessage(ErrorCode.OK, "验证通过", res);
 			}
-		} 
-
+		} else if (intType == 9) {
+			String mAuthCode = (String)req.getSession().getAttribute("mauthCode");
+			String fmAuthCode = (String)reqParams.get("mauthCode");
+			
+			
+			if (!fmAuthCode.equalsIgnoreCase(mAuthCode)) {
+				req.setAttribute("merr", "手机验证码错误。");
+				reqParams.put("page", "register2.jsp");
+			} else {
+				
+				User user = (User) req.getSession().getAttribute("tempUser");
+				/**
+				 *  verify OK
+				 */
+				user.setPhoneVerify(1);
+				getSessionContainer(req).setUser(user);
+				user.setLoginIp(req.getRemoteAddr());
+				user
+						.setLoginTime(new Timestamp(System
+								.currentTimeMillis()));
+				save(user);
+				req.getSession().removeAttribute("tempUser");
+				reqParams.put("page", "register3.jsp");
+				_forward(req, res);
+			}
+		} else if (intType == 10) {
+			UserDAO DAO = (UserDAO)DAOFactory.getDAO(USER_DAO);
+			
+			String flogin = (String)reqParams.get("flogin");
+			String fphoneNum = (String)reqParams.get("fphoneNum");
+			List<User> users = DAO.findByLogin(flogin);
+			if (users == null || users.size() == 0) {
+				super.writeErrorMessage(ErrorCode.ERROR, "用户名错误.", res);
+			} else {
+				boolean passed = false;
+				User user = null;
+				for (User u: users) {
+					if (u.getPhoneNumber().equalsIgnoreCase(fphoneNum)) {
+						passed = true;
+						user = u;
+						break;
+					}
+				}
+				if (!passed) {
+					super.writeErrorMessage(ErrorCode.ERROR, "手机号码错误.", res);
+				} else {
+					String newPwd = Tools.getRandomPWD();
+					String newMD5 = DigestUtils.md5Hex(newPwd);
+					user.setPwd(newMD5);
+					try {
+						DAO.beginTransaction();
+						DAO.merge(user);
+						DAO.commitTransaction();
+					} catch (Exception e) {
+						DAO.rollbackTransaction();
+					} finally {
+						DAO.closeSession();
+					}
+					
+					SmssendDAO SMS = (SmssendDAO)DAOFactory.getDAO(SMS_SEND_DAO);
+					Smssend vo = new Smssend();
+					Timestamp addTime = new Timestamp(System.currentTimeMillis());
+					vo.setAddTime(addTime);
+					vo.setBizCode("SYZ");
+					
+					String phoneNum = user.getPhoneNumber();
+					vo.setPhoneNumber(phoneNum);
+					vo.setMessage("尊敬的用户，您在iact平台上的新密码为：" + newPwd);
+					try {
+						SMS.beginTransaction();
+						SMS.save(vo);
+						SMS.commitTransaction();
+					} catch (Exception e) {
+						SMS.rollbackTransaction();
+					} finally {
+						SMS.closeSession();
+					}
+					super.writeErrorMessage(ErrorCode.OK, "新密码已发送.", res);
+				}
+			}
+		}
+		
 		return ErrorCode.OK;
 	}
 
+	
 	private boolean checkUserExisted() throws IActException {
 		UserDAO userDAO = (UserDAO) DAOFactory.getDAO(USER_DAO);
 		String login = (String) reqParams.get("login");
@@ -135,8 +265,8 @@ public class RegisterAction extends AbstractAction {
 
 	private boolean checkPhoneExisted() throws IActException {
 		UserDAO userDAO = (UserDAO) DAOFactory.getDAO(USER_DAO);
-		String login = (String) reqParams.get("mlogin");
-		List<User> us = userDAO.findByLogin(login);
+		String phoneNum = (String) reqParams.get("phoneNum");
+		List<User> us = userDAO.findByPhoneNumber(phoneNum);
 		return us != null && us.size() > 0;
 	}
 
@@ -161,6 +291,8 @@ public class RegisterAction extends AbstractAction {
 		
 		if (createMode == 1) {
 			user.setPhoneNumber((String) reqParams.get("login"));
+		} else {
+			user.setPhoneNumber((String) reqParams.get("phoneNum"));
 		}
 		
 		user.setEmail((String) reqParams.get("email"));

@@ -79,30 +79,32 @@ public class UserResourceAction extends AbstractAction {
 		if (resType.equalsIgnoreCase("1")) {
 			// image
 			String fileName = (String) reqParams.get("fileName");
-			String fileFullPath = req.getSession().getServletContext()
-					.getRealPath("/")
-					+ "images/temp/" + fileName;
-			File f = new File(fileFullPath);
+			if (fileName != null && fileName.trim().length() > 0) {
 
-			FileInputStream in;
-			try {
-				in = new FileInputStream(f);
-				ures.setLogoData(Hibernate.createBlob(in));
-			} catch (IOException e) {
-				throw new IActException(e);
-			}
-			ures.setSpotType("图文");
+				String fileFullPath = req.getSession().getServletContext()
+						.getRealPath("/")
+						+ "images/temp/" + fileName;
+				File f = new File(fileFullPath);
 
-			String imgScale = (String) reqParams.get("imgScale");
-			if (imgScale == null || imgScale.equalsIgnoreCase("0")) {
-				ures.setLogoX(120);
-				ures.setLogoX(80);
-			} else {
-				ures.setLogoX(160);
-				ures.setLogoX(120);
-			}
+				FileInputStream in;
+				try {
+					in = new FileInputStream(f);
+					ures.setLogoData(Hibernate.createBlob(in));
+				} catch (IOException e) {
+					throw new IActException(e);
+				}
+				ures.setSpotType("图文");
 
-			ures.setLogoType(Tools.getFileSuffix(fileName));
+				String imgScale = (String) reqParams.get("imgScale");
+				if (imgScale == null || imgScale.equalsIgnoreCase("0")) {
+					ures.setLogoX(120);
+					ures.setLogoX(80);
+				} else {
+					ures.setLogoX(160);
+					ures.setLogoX(120);
+				}
+				ures.setLogoType(Tools.getFileSuffix(fileName));
+			}	
 		}
 		/**
 		 * Save resource
